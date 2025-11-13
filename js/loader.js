@@ -126,25 +126,28 @@ document.addEventListener("DOMContentLoaded", () => {
   // Tentukan Lokasi
   const currentPath = window.location.pathname;
   const isIndexPage = currentPath === "/" || currentPath.endsWith("/index.html");
-  const isNewsPage = currentPath.includes("/page/news/news.html"); // Cek halaman berita
+  const isNewsPage = currentPath.includes("/page/news/news.html");
+  // Tambahkan cek untuk halaman baru Anda (Event dan Project)
+  const isEventPage = currentPath.includes("/page/event/");
+  const isProjectPage = currentPath.includes("/page/project/");
 
   const loadPromises = [];
 
   // 1. MUAT KOMPONEN GLOBAL (HEADER & FOOTER)
-  // FIX: Menggunakan jalur relatif dari root agar loader dapat menemukan komponen
-  loadPromises.push(loadComponent("header-placeholder", "components/header.html"));
-  loadPromises.push(loadComponent("footer-placeholder", "components/footer.html"));
+  // ⭐️ FIX: Menggunakan jalur RELATIF (naik satu tingkat dari js/ ke root) ⭐️
+  loadPromises.push(loadComponent("header-placeholder", "/components/header.html"));
+  loadPromises.push(loadComponent("footer-placeholder", "/components/footer.html"));
 
   // 2. MUAT KOMPONEN SPESIFIK (HANYA JIKA INI INDEX.HTML)
   if (isIndexPage) {
-    // FIX: Mengubah semua jalur di sini agar sesuai dengan asumsi root loading
-    loadPromises.push(loadComponent("hero-placeholder", "sections/hero.html"));
-    loadPromises.push(loadComponent("news-placeholder", "sections/news.html"));
-    loadPromises.push(loadComponent("emagz-placeholder", "sections/emagz.html"));
-    loadPromises.push(loadComponent("proker-placeholder", "sections/proker.html"));
-    loadPromises.push(loadComponent("podcast-placeholder", "sections/podcast.html"));
-    loadPromises.push(loadComponent("timeline-placeholder", "sections/timeline.html"));
-    loadPromises.push(loadComponent("ongoing-placeholder", "sections/ongoing.html"));
+    // ⭐️ FIX: Menggunakan jalur RELATIF (naik satu tingkat dari js/ ke sections/) ⭐️
+    loadPromises.push(loadComponent("hero-placeholder", "../sections/hero.html"));
+    loadPromises.push(loadComponent("news-placeholder", "../sections/news.html"));
+    loadPromises.push(loadComponent("emagz-placeholder", "../sections/emagz.html"));
+    loadPromises.push(loadComponent("proker-placeholder", "../sections/proker.html"));
+    loadPromises.push(loadComponent("podcast-placeholder", "../sections/podcast.html"));
+    loadPromises.push(loadComponent("timeline-placeholder", "../sections/timeline.html"));
+    loadPromises.push(loadComponent("ongoing-placeholder", "../sections/ongoing.html"));
   }
 
   // 3. EKSEKUSI JANJI (Promise.all)
@@ -152,7 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(() => {
       console.log("Semua komponen berhasil dimuat!");
 
-      // Beri waktu 100ms agar memastikan DOM benar-benar siap
+      // ... (Rest of the code for setTimeout and initializeScripts)
+
       setTimeout(() => {
         // Panggil JS Global (diperlukan untuk Header/Footer)
         initializeScripts();
@@ -160,9 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // ⭐️ PANGGIL INISIALISASI BERDASARKAN HALAMAN ⭐️
 
-        // 1. Halaman Index (Memuat News dan komponen lainnya)
+        // 1. Halaman Index
         if (isIndexPage) {
-          // Panggil Generator Berita Index (mengisi news-placeholder)
           if (typeof generateLatestNews === "function") {
             try {
               generateLatestNews();
@@ -171,8 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
               console.error("Gagal menjalankan generateLatestNews (Index):", e);
             }
           }
-
-          // Panggil inisialisasi kalender (jika ada)
           if (typeof window.initCalendar === "function") {
             try {
               window.initCalendar();
@@ -183,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
 
-        // 2. Halaman News Penuh (Mengisi Div 1, 2, 3 di news.html)
+        // 2. Halaman News Penuh
         if (isNewsPage) {
           if (typeof window.initNewsPage === "function") {
             try {
@@ -191,6 +192,30 @@ document.addEventListener("DOMContentLoaded", () => {
               console.log("✅ Halaman Berita Penuh berhasil diinisialisasi!");
             } catch (e) {
               console.error("Gagal menjalankan initNewsPage:", e);
+            }
+          }
+        }
+
+        // 3. Halaman Event (Asumsi Anda punya initEventPage)
+        if (isEventPage) {
+          if (typeof loadEventListPage === "function") {
+            try {
+              loadEventListPage();
+              console.log("✅ Halaman Event berhasil diinisialisasi!");
+            } catch (e) {
+              console.error("Gagal menjalankan loadEventListPage:", e);
+            }
+          }
+        }
+
+        // 4. Halaman Project (Asumsi Anda punya initProjectPage)
+        if (isProjectPage) {
+          if (typeof renderProjects === "function") {
+            try {
+              renderProjects();
+              console.log("✅ Halaman Project berhasil diinisialisasi!");
+            } catch (e) {
+              console.error("Gagal menjalankan renderProjects:", e);
             }
           }
         }
