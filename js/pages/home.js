@@ -1,7 +1,7 @@
 // js/pages/home.js
 
 // Tentukan tanggal hari ini (gunakan tanggal referensi yang lebih realistis untuk menguji data proyek)
-const today = new Date("2025-11-13");
+const today = new Date();
 today.setHours(0, 0, 0, 0);
 
 /**
