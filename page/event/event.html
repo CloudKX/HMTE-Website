@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
- <head>
-    <base href="/" />
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="page-title">Daftar Kegiatan - HMTE Unsoed</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../../css/style.css" />
-    <link rel="stylesheet" href="../../css/satoshi.css" />
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/satoshi.css" />
 
     <link
       rel="stylesheet"
@@ -19,29 +19,17 @@
     />
   </head>
 
-  <body class=" min-h-screen">
+  <body class="min-h-screen">
     <div id="header-placeholder"></div>
 
-    
+    <main>
       <section class="py-16 fade-in">
         <div class="mx-auto px-6 max-w-7xl">
           <h1 class="text-5xl md:text-6xl font-bold gradient-text text-center mb-4">Agenda HMTE</h1>
           <p class="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto text-center mb-10">Jadwal event terbaru, workshop, dan seminar yang sedang berlangsung.</p>
 
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16 items-center bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700">
-            <div class="pr- lg:pr-10">
-              <h2 class="text-3xl font-bold text-white mb-4">Jangan Sampai Ketinggalan!</h2>
-              <p class="text-gray-400 text-lg mb-6">Sinergi antara akademis dan praktik. Segera daftar untuk event utama kami yang sedang berjalan atau akan segera dimulai.</p>
-              <div class="flex flex-wrap gap-4 text-cyan-400 font-medium">
-                <span class="bg-gray-700 px-3 py-1 rounded-full text-xs">#Workshop</span>
-                <span class="bg-gray-700 px-3 py-1 rounded-full text-xs">#Webinar</span>
-                <span class="bg-gray-700 px-3 py-1 rounded-full text-xs">#KunjunganIndustri</span>
-              </div>
-            </div>
-
-            <div id="current-event-register">
-              <p class="text-gray-400 text-center">Memuat event utama...</p>
-            </div>
+          <div id="current-event-register" class="mb-16 w-full flex justify-center">
+            <p class="text-gray-400 text-center">Memuat event utama...</p>
           </div>
 
           <h2 class="text-3xl font-bold text-white mb-6 border-b border-gray-700 pb-2">🌟 Event Utama Lainnya</h2>
@@ -51,7 +39,7 @@
 
           <div id="div-tiga-events" class="pt-10">
             <h2 class="text-3xl font-bold text-white mb-6 border-b border-gray-700 pb-2">🔗 Arsip dan Dokumen</h2>
-            <p class="text-gray-400">Ruang ini dapat digunakan untuk menampilkan arsip event yang sudah selesai atau tautan ke media partner dan dokumentasi lainnya. (Divisi 3)</p>
+            <p class="text-gray-400">Memuat arsip...</p>
           </div>
         </div>
       </section>
@@ -59,8 +47,8 @@
 
     <div id="footer-placeholder"></div>
 
-    <script src="../../js/loader.js"></script>
-    <script src="../../js/data/calendar.js"></script>
-    <script src="../../js/pages/event.js"></script>
+    <script src="/js/loader.js"></script>
+    <script src="/js/data/calendar.js"></script>
+    <script src="/js/pages/event.js"></script>
   </body>
 </html>
