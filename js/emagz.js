@@ -1,6 +1,7 @@
 // js/emagz.js
 
 /**
+ * Data Edisi Emagz: Sekarang berfokus pada cover dan pdfLink untuk Reader.
  */
 const emagzData = [
   {
@@ -8,7 +9,6 @@ const emagzData = [
     title: "Arti Kemerdekaan",
     description: "Komik 2.0 karya Salsabila Miftahusy Syifa – Kimia",
     coverSrc: "https://apps.bem-unsoed.com/wp-content/uploads/2023/08/IMG_1799.png",
-
     pdfLink: "/img/emagz/sample.pdf",
   },
   {
@@ -16,7 +16,6 @@ const emagzData = [
     title: "Riset Teknologi Terbaru",
     description: "Deskripsi singkat artikel 2 tentang riset.",
     coverSrc: "/img/emagz/page2.webp",
-
     pdfLink: "/img/emagz/sample.pdf",
   },
   {
@@ -24,7 +23,6 @@ const emagzData = [
     title: "Profil Alumni Sukses",
     description: "Deskripsi singkat artikel 3.",
     coverSrc: "/img/emagz/page3.webp",
-
     pdfLink: "/img/emagz/sample.pdf",
   },
   {
@@ -32,7 +30,6 @@ const emagzData = [
     title: "Edisi Khusus Wisuda",
     description: "Perayaan kelulusan angkatan 2020.",
     coverSrc: "/img/emagz/page4.webp",
-
     pdfLink: "/img/emagz/sample.pdf",
   },
 ];
@@ -45,7 +42,7 @@ function createEmagzCardHTML(edition) {
 
   return `
         <div class="border-2 border-green-800 w-[260px] md:w-[280px] rounded-lg overflow-hidden shadow-lg bg-black hover:shadow-[0_0_15px_rgba(34,197,94,0.6)] transition-shadow duration-300 flex flex-col">
-          <div class="bg-gray-800 flex justify-center items-center h-64 p-3 relative"> 
+          <div class="bg-gray-800 flex justify-center items-center h-96 p-3 relative"> 
             <img src="${imagePath}" 
                  alt="${edition.title}" 
                  class="max-w-full max-h-full object-contain"
@@ -119,6 +116,7 @@ function loadEmagzArchivePage() {
 }
 
 // === READER LOGIC (MENGGUNAKAN IFRAME UNTUK EMBED PDF) ===
+
 function loadEmagzReader() {
   const readerContainer = document.getElementById("emagz-reader-container");
   if (!readerContainer) return;
@@ -142,21 +140,44 @@ function loadEmagzReader() {
   const subTitle = document.querySelector("main p.text-center");
   if (subTitle) subTitle.textContent = `Membaca: ${edition.title}`;
 
-  // Implementasi Embed PDF
+  let readerContentHtml = "";
+
   if (edition.pdfLink) {
-    const pdfContentHtml = `
-      <div class="shadow-2xl border-4 border-gray-700 bg-gray-200 w-full">
-        <iframe src="${edition.pdfLink}" width="100%" height="800px" style="border: none;"></iframe>
-      </div>
-    `;
-
+    // 1. Tautan Full View
     const fullViewLink = `
-       
+        <a href="${edition.pdfLink}" target="_blank" class="px-5 py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition duration-200 mt-3 inline-block">
+            Lihat di Tab Baru <i class="fas fa-external-link-alt ml-2"></i>
+        </a>
     `;
 
-    readerContainer.innerHTML = fullViewLink + pdfContentHtml;
+    // 2. Kontainer Metadata (Menambah estetika)
+    const metadataHtml = `
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col sm:flex-row items-start sm:items-center mb-10 border-l-4 border-green-500">
+            <img src="${edition.coverSrc}" alt="Cover ${edition.title}" 
+                 class="w-24 h-24 object-contain rounded-lg mr-6 mb-4 sm:mb-0 border border-gray-700"/>
+            <div class="flex-1">
+                <h2 class="text-2xl font-extrabold text-green-400 mb-1">${edition.title}</h2>
+                <p class="text-gray-400">${edition.description}</p>
+                ${fullViewLink}
+            </div>
+        </div>
+    `;
+
+    // 3. Viewer Embed (Bingkai yang lebih profesional)
+    const embedHtml = `
+        <div class="viewer-frame shadow-2xl border-2 border-gray-700 rounded-xl overflow-hidden bg-white">
+            <div class="viewer-header p-3 bg-gray-700 text-sm text-center font-medium text-gray-300">
+                E-MAGZ READER - Silakan scroll di dalam bingkai untuk membaca.
+            </div>
+            <iframe src="${edition.pdfLink}" width="100%" height="800px" style="border: none; background-color: white;"></iframe>
+        </div>
+    `;
+
+    readerContentHtml = metadataHtml + embedHtml;
   } else {
     readerContainer.innerHTML = '<p class="text-center text-red-400">Error: Tautan PDF untuk edisi ini tidak ditemukan.</p>';
   }
+
+  // Set the final HTML
+  readerContainer.innerHTML = readerContentHtml;
 }
-// HAPUS: document.addEventListener("DOMContentLoaded", ...) di sini (sudah di loader.js)
