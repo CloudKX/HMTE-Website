@@ -50,7 +50,7 @@ const newsData = [
     id: "Kulum-4",
     date: "Nov 21, 2025",
     category: "Ristek",
-    title: "Sosialisasi PPKM dan PKM",
+    title: "Kuliah Umum Seri 4",
     preview: "Kuliah Umum Seri 4 menghadirkan pemaparan mengenai penerapan machine learning dalam kendali prostetik, disampaikan oleh narasumber internasional melalui sesi daring. ",
     imgSrc: "../img/news/NewsCover-Kulum4.png",
     content: `
@@ -70,6 +70,19 @@ const newsData = [
       <p class="mb-4">Pada tanggal 20 November 2025, HMTE Unsoed menyelenggarakan Kuliah Umum Seri 3 di Aula Teknik Elektro sebagai bagian dari program peningkatan wawasan akademik mahasiswa. Kegiatan ini menghadirkan narasumber yang kompeten di bidang riset dan teknologi, dengan fokus pada perkembangan terbaru serta relevansinya terhadap dunia keteknikan.</p>
       <p class="mb-4">Acara ini diikuti oleh mahasiswa dari berbagai angkatan yang antusias untuk memperoleh perspektif baru mengenai inovasi, tantangan, dan peluang di bidang teknik elektro. Narasumber memaparkan materi secara sistematis, mulai dari fondasi konsep, penerapan nyata di industri, hingga arah perkembangan teknologi di masa mendatang.</p>
       <p>Sesi diskusi interaktif memberikan ruang bagi mahasiswa untuk mengajukan pertanyaan, bertukar pandangan, dan memperdalam pemahaman. Antusiasme terlihat dari banyaknya peserta yang aktif berpartisipasi dalam dialog yang berlangsung dinamis dan konstruktif.</p> 
+      `,
+  },
+  {
+    id: "Sarasehan-25",
+    date: "Nov 19, 2025",
+    category: "Internal",
+    title: "Sarasehan Internal",
+    preview: "Sarasehan Internal HMTE 2025 menjadi forum dialog antara mahasiswa, dosen, dan alumni untuk menyampaikan aspirasi serta membahas peningkatan kualitas akademik dan lingkungan jurusan. ",
+    imgSrc: "../img/news/NewsCover-Sarasehan2025.jpg",
+    content: `
+      <p class="mb-4">Pada bulan November 2025, HMTE Unsoed menyelenggarakan Sarasehan Internal sebagai forum resmi untuk mempertemukan mahasiswa, dosen, dan alumni dalam ruang dialog terbuka. Kegiatan ini mengusung tema “Empowering Voices, Enhancing Quality” dan bertujuan memperkuat komunikasi serta meningkatkan kualitas lingkungan akademik di Jurusan Teknik Elektro.</p>
+      <p class="mb-4">Melalui forum ini, mahasiswa diberikan kesempatan untuk menyampaikan aspirasi terkait perkuliahan, pelayanan akademik, hingga fasilitas penunjang di jurusan. Penyampaian masukan berlangsung secara terstruktur dan mencerminkan kepedulian mahasiswa terhadap perkembangan program studi.</p>
+      <p>Diskusi terbuka bersama dosen menjadi bagian penting dari sarasehan, membahas tindak lanjut yang dapat diambil terhadap berbagai isu akademik dan non-akademik. Forum ini juga menghasilkan sejumlah rekomendasi perbaikan yang dirumuskan bersama dan diarahkan untuk meningkatkan kualitas layanan akademik serta kenyamanan lingkungan belajar.</p> 
       `,
   },
 
