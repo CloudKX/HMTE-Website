@@ -8,10 +8,10 @@
 const eventsData = [
   {
     id: 1,
-    date: "2025-07-13",
+    date: "2025-09-20",
     title: "Line Tracer Soedirman",
     description: "Perlombaan Robot Line Tracer yang dilaksanakan di Fakultas Teknik Unsoed",
-    time: "13 Juli - 27 Juli",
+    time: "Pendaftaran 13 Juli - 27 Juli",
     location: "Gedung C Fakultas Teknik Unsoed",
     color: "green",
     isFeatured: true, // Tampilkan di Div 1/2
@@ -27,22 +27,22 @@ const eventsData = [
   },
   {
     id: 2,
-    date: "2025-11-20",
-    title: "Seminar Nasional: Masa Depan AI",
-    description: "Seminar tentang perkembangan teknologi AI dalam bidang elektro dan dampaknya terhadap industri 4.0.",
-    time: "13:00 - 16:00 WIB",
+    date: "2025-10-30",
+    title: "Electrical Fun Run",
+    description: "Kegiatan Fun Run yang dilaksanakan oleh Dies Natalis Teknik Elektro 2025",
+    time: "Pendaftaran 16 Oktober - 31 Oktober",
     location: "Gedung C Fakultas Teknik",
     color: "blue",
     isFeatured: true,
     registrationLink: "https://forms.gle/linkgformseminar",
 
     // --- TAMBAHAN: Properti untuk Halaman Detail ---
-    imgSrc: "/img/49d9b1a0-ca5b-4e48-99fd-b3b1d1a6c305.jpeg", // Path/link gambar cover event
+    imgSrc: "/img/Event/funrun.jpg", // Path/link gambar cover event
     locationLink: "https://maps.app.goo.gl/link-ke-convention-center", // Link Google Maps lokasi
     content: `
-      <h3 class="text-xl font-bold mb-3 text-white">Detail Seminar</h3>
-      <p class="mb-4 text-gray-300">Seminar ini menghadirkan pembicara kunci dari industri dan akademisi untuk membahas bagaimana Kecerdasan Buatan (AI) merevolusi sektor kelistrikan, mulai dari efisiensi energi hingga smart manufacturing.</p>
-      <p class="text-gray-300">Peserta akan mendapatkan wawasan mendalam tentang peluang karir di bidang AI dan Elektro.</p>
+      <h3 class="text-xl font-bold mb-3 text-white">Detail Fun Run</h3>
+      <p class="mb-4 text-gray-300">Kegiatan ini dilaksanakan di sekitar Fakultas Teknik yang diikuti oleh berbagai kalangan baik mahasiswa maupun masyarakat Umum.</p>
+      <p class="text-gray-300">Peserta akan mendapatkan Jersey, Medal, dan Doorprize.</p>
     `,
   },
   {
