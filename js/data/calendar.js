@@ -8,22 +8,21 @@
 const eventsData = [
   {
     id: 1,
-    date: "2025-11-16",
-    title: "Workshop Elektrikal: Dasar IoT",
-    description: "Workshop mengenai dasar-dasar kelistrikan dan elektronika, fokus pada implementasi IoT sederhana.",
-    time: "09:00 - 12:00 WIB",
-    location: "Aula Teknik Elektro",
+    date: "2025-07-13",
+    title: "Line Tracer Soedirman",
+    description: "Perlombaan Robot Line Tracer yang dilaksanakan di Fakultas Teknik Unsoed",
+    time: "13 Juli - 27 Juli",
+    location: "Gedung C Fakultas Teknik Unsoed",
     color: "green",
     isFeatured: true, // Tampilkan di Div 1/2
     registrationLink: "https://forms.gle/linkgformworkshop", // Link pendaftaran
 
     // --- TAMBAHAN: Properti untuk Halaman Detail ---
-    imgSrc: "img/49d9b1a0-ca5b-4e48-99fd-b3b1d1a6c305.jpeg", // Path/link gambar cover event
+    imgSrc: "img/event/lts.jpg", // Path/link gambar cover event
     locationLink: "https://maps.app.goo.gl/link-ke-aula-teknik", // Link Google Maps lokasi
     content: `
-      <h3 class="text-xl font-bold mb-3 text-white">Detail Workshop</h3>
-      <p class="mb-4 text-gray-300">Workshop ini bertujuan membekali mahasiswa dengan keterampilan dasar dalam implementasi sistem IoT menggunakan mikrokontroler. Materi mencakup dasar elektronika, pemrograman, dan integrasi sensor.</p>
-      <p class="text-gray-300">Kegiatan ini sangat penting bagi mahasiswa yang ingin fokus pada bidang smart system dan embedded programming.</p>
+      <h3 class="text-xl font-bold mb-3 text-white">Detail LTS</h3>
+      <p class="mb-4 text-gray-300">Lomba Line Tracer ini bertujuan berkompetisi dengan keterampilan dalam implementasi Sensor Tracing pada robot.</p>
     `,
   },
   {
@@ -32,7 +31,7 @@ const eventsData = [
     title: "Seminar Nasional: Masa Depan AI",
     description: "Seminar tentang perkembangan teknologi AI dalam bidang elektro dan dampaknya terhadap industri 4.0.",
     time: "13:00 - 16:00 WIB",
-    location: "Gedung Convention Center",
+    location: "Gedung C Fakultas Teknik",
     color: "blue",
     isFeatured: true,
     registrationLink: "https://forms.gle/linkgformseminar",
