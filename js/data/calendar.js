@@ -44,6 +44,26 @@ const eventsData = [
       <p class="mb-4 text-gray-300">Kegiatan ini dilaksanakan di sekitar Fakultas Teknik yang diikuti oleh berbagai kalangan baik mahasiswa maupun masyarakat Umum.</p>
       <p class="text-gray-300">Peserta akan mendapatkan Jersey, Medal, dan Doorprize.</p>
     `,
+  },
+  {
+    id: 3,
+    date: "2025-12-12",
+    title: "Musyawarah Anggota",
+    description: "Kegiatan Musyawarah Anggota HMTE 2025",
+    time: "Pelaksanaan Tanggal 12, 13, 14, 20, dan 22 Desember",
+    location: "Gedung F Fakultas Teknik dan Balai Desa",
+    color: "blue",
+    isFeatured: true,
+    registrationLink: "https://forms.gle/linkgformseminar",
+
+    // --- TAMBAHAN: Properti untuk Halaman Detail ---
+    imgSrc: "/img/Event/musyang.jpg", // Path/link gambar cover event
+    locationLink: "https://maps.app.goo.gl/link-ke-convention-center", // Link Google Maps lokasi
+    content: `
+      <h3 class="text-xl font-bold mb-3 text-white">Detail Musyang</h3>
+      <p class="mb-4 text-gray-300"></p>
+      <p class="text-gray-300"></p>
+    `,
   }
 ];
 
