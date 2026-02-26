@@ -120,3 +120,21 @@ collections:
               - { label: "Warna Badge", name: color, widget: select, options: ["green","blue","yellow"], default: "green" }
               - { label: "Tampil di Beranda", name: isFeatured, widget: boolean, default: false }
               - { label: "Konten Detail", name: content, widget: markdown, required: false }
+  # ── 4. E-MAGZ ──────────────────────────────────────────────
+  - name: "emagz"
+    label: "e-Magz"
+    files:
+      - name: "all_emagz"
+        label: "Semua e-Magz"
+        file: "js/data/json/emagz.json"
+        fields:
+          - label: "Daftar Majalah"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Edisi / Judul", name: title, widget: string }
+              - { label: "Deskripsi", name: description, widget: text }
+              - { label: "Cover Depan", name: image, widget: image, required: false }
+              - { label: "Link Baca (PDF/Issuu)", name: link, widget: string }
+              - { label: "Tanggal Rilis", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false }
