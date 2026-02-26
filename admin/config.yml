@@ -35,13 +35,13 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - { label: "Judul", name: title, widget: string }
-              - { label: "Deskripsi", name: description, widget: text }
-              - { label: "PIC / Divisi", name: pic, widget: string, required: false }
-              - { label: "Status / Progres", name: status, widget: string, hint: "Contoh: 60% atau Tahap Perencanaan" }
-              - { label: "Gambar", name: image, widget: image, required: false }
-              - { label: "Tanggal Mulai", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false, required: false }
-              - { label: "Link Dokumentasi", name: link, widget: string, required: false }
+              - { label: "Judul",            name: title,       widget: string }
+              - { label: "Deskripsi",        name: description, widget: text }
+              - { label: "PIC / Divisi",     name: pic,         widget: string,   required: false }
+              - { label: "Status / Progres", name: status,      widget: string,   hint: "Contoh: 60% atau Tahap Perencanaan" }
+              - { label: "Gambar",           name: image,       widget: image,    required: false }
+              - { label: "Tanggal Mulai",    name: date,        widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false, required: false }
+              - { label: "Link Dokumentasi", name: link,        widget: string,   required: false }
 
       - name: "upcoming"
         label: "Proker Mendatang"
@@ -52,11 +52,11 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - { label: "Judul", name: title, widget: string }
+              - { label: "Judul",     name: title,       widget: string }
               - { label: "Deskripsi", name: description, widget: text }
-              - { label: "Gambar", name: image, widget: image, required: false }
-              - { label: "Tanggal", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false, required: false }
-              - { label: "Link", name: link, widget: string, required: false }
+              - { label: "Gambar",    name: image,       widget: image,    required: false }
+              - { label: "Tanggal",   name: date,        widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false, required: false }
+              - { label: "Link",      name: link,        widget: string,   required: false }
 
       - name: "completed"
         label: "Proker Selesai"
@@ -67,12 +67,12 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - { label: "Judul", name: title, widget: string }
-              - { label: "Deskripsi", name: description, widget: text }
-              - { label: "Gambar", name: image, widget: image, required: false }
-              - { label: "Tanggal Selesai", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false }
-              - { label: "Link Dokumentasi", name: link, widget: string, required: false }
-              - { label: "Konten Rilis", name: releaseDescription, widget: text, required: false }
+              - { label: "Judul",            name: title,              widget: string }
+              - { label: "Deskripsi",        name: description,        widget: text }
+              - { label: "Gambar",           name: image,              widget: image,    required: false }
+              - { label: "Tanggal Selesai",  name: date,               widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false }
+              - { label: "Link Dokumentasi", name: link,               widget: string,   required: false }
+              - { label: "Konten Rilis",     name: releaseDescription, widget: text,     required: false }
 
   # ── 2. BERITA ──────────────────────────────────────────────
   - name: "news"
@@ -87,13 +87,13 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - { label: "ID / Slug", name: id, widget: string, hint: "URL-friendly, contoh: seminar-ai-2025" }
-              - { label: "Judul", name: title, widget: string }
-              - { label: "Tanggal", name: date, widget: string, hint: "Format: Mar 12, 2025" }
-              - { label: "Kategori", name: category, widget: select, options: ["Graduation","Humas","Ristek","Internal","Lainnya"] }
-              - { label: "Preview", name: preview, widget: text }
-              - { label: "Konten", name: content, widget: markdown }
-              - { label: "Gambar Cover", name: imgSrc, widget: image, required: false }
+              - { label: "ID / Slug",    name: id,       widget: string, hint: "URL-friendly, contoh: seminar-ai-2025" }
+              - { label: "Judul",        name: title,    widget: string }
+              - { label: "Tanggal",      name: date,     widget: string, hint: "Format: Mar 12, 2025" }
+              - { label: "Kategori",     name: category, widget: select, options: ["Graduation","Humas","Ristek","Internal","Lainnya"] }
+              - { label: "Preview",      name: preview,  widget: text }
+              - { label: "Konten",       name: content,  widget: markdown }
+              - { label: "Gambar Cover", name: imgSrc,   widget: image, required: false }
 
   # ── 3. EVENT ──────────────────────────────────────────────
   - name: "events"
@@ -108,19 +108,26 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - { label: "ID", name: id, widget: number }
-              - { label: "Nama Event", name: title, widget: string }
-              - { label: "Deskripsi", name: description, widget: text }
-              - { label: "Tanggal", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false }
-              - { label: "Waktu / Jadwal", name: time, widget: string, hint: "Contoh: Pendaftaran 13 Juli - 27 Juli" }
-              - { label: "Lokasi", name: location, widget: string }
-              - { label: "Link Google Maps", name: locationLink, widget: string, required: false }
-              - { label: "Gambar / Poster", name: imgSrc, widget: image, required: false }
-              - { label: "Link Pendaftaran", name: registrationLink, widget: string, required: false }
-              - { label: "Warna Badge", name: color, widget: select, options: ["green","blue","yellow"], default: "green" }
-              - { label: "Tampil di Beranda", name: isFeatured, widget: boolean, default: false }
-              - { label: "Konten Detail", name: content, widget: markdown, required: false }
-  # ── 4. E-MAGZ ──────────────────────────────────────────────
+              - { label: "ID",                name: id,               widget: number }
+              - { label: "Nama Event",        name: title,            widget: string }
+              - { label: "Deskripsi",         name: description,      widget: text }
+              - { label: "Tanggal",           name: date,             widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false }
+              - { label: "Waktu / Jadwal",    name: time,             widget: string,   hint: "Contoh: Pendaftaran 13 Juli - 27 Juli" }
+              - { label: "Lokasi",            name: location,         widget: string }
+              - { label: "Link Google Maps",  name: locationLink,     widget: string,   required: false }
+              - { label: "Gambar / Poster",   name: imgSrc,           widget: image,    required: false }
+              - { label: "Link Pendaftaran",  name: registrationLink, widget: string,   required: false }
+              - { label: "Warna Badge",       name: color,            widget: select,   options: ["green","blue","yellow"], default: "green" }
+              - { label: "Tampil di Beranda", name: isFeatured,       widget: boolean,  default: false }
+              - { label: "Konten Detail",     name: content,          widget: markdown, required: false }
+
+  # ── 4. E-MAGZ ─────────────────────────────────────────────
+  #
+  #  FIX: Field name disesuaikan dengan yang dipakai emagz.js:
+  #       - coverSrc  (bukan "image")
+  #       - pdfLink   (bukan "link")
+  #       - id        (ditambahkan — wajib untuk emagz-reader.html?id=)
+  #
   - name: "emagz"
     label: "e-Magz"
     files:
@@ -131,10 +138,56 @@ collections:
           - label: "Daftar Majalah"
             name: "items"
             widget: "list"
-            summary: "{{fields.title}}"
+            summary: "Edisi #{{fields.id}} — {{fields.title}}"
             fields:
-              - { label: "Edisi / Judul", name: title, widget: string }
-              - { label: "Deskripsi", name: description, widget: text }
-              - { label: "Cover Depan", name: image, widget: image, required: false }
-              - { label: "Link Baca (PDF/Issuu)", name: link, widget: string }
-              - { label: "Tanggal Rilis", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false }
+              - label: "Nomor Edisi"
+                name: id
+                widget: number
+                value_type: int
+                hint: "Angka urut edisi, misal: 1, 2, 3. Dipakai untuk URL ?id= di reader."
+              - { label: "Judul",           name: title,    widget: string }
+              - { label: "Deskripsi",       name: description, widget: text }
+              - label: "Gambar Cover"
+                name: coverSrc
+                widget: image
+                required: false
+                hint: "Upload cover depan majalah."
+              - label: "Link PDF / Issuu"
+                name: pdfLink
+                widget: string
+                hint: "URL lengkap ke file PDF atau halaman Issuu."
+              - label: "Tanggal Rilis"
+                name: date
+                widget: datetime
+                format: "YYYY-MM-DD"
+                date_format: "DD MMMM YYYY"
+                time_format: false
+
+  # ── 5. PODCAST ────────────────────────────────────────────
+  #
+  #  Collection tunggal — satu file JSON, satu set field.
+  #  Admin cukup update URL Spotify → save → Vercel deploy otomatis.
+  #
+  - name: "podcast"
+    label: "Podcast"
+    files:
+      - name: "podcast_settings"
+        label: "Pengaturan Podcast"
+        file: "js/data/json/podcast.json"
+        fields:
+          - label: "Judul Podcast"
+            name: title
+            widget: string
+            hint: "Nama podcast yang tampil di website."
+          - label: "Deskripsi Singkat"
+            name: description
+            widget: text
+            required: false
+          - label: "URL Spotify (Link Buka App)"
+            name: spotifyUrl
+            widget: string
+            hint: "Contoh: https://open.spotify.com/show/XXXXXXXXXX"
+          - label: "URL Embed Spotify"
+            name: embedUrl
+            widget: string
+            hint: "Contoh: https://open.spotify.com/embed/show/XXXXXXXXXX — dipakai untuk iframe di website."
