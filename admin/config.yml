@@ -6,9 +6,9 @@
 # ── BACKEND ──────────────────────────────────────────────────
 backend:
   name: github
-  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME   # ← GANTI INI
+  repo: CloudKX/HMTE-Website   # ← GANTI INI
   branch: main
-  base_url: https://YOUR_NETLIFY_SITE.netlify.app  # ← GANTI INI (OAuth proxy)
+  base_url: https://meek-kulfi-e8055b.netlify.app  # ← GANTI INI (OAuth proxy)
 
 # ── MEDIA ────────────────────────────────────────────────────
 media_folder: "img/uploads"
