@@ -5,11 +5,8 @@
 
 # ── BACKEND ──────────────────────────────────────────────────────────────────
 backend:
-  name: github
-  repo: CloudKX/HMTE-Website
+  name: git-gateway
   branch: main
-  base_url: https://meek-kulfi-e8055b.netlify.app
-  auth_endpoint: auth
 
 # ── MEDIA & PUBLIC FOLDER ────────────────────────────────────────────────────
 media_folder: "img/uploads"
