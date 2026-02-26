@@ -73,6 +73,9 @@
   .podcast-card.is-visible { opacity: 1; transform: translateY(0); }
   .podcast-card:nth-child(1) { transition-delay: 0.05s; }
   .podcast-card:nth-child(2) { transition-delay: 0.15s; }
+  .podcast-card:nth-child(3) { transition-delay: 0.25s; }
+  .podcast-card:nth-child(4) { transition-delay: 0.35s; }
+
   .podcast-card::before {
     content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(15,188,109,0.35), transparent);
@@ -85,6 +88,14 @@
   }
 
   .podcast-card iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  /* Skeleton */
+  .podcast-skel {
+    background: rgba(255,255,255,0.04); border-radius: 6px;
+    animation: podSkel 1.6s ease-in-out infinite;
+    width: 100%; height: 100%;
+  }
+  @keyframes podSkel { 0%,100%{opacity:.3} 50%{opacity:.6} }
 
   /* Mobile: 1 kolom */
   @media (max-width: 540px) {
@@ -101,13 +112,14 @@
       <p class="podcast-subtitle">POTEK — Podcast Teknik Elektro Unsoed.</p>
     </div>
 
-    <div class="podcast-grid">
-      <div class="podcast-card">
-        <iframe src="https://www.youtube.com/embed/tcTy54pZHEQ" title="Podcast 1" allowfullscreen loading="lazy"></iframe>
-      </div>
-      <div class="podcast-card">
-        <iframe src="https://www.youtube.com/embed/tI45_FthHds" title="Podcast 2" allowfullscreen loading="lazy"></iframe>
-      </div>
+    <!--
+      Container ini dikosongkan — diisi oleh script di bawah via fetch().
+      Tidak ada lagi iframe hardcoded di sini.
+    -->
+    <div id="podcast-container" class="podcast-grid">
+      <!-- Skeleton awal -->
+      <div class="podcast-card is-visible"><div class="podcast-skel"></div></div>
+      <div class="podcast-card is-visible"><div class="podcast-skel"></div></div>
     </div>
 
   </div>
@@ -115,15 +127,80 @@
 
 <script>
 (function () {
-  function initPodcastAnim() {
-    const targets = document.querySelectorAll('.podcast-header, .podcast-card');
-    if (!targets.length) return;
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-    targets.forEach((el) => { el.classList.remove('is-visible'); obs.observe(el); });
+  // ── Path ke file JSON yang dikelola Decap CMS ──────────────────────────────
+  var PODCAST_JSON = '/js/data/json/podcast.json';
+
+  // ── Render: ambil data, buat iframe per video ──────────────────────────────
+  function renderPodcastVideos(videos) {
+    var container = document.getElementById('podcast-container');
+    if (!container) return;
+
+    if (!videos || videos.length === 0) {
+      container.innerHTML = '<p style="color:rgba(156,163,175,0.5);text-align:center;grid-column:1/-1;">Belum ada episode yang tersedia.</p>';
+      return;
+    }
+
+    // Urutkan descending by episode number
+    var sorted = videos.slice().sort(function(a, b) { return b.episode - a.episode; });
+
+    container.innerHTML = sorted.map(function(v, i) {
+      // Embed URL YouTube: https://www.youtube.com/embed/VIDEO_ID
+      var embedSrc = 'https://www.youtube.com/embed/' + v.youtubeId;
+      return (
+        '<div class="podcast-card" style="transition-delay:' + (i * 0.1) + 's">' +
+          '<iframe src="' + embedSrc + '"' +
+            ' title="' + v.title + '"' +
+            ' allowfullscreen loading="lazy">' +
+          '</iframe>' +
+        '</div>'
+      );
+    }).join('');
+
+    // Re-trigger animasi setelah card baru di-inject
+    initPodcastAnim();
   }
+
+  // ── Fetch dari JSON ────────────────────────────────────────────────────────
+  function loadPodcastSection() {
+    fetch(PODCAST_JSON)
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        renderPodcastVideos(data.videos || []);
+      })
+      .catch(function(e) {
+        console.error('[podcast.html] Gagal fetch:', e.message);
+        var container = document.getElementById('podcast-container');
+        if (container) {
+          container.innerHTML = '<p style="color:rgba(239,68,68,0.8);text-align:center;grid-column:1/-1;">Gagal memuat episode. Silakan refresh.</p>';
+        }
+      });
+  }
+
+  // ── Animasi scroll-in ──────────────────────────────────────────────────────
+  function initPodcastAnim() {
+    var targets = document.querySelectorAll('.podcast-header, #podcast-container .podcast-card');
+    if (!targets.length) return;
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach(function(el) { el.classList.remove('is-visible'); obs.observe(el); });
+  }
+
+  // ── Daftarkan ke component registry loader.js ──────────────────────────────
+  // init() dipanggil otomatis oleh loadComponent() setelah HTML diinjeksi.
   window.__components = window.__components || {};
-  window.__components['podcast'] = { init: initPodcastAnim };
+  window.__components['podcast'] = {
+    init: function() {
+      loadPodcastSection(); // ← ini yang sebelumnya tidak pernah dipanggil
+    }
+  };
+
+  // Expose juga ke global kalau dipanggil manual
+  window.loadPodcastSection = loadPodcastSection;
 })();
 </script>
