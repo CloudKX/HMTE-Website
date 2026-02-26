@@ -165,29 +165,32 @@ collections:
 
   # ── 5. PODCAST ────────────────────────────────────────────
   #
-  #  Collection tunggal — satu file JSON, satu set field.
-  #  Admin cukup update URL Spotify → save → Vercel deploy otomatis.
+  #  Daftar episode YouTube — admin tambah/hapus/ganti video.
+  #  Setiap item butuh YouTube Video ID (bukan full URL).
+  #  Contoh: URL https://youtube.com/watch?v=dQw4w9WgXcQ → ID = dQw4w9WgXcQ
   #
   - name: "podcast"
     label: "Podcast"
     files:
-      - name: "podcast_settings"
-        label: "Pengaturan Podcast"
+      - name: "podcast_videos"
+        label: "Daftar Episode Podcast"
         file: "js/data/json/podcast.json"
         fields:
-          - label: "Judul Podcast"
-            name: title
-            widget: string
-            hint: "Nama podcast yang tampil di website."
-          - label: "Deskripsi Singkat"
-            name: description
-            widget: text
-            required: false
-          - label: "URL Spotify (Link Buka App)"
-            name: spotifyUrl
-            widget: string
-            hint: "Contoh: https://open.spotify.com/show/XXXXXXXXXX"
-          - label: "URL Embed Spotify"
-            name: embedUrl
-            widget: string
-            hint: "Contoh: https://open.spotify.com/embed/show/XXXXXXXXXX — dipakai untuk iframe di website."
+          - label: "Daftar Video"
+            name: "videos"
+            widget: "list"
+            summary: "EPS.{{fields.episode}} — {{fields.title}}"
+            fields:
+              - label: "Nomor Episode"
+                name: episode
+                widget: number
+                value_type: int
+                hint: "Angka episode, misal: 5"
+              - label: "Judul Episode"
+                name: title
+                widget: string
+                hint: "Judul lengkap episode, misal: POTEK SEASON 4 - EPS.5 Menembus Batas Inovasi"
+              - label: "YouTube Video ID"
+                name: youtubeId
+                widget: string
+                hint: "Hanya ID-nya saja. Dari URL youtube.com/watch?v=XXXX → isi XXXX di sini."
