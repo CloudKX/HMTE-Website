@@ -7,7 +7,9 @@
 backend:
   name: git-gateway
   branch: main
+  site_domain: meek-kulfi-e8055b.netlify.app
 
+# (Biarkan baris media_folder, locale, dan collections di bawahnya utuh)
 # ── MEDIA & PUBLIC FOLDER ────────────────────────────────────────────────────
 media_folder: "img/uploads"
 public_folder: "/img/uploads"
