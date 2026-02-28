@@ -45,24 +45,30 @@ async function renderHomeOngoingEvents() {
   container.innerHTML = futureEvents.map(function (event, index) {
     var imagePath = event.imgSrc ? event.imgSrc.replace('../../', '') : 'img/logohmte.png';
     if (imagePath.startsWith('../')) imagePath = imagePath.substring(3);
+    if (imagePath && !imagePath.startsWith('/') && !imagePath.startsWith('http')) imagePath = '/' + imagePath;
     var formattedDate = formatDate(event.date);
-    var targetLink    = event.registrationLink ? event.registrationLink : './page/event/event.html';
+    var targetLink    = event.registrationLink ? event.registrationLink : '/page/event/event.html';
+    var delayMs       = (index * 120 + 80);
 
-    return '<a href="' + targetLink + '" class="ongoing-card" style="animation-delay:' + (index * 0.15 + 0.1) + 's;">' +
-      '<div class="ongoing-card-img">' +
+    return '<a href="' + targetLink + '" class="ongoing-card"' +
+           ' style="transition-delay:' + delayMs + 'ms" data-index="' + index + '">' +
+      '<div class="ongoing-card-cover">' +
         '<span class="ongoing-badge"><span class="ongoing-badge-dot"></span>Terdekat</span>' +
-        '<img src="' + imagePath + '" alt="' + event.title + '" onerror="this.onerror=null;this.src=\'img/logohmte.png\';" />' +
+        '<img src="' + imagePath + '" alt="' + event.title + '"' +
+             ' onerror="this.onerror=null;this.src=\'/img/logohmte.png\';" />' +
       '</div>' +
       '<div class="ongoing-card-body">' +
         '<div class="ongoing-card-meta">' +
-          '<span class="ongoing-card-date"><i class="ri-calendar-line"></i> ' + formattedDate + '</span>' +
-          '<span class="ongoing-card-tag">' + event.time + '</span>' +
+          '<span class="ongoing-card-date">' +
+            '<i class="far fa-calendar-alt"></i> ' + formattedDate +
+          '</span>' +
+          (event.time ? '<span class="ongoing-card-tag">' + event.time + '</span>' : '') +
         '</div>' +
         '<h3 class="ongoing-card-title">' + event.title + '</h3>' +
-        '<p style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:rgba(156,163,175,0.7);font-size:0.8rem;margin:0;">' +
-          (event.description || 'Klik untuk melihat detail acara.') +
-        '</p>' +
-        '<div class="ongoing-card-info"><i class="ri-map-pin-line"></i> ' + (event.location || 'Lokasi menyusul') + '</div>' +
+        '<p class="ongoing-card-desc">' + (event.description || 'Klik untuk melihat detail acara.') + '</p>' +
+        '<div class="ongoing-card-cta">' +
+          '<i class="far fa-calendar-alt"></i> ' + (event.location || 'Lokasi menyusul') + ' →' +
+        '</div>' +
       '</div>' +
     '</a>';
   }).join('');

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title id="page-title">Daftar Kegiatan - HMTE Unsoed</title>
+    <title id="page-title">Agenda HMTE - HMTE Unsoed</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/style.css" />
@@ -11,136 +11,312 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
-      .gradient-text {
-        background: linear-gradient(135deg, #fff 0%, #0fbc6d 60%, #22c55e 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-size: clamp(2rem, 7vw, 4rem) !important;
-        line-height: 1.3 !important;
-        padding-bottom: 0.1em !important;
-      }
+    /* ══════════════════════════════════════════════════════════
+       EVENT PAGE — DNA IDENTIK DENGAN EMAGZ & PROKER
+       Semua layout pakai pure CSS, tidak bergantung Tailwind CDN
+    ══════════════════════════════════════════════════════════ */
 
-      section.py-16 {
-        padding-top: 120px !important;
-        padding-bottom: 64px !important;
-      }
+    html, body { background: #0a0e14 !important; overflow-x: hidden; }
 
-      /* ─ Section label ─ */
-      .section-eyebrow {
-        display: inline-flex; align-items: center; gap: 10px;
-        font-size: 0.68rem; letter-spacing: 0.22em;
-        text-transform: uppercase; color: #0fbc6d; font-weight: 700;
-        margin-bottom: 8px;
-      }
-      .section-eyebrow::before, .section-eyebrow::after {
-        content: ''; display: block; width: 24px; height: 1px;
-        background: #0fbc6d; opacity: 0.5;
-      }
+    /* ── PAGE HEADER ── */
+    .ev-page-header {
+      padding-top: 120px;            /* Fixed Header Clearance */
+      padding-bottom: 12px;
+      text-align: center;
+      position: relative;
+    }
+    .ev-page-header::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: min(700px, 100%); height: 320px;
+      background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .ev-gradient-title {
+      display: block;
+      background: linear-gradient(135deg, #fff 0%, #0fbc6d 55%, #22c55e 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-size: clamp(2rem, 7vw, 4.2rem);
+      font-weight: 900; letter-spacing: -0.04em;
+      line-height: 1.2; padding-bottom: 0.1em; margin: 0;
+    }
+    .ev-page-sub {
+      color: rgba(156,163,175,0.65);
+      font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+      margin: 8px 0 0; line-height: 1.5;
+    }
 
-      /* ── EVENT MENDATANG (#current-event-register) ── */
-      #current-event-register > div {
-        background: linear-gradient(145deg,
-          rgba(15,188,109,0.08) 0%, rgba(13,17,23,0.98) 40%, rgba(13,17,23,0.98) 100%
-        ) !important;
-        border: 2px solid rgba(15,188,109,0.4) !important;
-        border-radius: 20px !important;
-        overflow: hidden !important;
-        box-shadow: 0 0 40px rgba(15,188,109,0.08), 0 8px 32px rgba(0,0,0,0.5) !important;
-        max-width: 340px !important;
-        width: 100% !important;
-        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-        animation: cardFadeUp 0.6s cubic-bezier(0.23,1,0.32,1) both !important;
-      }
-      #current-event-register > div:hover {
-        transform: translateY(-4px) !important;
-        box-shadow: 0 0 60px rgba(15,188,109,0.12), 0 16px 48px rgba(0,0,0,0.6) !important;
-      }
-      #current-event-register .relative[style*="aspect-ratio"] {
-        width: 100% !important; aspect-ratio: 9/12 !important;
-        background: #000 !important; overflow: hidden !important;
-      }
-      #current-event-register img {
-        width: 100% !important; height: 100% !important;
-        object-fit: cover !important; transition: transform 0.5s ease !important;
-      }
-      #current-event-register > div:hover img { transform: scale(1.03) !important; }
+    /* ── SECTION LABEL ── */
+    .ev-section-label {
+      text-align: center; margin-bottom: 10px;
+    }
+    .ev-section-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: #0fbc6d; font-weight: 700;
+    }
+    .ev-section-eyebrow::before, .ev-section-eyebrow::after {
+      content: ''; display: block; width: 22px; height: 1px;
+      background: #0fbc6d; opacity: 0.5;
+    }
+    .ev-section-title {
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 900; color: #fff; letter-spacing: -0.03em;
+      margin: 4px 0 0;
+    }
 
-      /* ── EVENT MENDATANG LAINNYA (#upcoming-list) ── */
-      #upcoming-list > div {
-        background: linear-gradient(145deg,
-          rgba(15,188,109,0.06) 0%, rgba(13,17,23,0.98) 40%, rgba(13,17,23,0.98) 100%
-        ) !important;
-        border-radius: 16px !important; overflow: hidden !important;
-        border: 1px solid rgba(15,188,109,0.12) !important;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.4) !important;
-        width: 100% !important; margin: 0 !important;
-        transition: transform 0.3s ease, border-color 0.3s ease !important;
-        animation: cardFadeUp 0.55s cubic-bezier(0.23,1,0.32,1) both !important;
-        position: relative !important;
-      }
-      #upcoming-list > div::before {
-        content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(15,188,109,0.3), transparent); z-index: 2;
-      }
-      #upcoming-list > div:hover {
-        transform: translateY(-4px) !important;
-        border-color: rgba(15,188,109,0.28) !important;
-      }
-      #upcoming-list [style*="aspect-ratio"] {
-        width: 100% !important; aspect-ratio: 9/12 !important;
-        overflow: hidden !important; background: #000 !important;
-      }
-      #upcoming-list img {
-        width: 100% !important; height: 100% !important;
-        object-fit: cover !important; transition: transform 0.5s ease !important;
-      }
-      #upcoming-list > div:hover img { transform: scale(1.04) !important; }
+    /* ══ CARD EVENT TERDEKAT (Event Utama) ══ */
+    .ev-main-card {
+      display: flex; flex-direction: column;
+      border-radius: 20px; overflow: hidden;
+      background: linear-gradient(145deg,
+        rgba(15,188,109,0.1) 0%, rgba(13,17,23,0.98) 40%, rgba(13,17,23,0.98) 100%
+      );
+      border: 2px solid rgba(15,188,109,0.35);
+      box-shadow: 0 0 40px rgba(15,188,109,0.07), 0 8px 32px rgba(0,0,0,0.5);
+      max-width: 340px; width: 100%;
+      animation: evFadeUp 0.6s cubic-bezier(0.23,1,0.32,1) both;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .ev-main-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 60px rgba(15,188,109,0.12), 0 16px 48px rgba(0,0,0,0.6);
+    }
+    .ev-main-cover {
+      position: relative; width: 100%; aspect-ratio: 9/12;
+      overflow: hidden; flex-shrink: 0; background: #000;
+    }
+    .ev-main-cover img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.82); transition: transform 0.5s ease;
+    }
+    .ev-main-card:hover .ev-main-cover img { transform: scale(1.04); }
+    .ev-main-badge {
+      position: absolute; top: 0; left: 0;
+      background: rgba(15,188,109,0.9); color: #fff;
+      font-size: 0.62rem; font-weight: 800; letter-spacing: 0.12em;
+      padding: 5px 14px; border-radius: 0 0 12px 0; z-index: 2;
+    }
+    .ev-main-body { padding: 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .ev-main-title {
+      font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.3; margin: 0;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .ev-main-desc {
+      font-size: 0.8rem; color: rgba(156,163,175,0.6); line-height: 1.55; margin: 0;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .ev-main-info {
+      border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .ev-main-info p {
+      margin: 0; font-size: 0.78rem; color: rgba(209,213,219,0.75);
+      display: flex; align-items: flex-start; gap: 7px;
+    }
+    .ev-main-info p i { color: #0fbc6d; margin-top: 2px; flex-shrink: 0; }
+    .ev-main-info p a { color: rgba(209,213,219,0.75); text-decoration: none; }
+    .ev-main-info p a:hover { color: #0fbc6d; }
+    .ev-main-btn {
+      display: block; width: 100%; text-align: center;
+      padding: 10px; margin-top: 4px;
+      background: #16a34a; color: #fff; font-size: 0.85rem; font-weight: 700;
+      border-radius: 10px; text-decoration: none;
+      box-shadow: 0 0 20px rgba(15,188,109,0.2);
+      transition: background 0.2s ease;
+    }
+    .ev-main-btn:hover { background: #15803d; }
+    .ev-main-btn-ghost {
+      background: rgba(255,255,255,0.04) !important;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.4) !important; cursor: default;
+      box-shadow: none !important; font-weight: 600;
+    }
 
-      /* ── ARSIP (#div-tiga-events) ── */
-      #div-tiga-events h2 {
-        font-size: clamp(1.2rem, 3vw, 1.8rem) !important;
-        border-color: rgba(255,255,255,0.06) !important;
-      }
-      #div-tiga-events .grid > div {
-        background: linear-gradient(145deg, rgba(15,188,109,0.04) 0%, rgba(13,17,23,0.95) 100%) !important;
-        border-radius: 14px !important;
-        border: 1px solid rgba(255,255,255,0.06) !important;
-        overflow: hidden !important;
-        transition: transform 0.3s ease !important;
-        animation: cardFadeUp 0.55s cubic-bezier(0.23,1,0.32,1) both !important;
-        max-width: 100% !important; margin: 0 !important;
-      }
-      #div-tiga-events .grid > div:hover {
-        transform: translateY(-3px) !important;
-        border-color: rgba(15,188,109,0.15) !important;
-      }
-      #div-tiga-events [style*="aspect-ratio"] {
-        width: 100% !important; aspect-ratio: 9/12 !important; overflow: hidden !important;
-      }
-      #div-tiga-events img {
-        width: 100% !important; height: 100% !important; object-fit: cover !important;
-      }
+    /* ══ CARD UPCOMING & ARCHIVE ══ */
+    .ev-card {
+      position: relative;
+      border-radius: 16px; overflow: hidden;
+      background: linear-gradient(145deg,
+        rgba(15,188,109,0.07) 0%, rgba(13,17,23,0.98) 35%,
+        rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.04) 100%
+      );
+      box-shadow: 0 4px 24px rgba(0,0,0,0.45);
+      display: flex; flex-direction: column;
+      /* Animasi awal */
+      opacity: 0; transform: translateY(32px);
+      transition:
+        opacity 0.55s cubic-bezier(0.23,1,0.32,1),
+        transform 0.55s cubic-bezier(0.23,1,0.32,1),
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+    .ev-card.is-visible { opacity: 1; transform: translateY(0); }
+    .ev-card::before {
+      content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(15,188,109,0.35), transparent);
+      z-index: 2; pointer-events: none;
+    }
+    .ev-card:hover {
+      transform: translateY(-5px) !important;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 24px rgba(15,188,109,0.07) !important;
+    }
+    .ev-card-archive { opacity: 0.82; }
+    .ev-card-archive:hover { opacity: 1; }
 
-      /* ── ANIMASI ── */
-      @keyframes cardFadeUp {
-        from { opacity: 0; transform: translateY(28px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
+    /* Cover — 9:12 untuk upcoming (poster style), 4:3 untuk arsip */
+    .ev-card-cover {
+      position: relative; width: 100%;
+      aspect-ratio: 9 / 12;  /* Poster style */
+      overflow: hidden; flex-shrink: 0; background: #000;
+    }
+    .ev-card-archive .ev-card-cover { aspect-ratio: 4 / 3; }
+    .ev-card-cover img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s ease, filter 0.3s ease;
+    }
+    .ev-card:hover .ev-card-cover img { transform: scale(1.05); }
+    .ev-card-archive:hover .ev-card-cover img { filter: grayscale(0) !important; }
+    .ev-card-cover::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+      background: linear-gradient(to top, rgba(13,17,23,0.8), transparent);
+      pointer-events: none;
+    }
 
-      /* ── MOBILE ── */
-      @media screen and (max-width: 768px) {
-        .gradient-text { font-size: clamp(1.8rem, 8vw, 2.6rem) !important; }
-        section.py-16 { padding-top: 110px !important; padding-bottom: 40px !important; }
-        .mx-auto.px-6 { padding-left: 16px !important; padding-right: 16px !important; }
-        #current-event-register > div { max-width: 100% !important; border-radius: 16px !important; }
-        #upcoming-list { grid-template-columns: 1fr !important; gap: 16px !important; }
-        #div-tiga-events .grid { grid-template-columns: 1fr !important; gap: 14px !important; }
-      }
-      @media screen and (min-width: 480px) and (max-width: 768px) {
-        #upcoming-list,
-        #div-tiga-events .grid { grid-template-columns: 1fr 1fr !important; }
-      }
+    /* Badge */
+    .ev-card-badge {
+      position: absolute; top: 10px; left: 10px; z-index: 3;
+      padding: 3px 9px; border-radius: 20px;
+      font-size: 0.58rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Body */
+    .ev-card-body {
+      padding: 12px 14px 16px;
+      display: flex; flex-direction: column; gap: 5px; flex: 1;
+    }
+    .ev-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .ev-card-date {
+      font-size: 0.63rem; color: rgba(156,163,175,0.5);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .ev-card-date i { color: rgba(15,188,109,0.55); }
+    .ev-card-title {
+      font-size: clamp(0.82rem, 2vw, 0.93rem); font-weight: 800;
+      color: rgba(255,255,255,0.9); line-height: 1.35; margin: 0;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+      transition: color 0.2s ease;
+    }
+    .ev-card:hover .ev-card-title { color: #fff; }
+    .ev-card-desc {
+      font-size: 0.76rem; color: rgba(156,163,175,0.55); line-height: 1.55; margin: 0;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .ev-card-loc {
+      font-size: 0.72rem; color: rgba(156,163,175,0.45); margin: 0;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .ev-card-loc i { color: rgba(15,188,109,0.4); }
+    .ev-card-info {
+      display: flex; flex-direction: column; gap: 4px;
+      font-size: 0.68rem; color: rgba(156,163,175,0.45);
+      border-top: 1px solid rgba(255,255,255,0.05); padding-top: 7px; margin-top: 2px;
+    }
+    .ev-card-info span { display: flex; align-items: center; gap: 5px; }
+    .ev-card-info i { color: rgba(15,188,109,0.45); }
+
+    /* Tombol aksi */
+    .ev-card-action {
+      display: block; width: 100%; text-align: center;
+      padding: 8px; margin-top: auto; padding-top: 10px;
+      font-size: 0.78rem; font-weight: 700; border-radius: 9px;
+      text-decoration: none; transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .ev-action-reg {
+      background: rgba(22,163,74,0.85); color: #fff;
+      border: 1px solid rgba(22,163,74,0.4);
+    }
+    .ev-action-reg:hover { background: #16a34a; }
+    .ev-action-doc {
+      background: rgba(255,255,255,0.05); color: rgba(156,163,175,0.75);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .ev-action-doc:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .ev-action-soon, .ev-action-empty {
+      color: rgba(107,114,128,0.6); font-size: 0.72rem; font-style: italic;
+      text-align: center; padding: 6px 0; margin-top: auto;
+    }
+
+    /* ══ GRID KARTU UPCOMING ══ */
+    #upcoming-list {
+      display: flex; flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(12px, 2vw, 18px);
+    }
+    #upcoming-list .ev-card {
+      flex: 1 1 220px;
+      max-width: 260px;
+      min-width: 180px;
+    }
+
+    /* ══ ARSIP: grid rapi ══ */
+    .ev-archive-wrap { padding-top: 48px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 16px; }
+    .ev-archive-header { text-align: center; margin-bottom: 28px; }
+    .ev-archive-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(156,163,175,0.5); font-weight: 700; margin-bottom: 6px;
+    }
+    .ev-archive-eyebrow span { display: block; width: 24px; height: 1px; background: rgba(156,163,175,0.3); }
+    .ev-archive-title {
+      font-size: clamp(1.3rem, 3vw, 1.9rem); font-weight: 900; color: #fff;
+      letter-spacing: -0.03em; margin: 0;
+    }
+    .ev-archive-sub { font-size: 0.82rem; color: rgba(156,163,175,0.5); margin: 5px 0 0; }
+
+    /* Grid arsip: max 4 kolom, kartu tidak raksasa */
+    .ev-archive-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: clamp(12px, 2vw, 18px);
+      max-width: 1000px; margin: 0 auto;
+    }
+    /* Kunci max lebar agar tidak raksasa di desktop lebar */
+    .ev-archive-grid .ev-card { max-width: 100%; }
+
+    .ev-more-btn {
+      padding: 10px 28px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 50px;
+      color: rgba(255,255,255,0.6); font-size: 0.84rem; font-weight: 600;
+      cursor: pointer; transition: all 0.25s ease;
+    }
+    .ev-more-btn:hover { background: rgba(255,255,255,0.07); color: #fff; border-color: rgba(15,188,109,0.3); }
+
+    /* ── ANIMASI ── */
+    @keyframes evFadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .ev-page-section {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 clamp(16px, 5vw, 48px) 80px;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 767px) {
+      .ev-page-header { padding-top: 100px; }
+      #upcoming-list .ev-card { flex: 1 1 calc(50% - 10px); max-width: calc(50% - 5px); min-width: 0; }
+      .ev-archive-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 479px) {
+      #upcoming-list { flex-direction: column; align-items: center; }
+      #upcoming-list .ev-card { flex: none; width: min(300px, 90vw); max-width: none; }
+      .ev-archive-grid { grid-template-columns: 1fr; }
+    }
     </style>
   </head>
 
@@ -148,37 +324,36 @@
     <div id="header-placeholder"></div>
 
     <main>
-      <section class="py-16 fade-in">
-        <div class="mx-auto px-6 max-w-7xl">
+      <!-- ── Page Header ── -->
+      <div class="ev-page-header">
+        <h1 class="ev-gradient-title">Agenda HMTE</h1>
+        <p class="ev-page-sub">Jadwal event terbaru, workshop, dan seminar HMTE Unsoed.</p>
+      </div>
 
-          <!-- Page Header -->
-          <h1 class="text-5xl md:text-6xl font-bold gradient-text text-center mb-4">Agenda HMTE</h1>
-          <p class="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto text-center mb-12">
-            Jadwal event terbaru, workshop, dan seminar yang sedang berlangsung.
-          </p>
+      <!-- ── Main Content ── -->
+      <div class="ev-page-section">
 
-          <!-- ─── SECTION: EVENT MENDATANG ─── -->
-          <div class="mb-4 text-center">
-            <span class="section-eyebrow">Kegiatan HMTE</span>
-            <h2 class="text-2xl md:text-3xl font-bold text-white">Event Mendatang</h2>
-          </div>
-
-          <!-- Event terdekat (card utama, center) -->
-          <div id="current-event-register" class="mb-10 w-full flex justify-center">
-            <p class="text-gray-400 text-center animate-pulse">Memuat event...</p>
-          </div>
-
-          <!-- Event mendatang lainnya (grid) -->
-          <div id="upcoming-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mb-16">
-          </div>
-
-          <!-- ─── SECTION: ARSIP KEGIATAN ─── -->
-          <div id="div-tiga-events" class="pt-8">
-            <!-- diisi oleh event.js -->
-          </div>
-
+        <!-- Section: Event Mendatang -->
+        <div class="ev-section-label" style="margin-bottom:20px;">
+          <div class="ev-section-eyebrow">Kegiatan HMTE</div>
+          <h2 class="ev-section-title">Event Mendatang</h2>
         </div>
-      </section>
+
+        <!-- Event terdekat — card besar center -->
+        <div id="current-event-register"
+             style="display:flex;justify-content:center;margin-bottom:32px;">
+          <p style="color:rgba(156,163,175,0.5);padding:40px 0;font-style:italic;" class="animate-pulse">
+            Memuat event...
+          </p>
+        </div>
+
+        <!-- Event mendatang lainnya — grid flex -->
+        <div id="upcoming-list" style="margin-bottom:40px;"></div>
+
+        <!-- Section: Arsip Kegiatan (diisi event.js) -->
+        <div id="div-tiga-events"></div>
+
+      </div>
     </main>
 
     <div id="footer-placeholder"></div>
