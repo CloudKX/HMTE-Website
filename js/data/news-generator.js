@@ -17,7 +17,12 @@ async function getNewsData() {
     _newsCache = json.items || [];
     return _newsCache;
   } catch (e) {
-    console.error('[news-generator.js] Gagal fetch:', e.message);
+    console.warn('[news-generator.js] JSON tidak tersedia, fallback ke newsData static:', e.message);
+    // Fallback ke variabel global newsData dari news.js (jika masih dipakai)
+    if (typeof newsData !== 'undefined' && Array.isArray(newsData)) {
+      _newsCache = newsData;
+      return _newsCache;
+    }
     return [];
   }
 }

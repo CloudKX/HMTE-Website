@@ -167,6 +167,117 @@
   }
 </style>
 
+<script>
+(function () {
+  /* Inject keyframes */
+  if (!document.getElementById('timeline-anim-style')) {
+    const s = document.createElement('style');
+    s.id = 'timeline-anim-style';
+    s.textContent = `
+      @keyframes tlFadeUp {
+        from { opacity: 0; transform: translateY(28px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes tlFadeRight {
+        from { opacity: 0; transform: translateX(-18px); }
+        to   { opacity: 1; transform: translateX(0); }
+      }
+
+      .tl-anim-up    { animation: tlFadeUp    0.65s cubic-bezier(0.23,1,0.32,1) both; }
+      .tl-anim-right { animation: tlFadeRight 0.55s cubic-bezier(0.23,1,0.32,1) both; }
+
+      /* Upcoming event items */
+      #upcoming-events > * {
+        opacity: 0;
+        transform: translateX(-14px);
+        transition: opacity 0.45s cubic-bezier(0.23,1,0.32,1),
+                    transform 0.45s cubic-bezier(0.23,1,0.32,1);
+      }
+      #upcoming-events > *.tl-item-visible {
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+      }
+
+      /* Header timeline */
+      .timeline-header {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+      .timeline-header.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    `;
+    document.head.appendChild(s);
+  }
+
+  function initTimelineAnim() {
+    /* Header */
+    const header = document.querySelector('.timeline-header');
+    if (header) {
+      const hIO = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('is-visible'); hIO.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      hIO.observe(header);
+    }
+
+    /* Calendar card & upcoming card — slide in saat terlihat */
+    const cards = document.querySelectorAll('.tl-calendar-card, .tl-upcoming-card');
+    const cardIO = new IntersectionObserver((entries) => {
+      entries.forEach((e, idx) => {
+        if (e.isIntersecting) {
+          e.target.style.animationDelay = `${idx * 0.12}s`;
+          e.target.classList.add('tl-anim-up');
+          cardIO.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    cards.forEach((c) => cardIO.observe(c));
+
+    /* Upcoming events list — pantau inject dari calendar.js */
+    const upcomingContainer = document.getElementById('upcoming-events');
+    if (!upcomingContainer) return;
+
+    const itemIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('tl-item-visible'); itemIO.unobserve(e.target); }
+      });
+    }, { threshold: 0.05 });
+
+    const mutIO = new MutationObserver(() => {
+      upcomingContainer.querySelectorAll(':scope > *:not(.tl-item-visible)').forEach((item, i) => {
+        item.style.transitionDelay = `${i * 0.09}s`;
+        itemIO.observe(item);
+      });
+    });
+    mutIO.observe(upcomingContainer, { childList: true });
+
+    /* Observe yang sudah ada */
+    upcomingContainer.querySelectorAll(':scope > *').forEach((item, i) => {
+      item.style.transitionDelay = `${i * 0.09}s`;
+      itemIO.observe(item);
+    });
+  }
+
+  /* Register ke loader */
+  window.__components = window.__components || {};
+  window.__components['timeline'] = { init: initTimelineAnim };
+
+  document.addEventListener('component:loaded', (e) => {
+    if (e.detail?.name === 'timeline') initTimelineAnim();
+  });
+
+  if (document.readyState !== 'loading') {
+    initTimelineAnim();
+  } else {
+    document.addEventListener('DOMContentLoaded', initTimelineAnim);
+  }
+})();
+</script>
+
 <section class="timeline-section fade-in">
   <div class="timeline-inner">
 

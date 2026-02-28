@@ -2,7 +2,6 @@
 #  DECAP CMS — KONFIGURASI UTAMA — HMTE UNSOED
 # =============================================================
 
-# ── BACKEND ──────────────────────────────────────────────────
 backend:
   name: github
   repo: CloudKX/HMTE-Website
@@ -10,18 +9,14 @@ backend:
   base_url: https://hmte-website.vercel.app
   auth_endpoint: api/auth
 
-# ── MEDIA ────────────────────────────────────────────────────
 media_folder: "img/uploads"
 public_folder: "/img/uploads"
 
 locale: id
 
-# =============================================================
-#  COLLECTIONS
-# =============================================================
 collections:
 
-  # ── 1. PROGRAM KERJA ───────────────────────────────────────
+  # ── 1. PROGRAM KERJA ──────────────────────────────────────
   - name: "projects"
     label: "Program Kerja"
     files:
@@ -42,6 +37,11 @@ collections:
               - { label: "Gambar",           name: image,       widget: image,    required: false }
               - { label: "Tanggal Mulai",    name: date,        widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false, required: false }
               - { label: "Link Dokumentasi", name: link,        widget: string,   required: false }
+              - label: "Tampilkan di Beranda"
+                name: showOnHome
+                widget: boolean
+                default: false
+                hint: "Aktifkan agar proker ini muncul di halaman utama (Beranda)."
 
       - name: "upcoming"
         label: "Proker Mendatang"
@@ -57,6 +57,11 @@ collections:
               - { label: "Gambar",    name: image,       widget: image,    required: false }
               - { label: "Tanggal",   name: date,        widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false, required: false }
               - { label: "Link",      name: link,        widget: string,   required: false }
+              - label: "Tampilkan di Beranda"
+                name: showOnHome
+                widget: boolean
+                default: false
+                hint: "Aktifkan agar proker ini muncul di halaman utama (Beranda)."
 
       - name: "completed"
         label: "Proker Selesai"
@@ -73,8 +78,13 @@ collections:
               - { label: "Tanggal Selesai",  name: date,               widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false }
               - { label: "Link Dokumentasi", name: link,               widget: string,   required: false }
               - { label: "Konten Rilis",     name: releaseDescription, widget: text,     required: false }
+              - label: "Tampilkan di Beranda"
+                name: showOnHome
+                widget: boolean
+                default: false
+                hint: "Aktifkan agar proker ini muncul di halaman utama (Beranda)."
 
-  # ── 2. BERITA ──────────────────────────────────────────────
+  # ── 2. BERITA ─────────────────────────────────────────────
   - name: "news"
     label: "Berita"
     files:
@@ -87,13 +97,22 @@ collections:
             widget: "list"
             summary: "{{fields.title}}"
             fields:
-              - { label: "ID / Slug",    name: id,       widget: string, hint: "URL-friendly, contoh: seminar-ai-2025" }
+              - label: "ID / Slug"
+                name: id
+                widget: string
+                hint: "Unik, tanpa spasi. Contoh: seminar-ai-2025. Dipakai di URL berita."
               - { label: "Judul",        name: title,    widget: string }
-              - { label: "Tanggal",      name: date,     widget: string, hint: "Format: Mar 12, 2025" }
+              - { label: "Tanggal",      name: date,     widget: string, hint: "Format bebas, contoh: Mar 12, 2025" }
               - { label: "Kategori",     name: category, widget: select, options: ["Graduation","Humas","Ristek","Internal","Lainnya"] }
-              - { label: "Preview",      name: preview,  widget: text }
-              - { label: "Konten",       name: content,  widget: markdown }
-              - { label: "Gambar Cover", name: imgSrc,   widget: image, required: false }
+              - { label: "Preview",      name: preview,  widget: text,   hint: "Ringkasan singkat, muncul di daftar berita." }
+              - label: "Konten Artikel"
+                name: content
+                widget: markdown
+                hint: >
+                  Tulis konten seperti biasa menggunakan editor di bawah ini.
+                  JANGAN copy-paste kode HTML (<p>, <div>, dll) — cukup ketik teks biasa
+                  dan gunakan tombol Bold/Italic/Heading di toolbar.
+              - { label: "Gambar Cover", name: imgSrc,   widget: image,  required: false }
 
   # ── 3. EVENT ──────────────────────────────────────────────
   - name: "events"
@@ -106,28 +125,37 @@ collections:
           - label: "Daftar Event"
             name: "items"
             widget: "list"
-            summary: "{{fields.title}}"
+            summary: "{{fields.date}} — {{fields.title}}"
             fields:
               - { label: "ID",                name: id,               widget: number }
               - { label: "Nama Event",        name: title,            widget: string }
               - { label: "Deskripsi",         name: description,      widget: text }
-              - { label: "Tanggal",           name: date,             widget: datetime, format: "YYYY-MM-DD", date_format: "DD MMMM YYYY", time_format: false }
-              - { label: "Waktu / Jadwal",    name: time,             widget: string,   hint: "Contoh: Pendaftaran 13 Juli - 27 Juli" }
+              - label: "Tanggal"
+                name: date
+                widget: datetime
+                format: "YYYY-MM-DD"
+                date_format: "DD MMMM YYYY"
+                time_format: false
+                hint: "Gunakan tanggal yang akan datang agar muncul di section Event Mendatang."
+              - { label: "Waktu / Jadwal",    name: time,             widget: string,  hint: "Contoh: Pendaftaran 13 Juli - 27 Juli" }
               - { label: "Lokasi",            name: location,         widget: string }
-              - { label: "Link Google Maps",  name: locationLink,     widget: string,   required: false }
-              - { label: "Gambar / Poster",   name: imgSrc,           widget: image,    required: false }
-              - { label: "Link Pendaftaran",  name: registrationLink, widget: string,   required: false }
-              - { label: "Warna Badge",       name: color,            widget: select,   options: ["green","blue","yellow"], default: "green" }
-              - { label: "Tampil di Beranda", name: isFeatured,       widget: boolean,  default: false }
+              - { label: "Link Google Maps",  name: locationLink,     widget: string,  required: false }
+              - { label: "Gambar / Poster",   name: imgSrc,           widget: image,   required: false }
+              - label: "Link Pendaftaran"
+                name: registrationLink
+                widget: string
+                required: false
+                hint: "Isi jika event belum selesai dan masih bisa didaftar."
+              - label: "Link Dokumentasi (Google Drive)"
+                name: driveLink
+                widget: string
+                required: false
+                hint: "Isi setelah event selesai. Paste link Google Drive folder dokumentasi di sini."
+              - { label: "Warna Badge",       name: color,            widget: select,  options: ["green","blue","yellow"], default: "green" }
+              - { label: "Tampil di Beranda", name: isFeatured,       widget: boolean, default: false }
               - { label: "Konten Detail",     name: content,          widget: markdown, required: false }
 
   # ── 4. E-MAGZ ─────────────────────────────────────────────
-  #
-  #  FIX: Field name disesuaikan dengan yang dipakai emagz.js:
-  #       - coverSrc  (bukan "image")
-  #       - pdfLink   (bukan "link")
-  #       - id        (ditambahkan — wajib untuk emagz-reader.html?id=)
-  #
   - name: "emagz"
     label: "e-Magz"
     files:
@@ -144,14 +172,13 @@ collections:
                 name: id
                 widget: number
                 value_type: int
-                hint: "Angka urut edisi, misal: 1, 2, 3. Dipakai untuk URL ?id= di reader."
-              - { label: "Judul",           name: title,    widget: string }
+                hint: "Angka urut edisi. Dipakai untuk URL ?id= di reader."
+              - { label: "Judul",           name: title,       widget: string }
               - { label: "Deskripsi",       name: description, widget: text }
               - label: "Gambar Cover"
                 name: coverSrc
                 widget: image
                 required: false
-                hint: "Upload cover depan majalah."
               - label: "Link PDF / Issuu"
                 name: pdfLink
                 widget: string
@@ -164,11 +191,6 @@ collections:
                 time_format: false
 
   # ── 5. PODCAST ────────────────────────────────────────────
-  #
-  #  Daftar episode YouTube — admin tambah/hapus/ganti video.
-  #  Setiap item butuh YouTube Video ID (bukan full URL).
-  #  Contoh: URL https://youtube.com/watch?v=dQw4w9WgXcQ → ID = dQw4w9WgXcQ
-  #
   - name: "podcast"
     label: "Podcast"
     files:
@@ -185,12 +207,9 @@ collections:
                 name: episode
                 widget: number
                 value_type: int
-                hint: "Angka episode, misal: 5"
-              - label: "Judul Episode"
-                name: title
-                widget: string
-                hint: "Judul lengkap episode, misal: POTEK SEASON 4 - EPS.5 Menembus Batas Inovasi"
+                hint: "Angka episode, contoh: 5"
+              - { label: "Judul Episode", name: title,     widget: string }
               - label: "YouTube Video ID"
                 name: youtubeId
                 widget: string
-                hint: "Hanya ID-nya saja. Dari URL youtube.com/watch?v=XXXX → isi XXXX di sini."
+                hint: "Dari URL youtube.com/watch?v=XXXX → isi XXXX saja (bukan full URL)."

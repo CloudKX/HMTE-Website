@@ -1,7 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head><title>Admin Panel HMTE</title></head>
-  <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>HMTE Admin Panel</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <!-- Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <script>
+  /**
+   * ════════════════════════════════════════════════════════
+   *  AUTO-SLUG GENERATOR untuk Decap CMS
+   *  Cara kerja: setiap kali field "Judul" berubah pada
+   *  collection Berita, field "ID / Slug" diisi otomatis
+   *  dengan versi slug-nya (lowercase, strip spasi → "-").
+   * ════════════════════════════════════════════════════════
+   */
+  function slugify(text) {
+    return text
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')        // spasi → -
+      .replace(/[^\w\-]+/g, '')    // hapus karakter non-word
+      .replace(/\-\-+/g, '-')      // double -- → -
+      .replace(/^-+/, '')           // hapus - di awal
+      .replace(/-+$/, '');          // hapus - di akhir
+  }
+
+  /**
+   * Pantau DOM sampai field slug & title tersedia,
+   * lalu pasang listener. Retry tiap 600ms.
+   */
+  function attachSlugWatcher() {
+    // Cari semua input di panel CMS
+    const allInputs = document.querySelectorAll('input[id], input[name]');
+
+    // Cari field title & id/slug berdasarkan label atau placeholder
+    let titleInput = null;
+    let slugInput  = null;
+
+    document.querySelectorAll('label').forEach(label => {
+      const text = label.textContent.trim().toLowerCase();
+      const input = label.closest('[data-slate-editor]')
+                 || label.parentElement?.querySelector('input');
+
+      if (!input) return;
+
+      if (text.includes('judul') && !titleInput) titleInput = input;
+      if ((text.includes('id') || text.includes('slug')) && !slugInput) slugInput = input;
+    });
+
+    if (!titleInput || !slugInput) {
+      setTimeout(attachSlugWatcher, 600);
+      return;
+    }
+
+    // Jangan override jika slug sudah ada isinya
+    if (slugInput._slugWatcherAttached) return;
+    slugInput._slugWatcherAttached = true;
+
+    titleInput.addEventListener('input', function () {
+      // Hanya auto-fill jika slug masih kosong atau sama dengan slug sebelumnya
+      const currentSlug = slugInput.value;
+      const prevTitle   = titleInput._prevTitle || '';
+      const prevSlug    = slugify(prevTitle);
+
+      if (currentSlug === '' || currentSlug === prevSlug) {
+        const newSlug = slugify(this.value);
+        // Trigger native React input event agar Decap CMS mendeteksi perubahan
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype, 'value'
+        ).set;
+        nativeInputValueSetter.call(slugInput, newSlug);
+        slugInput.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      titleInput._prevTitle = this.value;
+    });
+
+    console.log('[HMTE Admin] Auto-slug watcher aktif ✅');
+  }
+
+  /**
+   * Mulai pantau setelah CMS siap
+   */
+  if (window.CMS) {
+    CMS.registerEventListener({
+      name: 'prePublish',
+      handler: () => {}
+    });
+  }
+
+  // Pantau perubahan route/halaman di dalam CMS SPA
+  const observer = new MutationObserver(() => {
+    attachSlugWatcher();
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    observer.observe(document.body, { childList: true, subtree: true });
+    // Mulai cek pertama
+    setTimeout(attachSlugWatcher, 1500);
+  });
+  </script>
+</body>
 </html>

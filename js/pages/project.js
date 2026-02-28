@@ -1,6 +1,6 @@
 // js/pages/project.js
-// Versi CMS: data di-fetch dari JSON, bukan variabel global.
-// Semua logika render TIDAK BERUBAH.
+// Versi CMS: data di-fetch dari JSON.
+// + Support field showOnHome untuk tampil di Beranda.
 
 const JSON_PATHS = {
   ongoing:   "/js/data/json/ongoing-projects.json",
@@ -31,31 +31,66 @@ async function getAllProjects() {
     fetchProjectData("upcoming"),
     fetchProjectData("completed"),
   ]);
+
   const withMeta = (arr, categoryLabel, statusFn, contentFn) =>
-    arr.map((p) => ({ ...p, categoryLabel, statusText: statusFn(p), content: contentFn(p) }));
+    arr.map((p) => ({
+      ...p,
+      categoryLabel,
+      statusText: statusFn(p),
+      content: contentFn(p),
+    }));
 
   const all = [
     ...withMeta(ongoing,   "Sedang Berjalan", (p) => `Progres: ${p.status}`, (p) => p.description),
-    ...withMeta(upcoming,  "Akan Datang",     ()  => "Segera Hadir",           (p) => p.description),
-    ...withMeta(completed, "Arsip Kegiatan",  ()  => "Selesai",                (p) => p.releaseDescription || p.description),
+    ...withMeta(upcoming,  "Akan Datang",     ()  => "Segera Hadir",          (p) => p.description),
+    ...withMeta(completed, "Arsip Kegiatan",  ()  => "Selesai",               (p) => p.releaseDescription || p.description),
   ];
-  return all.map((p, i) => ({ ...p, id: i + 1 }));
+
+  return all.map((p, i) => ({ ...p, id: p.id ?? i + 1 }));
 }
 
+/**
+ * getHomeProjects — ambil proker yang showOnHome: true
+ * Dipanggil oleh home.js / renderHomeProker()
+ * Fallback: jika tidak ada yang showOnHome, ambil 1 dari tiap kategori
+ */
+async function getHomeProjects() {
+  const all = await getAllProjects();
+  const featured = all.filter((p) => p.showOnHome === true);
+
+  if (featured.length > 0) return featured.slice(0, 4);
+
+  // ── Fallback: 1 ongoing + 1 upcoming + 1 completed ──
+  const fallback = [];
+  const o = all.find((p) => p.category === 'ongoing');
+  const u = all.filter((p) => p.category === 'upcoming')
+               .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+  const c = all.filter((p) => p.category === 'completed')
+               .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+  if (o) fallback.push(o);
+  if (u) fallback.push(u);
+  if (c) fallback.push(c);
+  return fallback;
+}
+
+// ── Halaman project.html ─────────────────────────────────────────────────────
 async function loadProjectSections() {
   const all      = await getAllProjects();
   const ongoing  = all.filter((p) => p.category === "ongoing");
-  const upcoming = all.filter((p) => p.category === "upcoming").sort((a, b) => new Date(a.date) - new Date(b.date));
-  const completed = all.filter((p) => p.category === "completed").sort((a, b) => new Date(b.date) - new Date(a.date));
+  const upcoming = all.filter((p) => p.category === "upcoming")
+                      .sort((a, b) => new Date(a.date) - new Date(b.date));
+  const completed = all.filter((p) => p.category === "completed")
+                       .sort((a, b) => new Date(b.date) - new Date(a.date));
   renderOngoingProjects(ongoing.slice(0, 3));
   renderUpcomingProjects(upcoming);
   renderCompletedProjects(completed);
 }
 
+// ── Halaman project-detail.html ──────────────────────────────────────────────
 async function loadProjectDetailPage() {
   const id  = new URLSearchParams(window.location.search).get("id");
   const all = await getAllProjects();
-  const project = all.find((p) => p.id == id);
+  const project = all.find((p) => String(p.id) === String(id));
 
   const titleEl       = document.getElementById("detail-title");
   const contentEl     = document.getElementById("detail-content");
@@ -75,9 +110,9 @@ async function loadProjectDetailPage() {
   }
 
   document.getElementById("page-title").textContent = `${project.title} - Detail`;
-  titleEl.textContent        = project.title;
-  statusBadge.textContent    = project.statusText;
-  categoryBadge.textContent  = project.categoryLabel;
+  titleEl.textContent       = project.title;
+  statusBadge.textContent   = project.statusText;
+  categoryBadge.textContent = project.categoryLabel;
 
   const badgeMap = {
     completed: "px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-green-900/50 text-green-400 border border-green-800",
@@ -88,7 +123,8 @@ async function loadProjectDetailPage() {
 
   if (project.date) {
     const d = new Date(project.date);
-    dateEl.textContent = isNaN(d.getTime()) ? "Tanggal belum ditentukan"
+    dateEl.textContent = isNaN(d.getTime())
+      ? "Tanggal belum ditentukan"
       : d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
   } else {
     dateEl.textContent = "-";
@@ -100,7 +136,7 @@ async function loadProjectDetailPage() {
       class="w-full h-auto rounded-lg shadow-lg"
       onerror="this.onerror=null;this.src='/img/logohmte.png';" />`;
   }
-  contentEl.innerHTML = project.content;
+  contentEl.innerHTML = project.content || '';
 
   if (project.link && docSection && docLink) {
     docLink.href = project.link;
@@ -110,61 +146,90 @@ async function loadProjectDetailPage() {
   }
 }
 
-// ── Render Functions (tidak berubah) ─────────────────────────────────────────
+// ── Render Functions ─────────────────────────────────────────────────────────
 function renderOngoingProjects(projects) {
   const container = document.getElementById("ongoing-projects-container");
   if (!container) return;
-  if (projects.length === 0) { container.innerHTML = '<p class="text-gray-400">Tidak ada proyek yang sedang berjalan saat ini.</p>'; return; }
+  if (!projects.length) {
+    container.innerHTML = '<p class="text-gray-400">Tidak ada proyek yang sedang berjalan saat ini.</p>';
+    return;
+  }
   container.innerHTML = `<div class="cards-grid">${projects.map((p) => {
     const img  = p.image.startsWith("/") ? p.image : `/${p.image}`;
     const link = `/page/project/project-detail.html?id=${p.id}`;
     return `<a href="${link}" class="project-card border-t-green group">
-      <div class="card-img-wrap"><img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';"><span class="card-badge">ONGOING</span></div>
+      <div class="card-img-wrap">
+        <img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';">
+        <span class="card-badge">ONGOING</span>
+      </div>
       <div class="p-5 flex flex-col flex-grow">
         <h3 class="card-title text-base font-bold text-white mb-2 group-hover:text-green-400 transition">${p.title}</h3>
         <p class="card-desc text-gray-400 text-sm mb-3">${p.description}</p>
         <p class="text-gray-500 text-xs mt-auto">${p.statusText}</p>
-      </div></a>`;
+      </div>
+    </a>`;
   }).join("")}</div>`;
 }
 
 function renderUpcomingProjects(projects) {
   const container = document.getElementById("upcoming-projects-container");
   if (!container) return;
-  if (projects.length === 0) { container.innerHTML = '<p class="text-gray-400">Tidak ada proyek yang dijadwalkan.</p>'; return; }
+  if (!projects.length) {
+    container.innerHTML = '<p class="text-gray-400">Tidak ada proyek yang dijadwalkan.</p>';
+    return;
+  }
   container.innerHTML = `<div class="cards-grid">${projects.map((p) => {
     const img  = p.image.startsWith("/") ? p.image : `/${p.image}`;
     const link = `/page/project/project-detail.html?id=${p.id}`;
     return `<a href="${link}" class="project-card border-t-yellow group">
-      <div class="card-img-wrap"><img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';"><span class="card-badge">UPCOMING</span></div>
+      <div class="card-img-wrap">
+        <img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';">
+        <span class="card-badge">UPCOMING</span>
+      </div>
       <div class="p-5 flex flex-col flex-grow">
         <h3 class="card-title text-base font-bold text-white mb-2 group-hover:text-yellow-400 transition">${p.title}</h3>
         <p class="card-desc text-gray-400 text-sm mb-3">${p.description}</p>
         <p class="text-yellow-400 text-xs mt-auto">${p.statusText}</p>
-      </div></a>`;
+      </div>
+    </a>`;
   }).join("")}</div>`;
 }
 
 function renderCompletedProjects(projects) {
   const container = document.getElementById("completed-projects-container");
   if (!container) return;
-  if (projects.length === 0) { container.innerHTML = '<p class="text-gray-400">Belum ada proyek selesai.</p>'; return; }
+  if (!projects.length) {
+    container.innerHTML = '<p class="text-gray-400">Belum ada proyek selesai.</p>';
+    return;
+  }
   container.innerHTML = `<div class="cards-grid">${projects.map((p) => {
     const img  = p.image.startsWith("/") ? p.image : `/${p.image}`;
     const link = `/page/project/project-detail.html?id=${p.id}`;
     return `<a href="${link}" class="project-card border-t-cyan group">
-      <div class="card-img-wrap"><img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';"><span class="card-badge">COMPLETED</span></div>
+      <div class="card-img-wrap">
+        <img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';">
+        <span class="card-badge">COMPLETED</span>
+      </div>
       <div class="p-5 flex flex-col flex-grow">
         <h3 class="card-title text-base font-bold text-white mb-2 group-hover:text-cyan-400 transition">${p.title}</h3>
         <p class="card-desc text-gray-400 text-sm mb-3">${p.description}</p>
         <p class="text-gray-500 text-xs mt-auto mb-2">${p.statusText}</p>
         <span class="text-cyan-400 text-sm font-semibold group-hover:underline mt-auto">Lihat Detail →</span>
-      </div></a>`;
+      </div>
+    </a>`;
   }).join("")}</div>`;
 }
 
+// ── Auto-run berdasarkan URL ──────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
   const path = window.location.pathname;
   if (path.includes("project-detail.html")) loadProjectDetailPage();
   else if (path.includes("project.html"))   loadProjectSections();
 });
+
+// ── Expose ke global ─────────────────────────────────────────────────────────
+window.getAllProjects         = getAllProjects;
+window.getHomeProjects        = getHomeProjects;
+window.loadProjectSections    = loadProjectSections;
+window.loadProjectDetailPage  = loadProjectDetailPage;
+window.renderProjects         = loadProjectSections; // alias untuk loader.js

@@ -558,27 +558,67 @@ footer {
   }
 
   .nav-contain {
-    top: -500px;
-    left: 0px;
+    /* Sembunyikan ke atas pakai transform — lebih smooth dari top:-500px */
     position: absolute;
-    opacity: 0;
+    left: 0;
+    top: 100%;           /* tepat di bawah header */
     width: 100vw;
-    transition: all 0.5s ease;
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    transition:
+      opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 998;
   }
 
   .nav-contain.nav-open {
     opacity: 1;
-    top: 60px;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   #nav_list {
     flex-direction: column;
     text-align: center;
-    gap: 30px;
-    padding: 20px 0;
-    background-color: rgba(22, 22, 22, 1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    gap: 0;
+    padding: 8px 0 16px;
+    /* Glassmorphism premium */
+    background: rgba(7, 9, 13, 0.96) !important;
+    backdrop-filter: blur(28px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+    border-bottom: 1px solid rgba(15, 188, 109, 0.12) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  /* Setiap nav item slide masuk stagger */
+  #nav_list > * {
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .nav-contain.nav-open #nav_list > *:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.05s; }
+  .nav-contain.nav-open #nav_list > *:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.10s; }
+  .nav-contain.nav-open #nav_list > *:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.15s; }
+  .nav-contain.nav-open #nav_list > *:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.20s; }
+  .nav-contain.nav-open #nav_list > *:nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 0.25s; }
+  .nav-contain.nav-open #nav_list > *:nth-child(6) { opacity: 1; transform: translateY(0); transition-delay: 0.30s; }
+
+  /* Padding tiap link nav */
+  #nav_list .nav-link,
+  #nav_list > li > a,
+  #nav_list > li {
+    padding: 14px 20px !important;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background 0.2s ease, color 0.2s ease !important;
+  }
+
+  #nav_list .nav-link:active,
+  #nav_list > li > a:active {
+    background: rgba(15, 188, 109, 0.08) !important;
+    color: #0fbc6d !important;
   }
   .dropdown-menu {
     display: none; /* Awalnya disembunyikan */

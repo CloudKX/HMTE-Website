@@ -104,9 +104,24 @@ function showEventDetails(dateStr) {
 
   const borderColorMap = { green: 'border-green-500', blue: 'border-cyan-500', yellow: 'border-yellow-500', gray: 'border-gray-500' };
   const borderColor    = borderColorMap[event?.color || 'gray'];
-  const actionButton   = event?.registrationLink
-    ? `<a href="${event.registrationLink}" target="_blank" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition text-sm font-semibold">Daftar</a>`
-    : '';
+  // Cek apakah event sudah selesai (tanggal < hari ini)
+  const _evDate      = new Date(dateStr); _evDate.setHours(0,0,0,0);
+  const _today       = new Date(); _today.setHours(0,0,0,0);
+  const _isCompleted = event && _evDate < _today;
+
+  let actionButton = '';
+  if (event) {
+    if (_isCompleted) {
+      const docUrl = event.driveLink || event.link || null;
+      actionButton = docUrl
+        ? `<a href="${docUrl}" target="_blank" class="px-3 py-1 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition text-sm font-semibold border border-gray-600">📁 Lihat Dokumentasi</a>`
+        : `<span class="text-gray-600 text-xs italic">Tidak ada dokumentasi.</span>`;
+    } else {
+      actionButton = event.registrationLink
+        ? `<a href="${event.registrationLink}" target="_blank" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition text-sm font-semibold">🎟️ Daftar</a>`
+        : `<span class="text-gray-500 text-xs italic">Pendaftaran segera dibuka.</span>`;
+    }
+  }
 
   if (event) {
     eventDetailsContainer.innerHTML = `

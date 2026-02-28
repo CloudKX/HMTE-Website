@@ -277,17 +277,78 @@
 
 <script>
 (function () {
-  function initEmagzAnim() {
-    const targets = document.querySelectorAll('.emagz-header, #emagz-cards-container .emagz-card, .emagz-footer');
-    if (!targets.length) return;
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-    targets.forEach((el) => { el.classList.remove('is-visible'); obs.observe(el); });
+  /* Inject keyframe sekali */
+  if (!document.getElementById('emagz-anim-style')) {
+    const s = document.createElement('style');
+    s.id = 'emagz-anim-style';
+    s.textContent = `
+      @keyframes emagzReveal {
+        from { opacity: 0; transform: translateY(28px) scale(0.97); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .emagz-card-revealed {
+        animation: emagzReveal 0.6s cubic-bezier(0.23,1,0.32,1) both !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    `;
+    document.head.appendChild(s);
   }
+
+  function initStaticAnim() {
+    const els = document.querySelectorAll('.emagz-header, .emagz-footer');
+    if (!els.length) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    els.forEach((el) => io.observe(el));
+  }
+
+  function watchEmagzContainer() {
+    const container = document.getElementById('emagz-cards-container');
+    if (!container) { setTimeout(watchEmagzContainer, 80); return; }
+
+    const cardIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible', 'emagz-card-revealed');
+          cardIO.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+
+    /* MutationObserver: tangkap kartu baru dari emagz.js inject */
+    const mutIO = new MutationObserver(() => {
+      container.querySelectorAll('.emagz-card:not(.emagz-card-revealed), div:not(.emagz-card-revealed), a:not(.emagz-card-revealed)').forEach((c, i) => {
+        c.style.animationDelay = `${i * 0.11}s`;
+        cardIO.observe(c);
+      });
+    });
+    mutIO.observe(container, { childList: true });
+
+    /* Observe skeleton yang sudah ada */
+    container.querySelectorAll('.emagz-card, div, a').forEach((c, i) => {
+      c.style.animationDelay = `${i * 0.11}s`;
+      cardIO.observe(c);
+    });
+  }
+
   window.__components = window.__components || {};
-  window.__components['emagz'] = { init: initEmagzAnim };
-  window.initEmagzAnimations = initEmagzAnim;
+  window.__components['emagz'] = {
+    init: () => { initStaticAnim(); watchEmagzContainer(); }
+  };
+  window.initEmagzAnimations = () => { initStaticAnim(); watchEmagzContainer(); };
+
+  document.addEventListener('component:loaded', (e) => {
+    if (e.detail?.name === 'emagz') { initStaticAnim(); watchEmagzContainer(); }
+  });
+  if (document.readyState !== 'loading') {
+    initStaticAnim(); watchEmagzContainer();
+  } else {
+    document.addEventListener('DOMContentLoaded', () => { initStaticAnim(); watchEmagzContainer(); });
+  }
 })();
 </script>
 

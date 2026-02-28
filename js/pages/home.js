@@ -95,89 +95,69 @@ async function renderHomeProker() {
   const container = document.getElementById('home-proker-container');
   if (!container) return;
 
-  // Tunggu getAllProjects tersedia (dari js/pages/project.js)
-  if (typeof window.getAllProjects !== 'function') {
+  // Tunggu getHomeProjects atau getAllProjects tersedia dari js/pages/project.js
+  const getProjects = window.getHomeProjects || window.getAllProjects;
+  if (typeof getProjects !== 'function') {
     setTimeout(renderHomeProker, 100);
     return;
   }
 
-  const allProjects = await window.getAllProjects();
-
-  const ongoingProjects   = allProjects.filter((p) => p.category === 'ongoing');
-  const upcomingProjects  = allProjects.filter((p) => p.category === 'upcoming');
-  const completedProjects = allProjects.filter((p) => p.category === 'completed');
-
-  const projectsToShow = [];
-
-  if (ongoingProjects.length > 0) {
-    projectsToShow.push({
-      ...ongoingProjects[0],
-      type: 'Ongoing', emoji: '🚀',
-      statusText: ongoingProjects[0].status,
-      link: './page/project/project.html',
-    });
+  let projectsToShow;
+  try {
+    projectsToShow = await getProjects();
+  } catch (e) {
+    console.error('[home.js] renderHomeProker error:', e);
+    projectsToShow = [];
   }
 
-  const futureUpcoming = upcomingProjects
-    .filter((p) => { const d = new Date(p.date); d.setHours(0,0,0,0); return d >= today; })
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  if (futureUpcoming.length > 0) {
-    projectsToShow.push({
-      ...futureUpcoming[0],
-      type: 'Upcoming', emoji: '🗓️',
-      statusText: new Date(futureUpcoming[0].date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-      link: './page/project/project.html',
-    });
-  }
-
-  const pastCompleted = completedProjects.sort((a, b) => new Date(b.date) - new Date(a.date));
-  if (pastCompleted.length > 0) {
-    projectsToShow.push({
-      ...pastCompleted[0],
-      type: 'Completed', emoji: '✅',
-      statusText: new Date(pastCompleted[0].date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-    });
-  }
-
-  if (!projectsToShow.length) {
-    container.innerHTML = '<p class="text-center text-gray-400 col-span-full">Tidak ada Program Kerja yang dapat ditampilkan.</p>';
+  if (!projectsToShow || !projectsToShow.length) {
+    container.innerHTML = '<p class="text-center text-gray-400 col-span-full py-6">Tidak ada Program Kerja yang ditampilkan.<br><span class="text-xs text-gray-600">Aktifkan "Tampilkan di Beranda" pada proker di panel admin.</span></p>';
     return;
   }
 
+  const typeLabel = (p) => {
+    if (p.category === 'ongoing')   return { label: 'ONGOING',   border: 'border-green-500',  textColor: 'text-green-400' };
+    if (p.category === 'upcoming')  return { label: 'UPCOMING',  border: 'border-yellow-500', textColor: 'text-yellow-400' };
+    return                                 { label: 'COMPLETED', border: 'border-cyan-500',   textColor: 'text-cyan-400' };
+  };
+
   container.innerHTML = projectsToShow.map((project) => {
-    let finalLink = './page/project/project.html';
-    let linkText  = '';
-    if (project.type === 'Completed') {
-      finalLink = `./page/project/project-detail.html?id=${project.id}`;
-      linkText  = project.link ? 'Press Release →' : '';
-    }
+    const { label, border, textColor } = typeLabel(project);
+    const finalLink = project.category === 'completed' && project.id
+      ? `./page/project/project-detail.html?id=${project.id}`
+      : './page/project/project.html';
 
-    const description = project.description.length > 70
-      ? project.description.substring(0, 70) + '...'
-      : project.description;
+    const description = (project.description || '').length > 80
+      ? (project.description || '').substring(0, 80) + '...'
+      : (project.description || '');
 
-    const imagePath   = project.image ? project.image.replace('../../', '') : 'img/logohmte.png';
-    const borderColor = project.type === 'Ongoing'   ? 'border-green-500'
-                      : project.type === 'Upcoming'  ? 'border-yellow-500'
-                      : 'border-cyan-500';
+    const imagePath = project.image
+      ? project.image.replace('../../', '').replace(/^\//, '')
+      : 'img/logohmte.png';
+
+    const statusInfo = project.category === 'ongoing'
+      ? `Progres: ${project.status || '-'}`
+      : project.date
+        ? new Date(project.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+        : '-';
 
     return `
-      <a href="${finalLink}" class="project-card flex flex-col bg-gray-800 rounded-xl shadow-lg overflow-hidden
-                                    transition-transform transform hover:scale-[1.02] border-t-4 ${borderColor}">
-        <div class="block relative h-72 overflow-hidden">
+      <a href="${finalLink}" class="ongoing-card" style="text-decoration:none;">
+        <div class="ongoing-card-img">
+          <span class="ongoing-badge" style="position:absolute;top:10px;right:10px;z-index:3;">
+            <span style="width:5px;height:5px;background:#0fbc6d;border-radius:50%;display:inline-block;margin-right:4px;box-shadow:0 0 6px #0fbc6d;"></span>
+            ${label}
+          </span>
           <img src="${imagePath}" alt="${project.title}"
-               class="w-full h-full object-cover transition duration-300 ease-in-out hover:opacity-80"
-               onerror="this.onerror=null;this.src='img/logohmte.png';">
-          <div class="absolute top-0 left-0 bg-gray-900 bg-opacity-70 text-xs text-white px-3 py-1 m-2 rounded-full font-bold">
-            ${project.type.toUpperCase()}
-          </div>
+               onerror="this.onerror=null;this.src='img/logohmte.png';" />
         </div>
-        <div class="p-5 flex flex-col flex-grow">
-          <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
-          <p class="text-gray-400 text-sm mb-3 flex-grow">${description}</p>
-          <p class="text-gray-500 text-xs mt-2">${project.type}: ${project.statusText}</p>
-          <span class="text-green-400 mt-2 text-sm font-semibold">${linkText}</span>
+        <div class="ongoing-card-body">
+          <div class="ongoing-card-meta">
+            <span class="ongoing-card-date">${statusInfo}</span>
+            <span class="ongoing-card-tag">${project.categoryLabel || label}</span>
+          </div>
+          <h3 class="ongoing-card-title">${project.title}</h3>
+          <p class="ongoing-card-desc">${description}</p>
         </div>
       </a>`;
   }).join('');
