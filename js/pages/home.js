@@ -1,6 +1,5 @@
 // js/pages/home.js
 // Versi CMS: baca _eventsCache (dari calendar.js) dan project data dari JSON.
-// Logika render TIDAK BERUBAH.
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -30,54 +29,50 @@ async function renderHomeOngoingEvents() {
   const futureEvents  = eventsData
     .filter((e) => new Date(e.date).setHours(0, 0, 0, 0) >= today.getTime() && e.isFeatured)
     .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 2);
+    .slice(0, 4); // Menampilkan maksimal 4 event
 
   if (!futureEvents.length) {
-    container.innerHTML = '<p class="text-center text-gray-400 col-span-full">Tidak ada kegiatan yang akan datang dalam waktu dekat.</p>';
+    container.innerHTML = '<p class="text-center text-gray-400 col-span-full" style="width: 100%; grid-column: 1 / -1;">Tidak ada kegiatan yang akan datang dalam waktu dekat.</p>';
     return;
   }
 
-  container.innerHTML = futureEvents.map((event) => {
-    const mainEventLink = './page/event/event.html';
+  // DIUBAH: Menggunakan format HTML yang 100% cocok dengan ongoing.html
+  container.innerHTML = futureEvents.map((event, index) => {
     let imagePath = event.imgSrc ? event.imgSrc.replace('../../', '') : 'img/logohmte.png';
     if (imagePath.startsWith('../')) imagePath = imagePath.substring(3);
 
-    const formattedDate    = formatDate(event.date);
-    const borderColorClass = event.color === 'green' ? 'border-emerald-500'
-                           : event.color === 'blue'  ? 'border-cyan-500'
-                           : 'border-yellow-500';
-    const actionButtonHTML = event.registrationLink
-      ? `<button onclick="window.open('${event.registrationLink}', '_blank')"
-                 class="mt-auto px-3 py-1 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition text-sm w-full">
-           Daftar Sekarang
-         </button>`
-      : `<button onclick="window.location.href='${mainEventLink}'"
-                 class="mt-auto px-3 py-1 bg-cyan-600 text-white font-semibold rounded-lg hover:bg-cyan-700 transition text-sm w-full">
-           Lihat Detail
-         </button>`;
+    const formattedDate = formatDate(event.date);
+    // Jika tidak ada link registrasi, arahkan ke detail event
+    const targetLink = event.registrationLink ? event.registrationLink : './page/event/event.html';
 
     return `
-      <div class="flex flex-col rounded-xl overflow-hidden border ${borderColorClass}
-                  transition-all duration-500 hover:border-green-500 hover:shadow-lg hover:shadow-green-500/40
-                  cursor-default bg-gray-900 w-full max-w-xs mx-auto">
-        <div class="flex items-center justify-center bg-black"
-             style="width:100%;aspect-ratio:9/12;overflow:hidden;">
-          <img src="${imagePath}" alt="${event.title}"
-               style="width:100%;height:100%;object-fit:cover;"
-               class="transition-transform duration-500 hover:scale-105"
-               onerror="this.onerror=null;this.src='img/logohmte.png';" />
+      <a href="${targetLink}" class="ongoing-card" style="animation-delay: ${index * 0.15 + 0.1}s;">
+        <div class="ongoing-card-img">
+          <span class="ongoing-badge">
+            <span class="ongoing-badge-dot"></span>Terdekat
+          </span>
+          <img src="${imagePath}" alt="${event.title}" onerror="this.onerror=null;this.src='img/logohmte.png';" />
         </div>
-        <div class="p-3 flex flex-col flex-1 bg-gray-900">
-          <h3 class="text-sm font-bold text-white mb-2">${event.title}</h3>
-          <div class="text-gray-300 text-xs mb-3 space-y-1">
-            <p><i class="far fa-calendar-alt mr-1 text-cyan-400"></i> ${formattedDate}</p>
-            <p><i class="fas fa-clock mr-1 text-cyan-400"></i> ${event.time}</p>
-            <p class="truncate"><i class="fas fa-map-marker-alt mr-1 text-cyan-400"></i> ${event.location}</p>
+        <div class="ongoing-card-body">
+          <div class="ongoing-card-meta">
+            <span class="ongoing-card-date"><i class="ri-calendar-line"></i> ${formattedDate}</span>
+            <span class="ongoing-card-tag">${event.time}</span>
           </div>
-          ${actionButtonHTML}
+          <h3 class="ongoing-card-title">${event.title}</h3>
+          <p class="ongoing-card-desc" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:rgba(156,163,175,0.7);font-size:0.8rem;margin:0;">
+            ${event.description || 'Klik untuk melihat detail acara.'}
+          </p>
+          <div class="ongoing-card-info">
+            <i class="ri-map-pin-line"></i> ${event.location || 'Lokasi menyusul'}
+          </div>
         </div>
-      </div>`;
+      </a>`;
   }).join('');
+
+  // SANGAT PENTING: Panggil ulang fungsi animasi setelah elemen baru selesai dirender
+  if (typeof window.initOngoingAnimations === 'function') {
+    window.initOngoingAnimations();
+  }
 }
 
 function checkAndRenderHomeOngoing() {
@@ -90,12 +85,10 @@ function checkAndRenderHomeOngoing() {
 }
 
 // ── Program Kerja di Homepage ─────────────────────────────────────────────────
-// Baca dari window._projectsCache yang diisi oleh project.js (fetch JSON)
 async function renderHomeProker() {
   const container = document.getElementById('home-proker-container');
   if (!container) return;
 
-  // Tunggu getHomeProjects atau getAllProjects tersedia dari js/pages/project.js
   const getProjects = window.getHomeProjects || window.getAllProjects;
   if (typeof getProjects !== 'function') {
     setTimeout(renderHomeProker, 100);
@@ -111,18 +104,18 @@ async function renderHomeProker() {
   }
 
   if (!projectsToShow || !projectsToShow.length) {
-    container.innerHTML = '<p class="text-center text-gray-400 col-span-full py-6">Tidak ada Program Kerja yang ditampilkan.<br><span class="text-xs text-gray-600">Aktifkan "Tampilkan di Beranda" pada proker di panel admin.</span></p>';
+    container.innerHTML = '<p class="text-center text-gray-400 col-span-full py-6" style="width: 100%; grid-column: 1 / -1;">Tidak ada Program Kerja yang ditampilkan.<br><span class="text-xs text-gray-600">Aktifkan "Tampilkan di Beranda" pada proker di panel admin.</span></p>';
     return;
   }
 
   const typeLabel = (p) => {
-    if (p.category === 'ongoing')   return { label: 'ONGOING',   border: 'border-green-500',  textColor: 'text-green-400' };
-    if (p.category === 'upcoming')  return { label: 'UPCOMING',  border: 'border-yellow-500', textColor: 'text-yellow-400' };
-    return                                 { label: 'COMPLETED', border: 'border-cyan-500',   textColor: 'text-cyan-400' };
+    if (p.category === 'ongoing')   return { label: 'ONGOING',   dotColor: '#0fbc6d' };
+    if (p.category === 'upcoming')  return { label: 'UPCOMING',  dotColor: '#eab308' };
+    return                                 { label: 'COMPLETED', dotColor: '#06b6d4' };
   };
 
-  container.innerHTML = projectsToShow.map((project) => {
-    const { label, border, textColor } = typeLabel(project);
+  container.innerHTML = projectsToShow.map((project, index) => {
+    const { label, dotColor } = typeLabel(project);
     const finalLink = project.category === 'completed' && project.id
       ? `./page/project/project-detail.html?id=${project.id}`
       : './page/project/project.html';
@@ -142,29 +135,32 @@ async function renderHomeProker() {
         : '-';
 
     return `
-      <a href="${finalLink}" class="ongoing-card" style="text-decoration:none;">
+      <a href="${finalLink}" class="ongoing-card" style="text-decoration:none; animation-delay: ${index * 0.15 + 0.1}s;">
         <div class="ongoing-card-img">
           <span class="ongoing-badge" style="position:absolute;top:10px;right:10px;z-index:3;">
-            <span style="width:5px;height:5px;background:#0fbc6d;border-radius:50%;display:inline-block;margin-right:4px;box-shadow:0 0 6px #0fbc6d;"></span>
+            <span style="width:5px;height:5px;background:${dotColor};border-radius:50%;display:inline-block;margin-right:4px;box-shadow:0 0 6px ${dotColor};"></span>
             ${label}
           </span>
-          <img src="${imagePath}" alt="${project.title}"
-               onerror="this.onerror=null;this.src='img/logohmte.png';" />
+          <img src="${imagePath}" alt="${project.title}" onerror="this.onerror=null;this.src='img/logohmte.png';" />
         </div>
         <div class="ongoing-card-body">
           <div class="ongoing-card-meta">
             <span class="ongoing-card-date">${statusInfo}</span>
-            <span class="ongoing-card-tag">${project.categoryLabel || label}</span>
+            <span class="ongoing-card-tag" style="color: ${dotColor}; border-color: ${dotColor}; background: transparent;">${project.categoryLabel || label}</span>
           </div>
           <h3 class="ongoing-card-title">${project.title}</h3>
           <p class="ongoing-card-desc">${description}</p>
         </div>
       </a>`;
   }).join('');
+
+  // Memicu animasi untuk proker (jika fungsi observer dipanggil dengan nama yang sama)
+  if (typeof window.initOngoingAnimations === 'function') {
+    window.initOngoingAnimations();
+  }
 }
 
-// ── Expose getAllProjects ke global agar bisa dipakai home.js ─────────────────
-// (project.js versi CMS harus expose window.getAllProjects)
+// ── Inisialisasi ─────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   renderHomeProker();
   checkAndRenderHomeOngoing();
