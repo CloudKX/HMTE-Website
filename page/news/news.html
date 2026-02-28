@@ -152,10 +152,17 @@
         z-index: 2; pointer-events: none;
       }
 
-      #all-news-container > div:hover {
-        transform: translateY(-5px) !important;
-        border-color: rgba(15,188,109,0.3) !important;
-        box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 20px rgba(15,188,109,0.08) !important;
+      /* Hover Desktop */
+      @media (hover: hover) {
+        #all-news-container > div:hover {
+          transform: translateY(-5px) !important;
+          border-color: rgba(15,188,109,0.3) !important;
+          box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 20px rgba(15,188,109,0.08) !important;
+        }
+        #all-news-container > div:hover img {
+          transform: scale(1.05) !important; filter: brightness(0.98) saturate(1.1) !important;
+        }
+        #all-news-container > div:hover h3 { color: #fff !important; }
       }
 
       /* ── GAMBAR CARD ── */
@@ -165,9 +172,6 @@
         display: block !important;
         filter: brightness(0.88) saturate(1.05) !important;
         transition: transform 0.5s ease, filter 0.3s ease !important;
-      }
-      #all-news-container > div:hover img {
-        transform: scale(1.05) !important; filter: brightness(0.98) saturate(1.1) !important;
       }
 
       /* ── KONTEN CARD ── */
@@ -190,7 +194,6 @@
         display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important;
         overflow: hidden !important; margin-bottom: 2px !important; transition: color 0.2s ease !important;
       }
-      #all-news-container > div:hover h3 { color: #fff !important; }
 
       #all-news-container .text-gray-400 {
         font-size: 0.72rem !important; color: rgba(156,163,175,0.55) !important; line-height: 1.6 !important;
@@ -228,18 +231,49 @@
       #news-pagination-container button:disabled { opacity: 0.3 !important; cursor: not-allowed !important; }
 
       /* ══════════════════════════════════════════════════
-         7. RESPONSIVE MEDIA QUERIES
+         7. RESPONSIVE MEDIA QUERIES (MOBILE FIXES)
       ══════════════════════════════════════════════════ */
       @media screen and (max-width: 1024px) {
         #all-news-container { grid-template-columns: repeat(3, 1fr) !important; }
       }
+      
       @media screen and (max-width: 768px) {
+        /* Memastikan tidak tertutup navbar di HP */
         .news-wrap { padding-top: 100px; padding-bottom: 60px; }
+        .news-inner { padding: 0 16px; }
+        
+        /* Grid 2 Kolom untuk Tablet */
         #all-news-container { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+        
+        /* Tipografi HP */
+        .solid-title { font-size: clamp(1.8rem, 8vw, 2.4rem) !important; margin-bottom: 8px !important; }
+        .news-subtitle { font-size: 0.85rem !important; padding: 0 10px; }
       }
+      
       @media screen and (max-width: 480px) {
-        #all-news-container { grid-template-columns: 1fr !important; gap: 14px !important; }
-        #news-pagination-container button { min-width: 34px !important; height: 34px !important; font-size: 0.78rem !important; }
+        /* Grid 1 Kolom Full di HP */
+        #all-news-container { grid-template-columns: 1fr !important; gap: 16px !important; }
+        
+        /* Efek Sentuh Android (Touch Feedback) */
+        #all-news-container > div:active { 
+          transform: scale(0.975) !important; 
+          transition: transform 0.1s ease !important;
+        }
+
+        .news-title-block { margin-bottom: 32px !important; }
+        
+        /* Ukuran font Card untuk Layar HP Kecil */
+        #all-news-container h3 { font-size: 1.05rem !important; }
+        #all-news-container .text-gray-400 { font-size: 0.8rem !important; }
+
+        /* Pagination HP: Target Sentuh yang Pas di Jempol */
+        #news-pagination-container { gap: 8px !important; margin-top: 32px !important; }
+        #news-pagination-container button { 
+          min-width: 40px !important; 
+          height: 40px !important; 
+          font-size: 0.9rem !important; 
+          border-radius: 12px !important;
+        }
       }
     </style>
   </head>
