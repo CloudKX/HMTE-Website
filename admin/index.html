@@ -162,17 +162,9 @@
     if (!window.CMS) return;
     clearInterval(_cmsReady);
 
-    // Hook sebelum simpan: pastikan slug sudah ter-generate
-    CMS.registerEventListener({
-      name: 'preSave',
-      handler: function (entry) {
-        // Tidak blokir save, hanya log untuk debug
-        console.log('[HMTE Admin] preSave entry:', entry && entry.get && entry.get('collection'));
-        return entry;
-      }
-    });
-
-    console.log('%c[HMTE Admin] ✅ CMS hooks terpasang', 'color:#0fbc6d;font-weight:bold;');
+    // preSave hook dihapus — entry.get() tidak tersedia di Decap CMS v3
+    // (entry adalah plain object, bukan Immutable.js Map)
+    console.log('%c[HMTE Admin] ✅ CMS siap', 'color:#0fbc6d;font-weight:bold;');
   }, 500);
 
   // ── 6. NETLIFY IDENTITY REDIRECT ───────────────────────
