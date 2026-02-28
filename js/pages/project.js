@@ -1,12 +1,8 @@
 // js/pages/project.js
 // Versi CMS: data di-fetch dari JSON.
 // ─────────────────────────────────────────────────────────────
-//  PERUBAHAN UTAMA:
-//  1. createProkerCardHTML(project, index) — generate markup
-//     bersih dengan class .proker-card + transition-delay stagger
-//  2. render*Projects() memakai createProkerCardHTML
-//  3. observeProkerCards() — IntersectionObserver terpusat
-//  4. Semua fungsi di-expose ke window.*
+//  createProkerCardHTML → kartu HORIZONTAL, tanpa badge teks
+//  di atas gambar. Warna kategori via border-left.
 // ─────────────────────────────────────────────────────────────
 
 var JSON_PATHS = {
@@ -72,7 +68,6 @@ async function getHomeProjects() {
   var featured = all.filter(function (p) { return p.showOnHome === true; });
   if (featured.length > 0) return featured.slice(0, 4);
 
-  // Fallback: 1 tiap kategori
   var fallback = [];
   var o = all.find(function (p) { return p.category === 'ongoing'; });
   var u = all.filter(function (p) { return p.category === 'upcoming'; })
@@ -87,8 +82,8 @@ async function getHomeProjects() {
 
 // ─────────────────────────────────────────────────────────────
 //  createProkerCardHTML
-//  Mencetak markup .proker-card yang BERSIH (tanpa class Tailwind).
-//  `index` → transition-delay stagger (90ms per card).
+//  Kartu HORIZONTAL — garis kiri berwarna per kategori.
+//  TIDAK ada badge/teks di atas gambar sama sekali.
 // ─────────────────────────────────────────────────────────────
 function createProkerCardHTML(project, index) {
   index = index || 0;
@@ -99,26 +94,18 @@ function createProkerCardHTML(project, index) {
     completed: 'card-completed',
   }[project.category] || 'card-completed';
 
-  var badgeDotColor = {
-    ongoing:   '#22c55e',
-    upcoming:  '#eab308',
-    completed: '#06b6d4',
-  }[project.category] || '#06b6d4';
-
-  var badgeLabel = {
-    ongoing:   'ONGOING',
-    upcoming:  'UPCOMING',
-    completed: 'COMPLETED',
-  }[project.category] || 'COMPLETED';
+  var categoryLabel = {
+    ongoing:   'Ongoing',
+    upcoming:  'Upcoming',
+    completed: 'Selesai',
+  }[project.category] || 'Selesai';
 
   var statusClass = 'status-' + project.category;
 
   var imageSrc = (project.image || FALLBACK_IMAGE).replace(/^\/\//, '/');
-  if (!imageSrc.startsWith('/') && !imageSrc.startsWith('http')) {
-    imageSrc = '/' + imageSrc;
-  }
+  if (!imageSrc.startsWith('/') && !imageSrc.startsWith('http')) imageSrc = '/' + imageSrc;
 
-  var link = '/page/project/project-detail.html?id=' + project.id;
+  var link    = '/page/project/project-detail.html?id=' + project.id;
   var delayMs = index * 90;
 
   var dateText = '';
@@ -130,122 +117,83 @@ function createProkerCardHTML(project, index) {
   }
 
   var desc = (project.description || '');
-  if (desc.length > 90) desc = desc.substring(0, 90) + '…';
+  if (desc.length > 90) desc = desc.substring(0, 90) + '\u2026';
 
-  return '<a href="' + link + '" class="proker-card ' + categoryClass + '" style="transition-delay:' + delayMs + 'ms" data-index="' + index + '">' +
+  return '<a href="' + link + '" class="proker-card ' + categoryClass + '" ' +
+         'style="transition-delay:' + delayMs + 'ms" data-index="' + index + '">' +
     '<div class="proker-card-cover">' +
-      '<span class="proker-badge">' +
-        '<span class="proker-badge-dot" style="background:' + badgeDotColor + ';box-shadow:0 0 6px ' + badgeDotColor + ';"></span>' +
-        badgeLabel +
-      '</span>' +
-      '<img src="' + imageSrc + '" alt="' + project.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + FALLBACK_IMAGE + '\';"/>' +
+      '<img src="' + imageSrc + '" alt="' + project.title + '" loading="lazy" ' +
+           'onerror="this.onerror=null;this.src=\'' + FALLBACK_IMAGE + '\';" />' +
     '</div>' +
     '<div class="proker-card-body">' +
       '<div class="proker-card-meta">' +
-        '<span class="proker-card-tag">' + (project.categoryLabel || badgeLabel) + '</span>' +
+        '<span class="proker-card-tag">' + categoryLabel + '</span>' +
         (dateText ? '<span class="proker-card-date">' + dateText + '</span>' : '') +
       '</div>' +
       '<h3 class="proker-card-title">' + project.title + '</h3>' +
       '<p class="proker-card-desc">' + desc + '</p>' +
       '<div class="proker-card-status ' + statusClass + '">' +
-        '<i class="fas fa-circle" style="font-size:0.4rem;"></i>' +
+        '<i class="fas fa-circle" style="font-size:0.35rem;"></i> ' +
         (project.statusText || '') +
       '</div>' +
     '</div>' +
   '</a>';
 }
 
-// ─────────────────────────────────────────────────────────────
-//  observeProkerCards — IntersectionObserver terpusat
-//  Dipanggil setelah kartu di-inject ke container.
-// ─────────────────────────────────────────────────────────────
+// ── observeProkerCards ────────────────────────────────────────
 function observeProkerCards(container) {
   if (!container || typeof IntersectionObserver === 'undefined') {
-    if (container) {
-      container.querySelectorAll('.proker-card').forEach(function (c) {
-        c.classList.add('is-visible');
-      });
-    }
+    if (container) container.querySelectorAll('.proker-card').forEach(function (c) { c.classList.add('is-visible'); });
     return;
   }
-
   var obs = new IntersectionObserver(function (entries, observer) {
     entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
+      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
     });
   }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
-
   container.querySelectorAll('.proker-card:not([data-obs])').forEach(function (card) {
     card.setAttribute('data-obs', '1');
     obs.observe(card);
   });
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Render functions — halaman project.html
-// ─────────────────────────────────────────────────────────────
+// ── Render functions ──────────────────────────────────────────
 function renderOngoingProjects(projects) {
   var container = document.getElementById('ongoing-projects-container');
   if (!container) return;
-  if (!projects.length) {
-    container.innerHTML = '<p class="loading-text">Tidak ada proyek yang sedang berjalan.</p>';
-    return;
-  }
-  container.innerHTML = '<div class="proker-archive-grid">' +
-    projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') +
-  '</div>';
+  if (!projects.length) { container.innerHTML = '<p class="loading-text">Tidak ada proyek yang sedang berjalan.</p>'; return; }
+  container.innerHTML = '<div class="proker-archive-grid">' + projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') + '</div>';
   observeProkerCards(container);
 }
 
 function renderUpcomingProjects(projects) {
   var container = document.getElementById('upcoming-projects-container');
   if (!container) return;
-  if (!projects.length) {
-    container.innerHTML = '<p class="loading-text">Tidak ada proyek yang dijadwalkan.</p>';
-    return;
-  }
-  container.innerHTML = '<div class="proker-archive-grid">' +
-    projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') +
-  '</div>';
+  if (!projects.length) { container.innerHTML = '<p class="loading-text">Tidak ada proyek yang dijadwalkan.</p>'; return; }
+  container.innerHTML = '<div class="proker-archive-grid">' + projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') + '</div>';
   observeProkerCards(container);
 }
 
 function renderCompletedProjects(projects) {
   var container = document.getElementById('completed-projects-container');
   if (!container) return;
-  if (!projects.length) {
-    container.innerHTML = '<p class="loading-text">Belum ada proyek selesai.</p>';
-    return;
-  }
-  container.innerHTML = '<div class="proker-archive-grid">' +
-    projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') +
-  '</div>';
+  if (!projects.length) { container.innerHTML = '<p class="loading-text">Belum ada proyek selesai.</p>'; return; }
+  container.innerHTML = '<div class="proker-archive-grid">' + projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') + '</div>';
   observeProkerCards(container);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  loadProjectSections — entry point halaman project.html
-// ─────────────────────────────────────────────────────────────
+// ── loadProjectSections ───────────────────────────────────────
 async function loadProjectSections() {
   var all = await getAllProjects();
-
-  var ongoing = all.filter(function (p) { return p.category === 'ongoing'; });
-  var upcoming = all.filter(function (p) { return p.category === 'upcoming'; })
-                    .sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
-  var completed = all.filter(function (p) { return p.category === 'completed'; })
-                     .sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
-
+  var ongoing   = all.filter(function (p) { return p.category === 'ongoing'; });
+  var upcoming  = all.filter(function (p) { return p.category === 'upcoming'; }).sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+  var completed = all.filter(function (p) { return p.category === 'completed'; }).sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
   renderOngoingProjects(ongoing);
   renderUpcomingProjects(upcoming);
   renderCompletedProjects(completed);
 }
 
-// ─────────────────────────────────────────────────────────────
-//  loadProjectDetailPage — halaman project-detail.html
-// ─────────────────────────────────────────────────────────────
+// ── loadProjectDetailPage ─────────────────────────────────────
 async function loadProjectDetailPage() {
   var id  = new URLSearchParams(window.location.search).get('id');
   var all = await getAllProjects();
@@ -284,17 +232,13 @@ async function loadProjectDetailPage() {
   if (dateEl) {
     if (project.date) {
       var d = new Date(project.date);
-      dateEl.textContent = isNaN(d.getTime())
-        ? 'Tanggal belum ditentukan'
+      dateEl.textContent = isNaN(d.getTime()) ? 'Tanggal belum ditentukan'
         : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-    } else {
-      dateEl.textContent = '-';
-    }
+    } else { dateEl.textContent = '-'; }
   }
 
   var imgSrc = (project.image || FALLBACK_IMAGE);
   if (!imgSrc.startsWith('/') && !imgSrc.startsWith('http')) imgSrc = '/' + imgSrc;
-
   if (imgContainer) {
     imgContainer.innerHTML = '<img src="' + imgSrc + '" alt="' + project.title + '" ' +
       'style="width:100%;height:auto;border-radius:12px;display:block;" ' +
@@ -303,8 +247,7 @@ async function loadProjectDetailPage() {
   if (contentEl) contentEl.innerHTML = project.content || '';
 
   if (project.link && docSection && docLink) {
-    docLink.href = project.link;
-    docSection.classList.remove('hidden');
+    docLink.href = project.link; docSection.classList.remove('hidden');
   } else if (docSection) {
     docSection.classList.add('hidden');
   }
@@ -318,10 +261,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // ── Expose ke global ──────────────────────────────────────────
-window.getAllProjects          = getAllProjects;
-window.getHomeProjects         = getHomeProjects;
-window.createProkerCardHTML    = createProkerCardHTML;
-window.observeProkerCards      = observeProkerCards;
-window.loadProjectSections     = loadProjectSections;
-window.loadProjectDetailPage   = loadProjectDetailPage;
-window.renderProjects          = loadProjectSections; // alias loader.js
+window.getAllProjects         = getAllProjects;
+window.getHomeProjects        = getHomeProjects;
+window.createProkerCardHTML   = createProkerCardHTML;
+window.observeProkerCards     = observeProkerCards;
+window.loadProjectSections    = loadProjectSections;
+window.loadProjectDetailPage  = loadProjectDetailPage;
+window.renderProjects         = loadProjectSections;
