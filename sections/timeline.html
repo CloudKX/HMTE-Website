@@ -1,17 +1,20 @@
 <style>
+  /* ── ROOT TIMELINE ── */
   .timeline-section {
     position: relative;
     padding: clamp(40px, 6vh, 80px) 0;
     overflow: hidden;
   }
 
+  /* Glow Background - Diubah menggunakan min() agar tidak meluber di HP */
   .timeline-section::before {
     content: '';
     position: absolute;
     top: 0; left: 50%;
     transform: translateX(-50%);
-    width: 600px; height: 300px;
-    background: radial-gradient(ellipse, rgba(15,188,109,0.05) 0%, transparent 70%);
+    width: min(600px, 100%); 
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -21,6 +24,7 @@
     padding: 0 clamp(16px, 4vw, 48px);
   }
 
+  /* ── HEADER ── */
   .timeline-header {
     text-align: center;
     margin-bottom: clamp(28px, 4vh, 48px);
@@ -31,38 +35,26 @@
   }
 
   .timeline-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.68rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #0fbc6d;
-    font-weight: 700;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.68rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: #0fbc6d; font-weight: 700;
   }
   .timeline-eyebrow::before, .timeline-eyebrow::after {
-    content: '';
-    display: block;
-    width: 20px; height: 1px;
-    background: #0fbc6d;
-    opacity: 0.6;
+    content: ''; display: block; width: 20px; height: 1px;
+    background: #0fbc6d; opacity: 0.6;
   }
 
   .timeline-title {
     font-size: clamp(1.8rem, 4vw, 3.2rem);
-    font-weight: 900;
-    color: #fff;
-    letter-spacing: -0.04em;
-    line-height: 1;
-    margin: 0;
+    font-weight: 900; color: #fff;
+    letter-spacing: -0.04em; line-height: 1; margin: 0;
   }
   .timeline-title em { font-style: normal; color: #0fbc6d; }
 
   .timeline-subtitle {
     font-size: clamp(0.82rem, 1.2vw, 0.92rem);
     color: rgba(156,163,175,0.6);
-    margin: 0;
-    line-height: 1.6;
+    margin: 0; line-height: 1.6;
   }
 
   /* ── CALENDAR CARD ── */
@@ -81,10 +73,7 @@
   }
 
   .tl-calendar-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 8%; right: 8%;
-    height: 1px;
+    content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(15,188,109,0.3), transparent);
   }
 
@@ -103,9 +92,7 @@
     background: rgba(15,188,109,0.08);
     border: 1px solid rgba(15,188,109,0.2);
     border-radius: 10px;
-    color: #0fbc6d;
-    font-size: 1rem;
-    cursor: pointer;
+    color: #0fbc6d; font-size: 1rem; cursor: pointer;
     transition: background 0.2s ease, border-color 0.2s ease;
   }
   .tl-month-btn:hover {
@@ -115,9 +102,7 @@
 
   #month-year-display {
     font-size: clamp(0.95rem, 1.5vw, 1.25rem);
-    font-weight: 800;
-    color: #fff;
-    letter-spacing: -0.02em;
+    font-weight: 800; color: #fff; letter-spacing: -0.02em;
   }
 
   #event-details {
@@ -138,32 +123,70 @@
     border-radius: 20px;
     padding: 24px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-    position: sticky;
-    top: 24px;
-    position: relative;
+    position: sticky; top: 24px;
   }
 
   .tl-upcoming-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 8%; right: 8%;
-    height: 1px;
+    content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(15,188,109,0.3), transparent);
-    border-radius: 0;
   }
 
   .tl-upcoming-title {
-    color: #fff;
-    font-weight: 800;
-    font-size: 1rem;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: #fff; font-weight: 800; font-size: 1rem;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
   }
+  .tl-upcoming-title i { color: #0fbc6d; }
 
-  .tl-upcoming-title i {
-    color: #0fbc6d;
+  /* ══════════════════════════════════════════════════════
+     MOBILE OPTIMIZATION (Android & iOS)
+  ══════════════════════════════════════════════════════ */
+  @media screen and (max-width: 768px) {
+    .timeline-title {
+      font-size: clamp(1.6rem, 7vw, 2.2rem) !important;
+    }
+    
+    /* Mengurangi padding luar agar kalender punya ruang lega di layar kecil */
+    .tl-calendar-card {
+      padding: 16px 12px !important;
+      border-radius: 16px !important;
+    }
+
+    /* Padding dalam dikurangi, memberikan space maksimal untuk angka tanggal */
+    .tl-calendar-inner {
+      padding: 12px 6px !important;
+      border-radius: 12px !important;
+    }
+
+    /* Jarak grid hari dirapatkan sedikit agar tidak pecah ke bawah */
+    #calendar-grid {
+      gap: 4px !important;
+    }
+
+    /* Ukuran header hari (Sen, Sel, dll) */
+    .tl-calendar-inner .grid-cols-7 > div:not(#calendar-grid) {
+      font-size: 0.65rem !important;
+    }
+
+    /* Memperbesar target sentuh panah navigasi (touch-friendly) */
+    .tl-month-btn {
+      width: 40px !important; 
+      height: 40px !important;
+    }
+
+    #month-year-display {
+      font-size: 1.05rem !important;
+    }
+
+    #event-details {
+      font-size: 0.75rem !important;
+      padding: 12px !important;
+    }
+
+    /* Mengurangi padding card upcoming */
+    .tl-upcoming-card {
+      padding: 20px 16px !important;
+      border-radius: 16px !important;
+    }
   }
 </style>
 
@@ -289,7 +312,6 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
 
-      <!-- Kalender -->
       <div class="lg:col-span-2 tl-calendar-card">
         <div class="flex items-center justify-between mb-5">
           <button onclick="changeMonth(-1)" class="tl-month-btn">←</button>
@@ -313,7 +335,6 @@
         <div id="event-details">Klik tanggal untuk melihat detail kegiatan</div>
       </div>
 
-      <!-- Upcoming Events -->
       <div class="lg:col-span-1">
         <div class="tl-upcoming-card">
           <h3 class="tl-upcoming-title">
