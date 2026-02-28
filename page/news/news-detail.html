@@ -4,108 +4,228 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="page-title">Memuat Berita...</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/satoshi.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
     <style>
-      body { background-color: #0d1117 !important; }
-      .group.inline-flex .rounded-full {
-        background: rgba(255,255,255,0.05) !important;
-        border-color: rgba(255,255,255,0.08) !important;
+      /* ══════════════════════════════════════════════════
+         1. BASE & BACKGROUND (GRID TEMA KONSISTEN)
+      ══════════════════════════════════════════════════ */
+      html { overflow-x: hidden !important; }
+      body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        color: #ffffff !important;
+        margin: 0; min-height: 100vh;
+        
+        /* Background kotak-kotak persis halaman News & Proker */
+        background-color: #161616 !important;
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
+                          linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+        background-size: 55px 55px !important;
       }
+
+      /* ── PAGE FADE IN ── */
+      .page-fade { animation: pageFadeIn 0.65s ease both; }
+      @keyframes pageFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ══════════════════════════════════════════════════
+         2. WRAPPER & CLEARANCE HEADER
+      ══════════════════════════════════════════════════ */
+      .detail-wrap {
+        /* Ini kunci agar tidak tertutup header di Desktop */
+        padding-top: 120px; 
+        padding-bottom: 80px;
+        position: relative;
+        min-height: 100vh;
+      }
+      /* Glow hijau di atas halaman */
+      .detail-wrap::before {
+        content: '';
+        position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+        width: min(700px, 100%); height: 300px;
+        background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .detail-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 clamp(16px, 5vw, 48px);
+      }
+
+      /* ══════════════════════════════════════════════════
+         3. UI COMPONENTS (BACK BTN, TITLE, META)
+      ══════════════════════════════════════════════════ */
+      /* Tombol Kembali - Premium Glassmorphism */
+      .btn-back {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 8px 20px 8px 8px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 50px;
+        color: rgba(255,255,255,0.7);
+        font-size: 0.85rem; font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        margin-bottom: 28px;
+        backdrop-filter: blur(10px);
+      }
+      .btn-back:hover {
+        background: rgba(15,188,109,0.1);
+        border-color: rgba(15,188,109,0.3);
+        color: #0fbc6d;
+      }
+      .btn-back .icon-circle {
+        width: 32px; height: 32px;
+        background: rgba(0,0,0,0.4);
+        border-radius: 50%;
+        display: flex; justify-content: center; align-items: center;
+        transition: transform 0.3s;
+      }
+      .btn-back:hover .icon-circle { transform: translateX(-4px); background: #0fbc6d; color: #161616; }
+
+      /* Kategori */
       #detail-category {
+        display: inline-block;
         background: rgba(15,188,109,0.12) !important;
         color: #0fbc6d !important;
-        border-color: rgba(15,188,109,0.25) !important;
+        border: 1px solid rgba(15,188,109,0.25) !important;
         font-size: 0.65rem !important;
+        font-weight: 800 !important;
         letter-spacing: 0.15em !important;
+        text-transform: uppercase;
+        padding: 6px 14px !important;
+        border-radius: 50px !important;
+        margin-bottom: 20px !important;
       }
+
+      /* Judul */
       #detail-title {
-        font-size: clamp(1.6rem, 5vw, 3.8rem) !important;
-        line-height: 1.15 !important;
-        letter-spacing: -0.03em !important;
+        font-size: clamp(1.8rem, 5vw, 3.5rem) !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.02em !important;
         font-weight: 900 !important;
+        color: #ffffff !important;
+        margin-bottom: 24px !important;
       }
-      .rounded-3xl.overflow-hidden {
-        background: rgba(0,0,0,0.4) !important;
-        border-color: rgba(255,255,255,0.06) !important;
-        border-radius: 20px !important;
-        padding: 0 !important;
-        overflow: hidden !important;
+
+      /* Info Meta (Tanggal & Penulis) */
+      .detail-meta {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 14px;
+        font-size: 0.85rem; color: rgba(156,163,175,0.7);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        padding-bottom: 24px; margin-bottom: 36px;
+      }
+      .detail-meta i { color: #0fbc6d; }
+      .meta-dot { width: 4px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 50%; }
+
+      /* Gambar Detail */
+      .detail-img-wrapper {
+        border-radius: 20px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        margin-bottom: 40px;
       }
       #detail-image {
-        width: 100% !important; height: auto !important;
-        max-height: 600px !important; object-fit: contain !important;
+        width: 100% !important; 
+        max-height: 500px !important; 
+        object-fit: cover !important; 
         display: block !important;
       }
-      #detail-content {
-        color: rgba(209,213,219,0.85) !important;
-        line-height: 1.8 !important;
-      }
-      #detail-content p  { font-size: clamp(0.92rem, 1.2vw, 1.1rem) !important; margin-bottom: 1.25rem !important; }
-      #detail-content h3 { font-size: clamp(1.1rem, 2vw, 1.5rem) !important; color: #fff !important; font-weight: 800 !important; margin-bottom: 0.75rem !important; }
 
+      /* Teks Konten */
+      #detail-content {
+        color: rgba(209,213,219,0.9) !important;
+        line-height: 1.8 !important;
+        font-size: clamp(1rem, 2vw, 1.12rem);
+      }
+      #detail-content p  { margin-bottom: 1.5em !important; }
+      #detail-content h3 { font-size: 1.4em !important; color: #fff !important; font-weight: 800 !important; margin-top: 1.5em !important; margin-bottom: 0.75em !important; }
+      #detail-content a  { color: #0fbc6d; text-decoration: underline; text-underline-offset: 4px; }
+
+      /* ══════════════════════════════════════════════════
+         4. MOBILE FIXES (Sangat Penting untuk Android)
+      ══════════════════════════════════════════════════ */
       @media screen and (max-width: 768px) {
-        .container.mx-auto.px-4 { padding-left: 16px !important; padding-right: 16px !important; }
-        article.container { padding-left: 16px !important; padding-right: 16px !important; padding-bottom: 48px !important; }
-        #detail-title { font-size: clamp(1.4rem, 6.5vw, 2rem) !important; }
-        #detail-image { max-height: 280px !important; object-fit: cover !important; }
-        .max-w-5xl, .max-w-4xl { max-width: 100% !important; }
+        .detail-wrap { 
+          padding-top: 100px; /* Clearance ekstra agar lepas dari navbar */
+          padding-bottom: 40px; 
+        }
+        .btn-back {
+          font-size: 0.75rem;
+          padding: 6px 14px 6px 6px;
+          margin-bottom: 20px;
+        }
+        .btn-back .icon-circle { width: 28px; height: 28px; }
+        
+        #detail-title { font-size: clamp(1.6rem, 7vw, 2.2rem) !important; margin-bottom: 16px !important; }
+        .detail-meta { font-size: 0.75rem; padding-bottom: 16px; margin-bottom: 24px; gap: 10px; }
+        
+        .detail-img-wrapper { border-radius: 14px; margin-bottom: 28px; }
+        #detail-image { max-height: 250px !important; }
       }
     </style>
   </head>
 
-  <body class="text-white min-h-screen flex flex-col font-satoshi">
+  <body class="page-fade">
     <div id="header-placeholder"></div>
 
-    <main class="flex-grow">
-      <div class="container mx-auto px-4 md:px-8 lg:px-12 py-8">
-        <a href="/page/news/news.html" class="group inline-flex items-center text-gray-400 hover:text-white transition text-sm font-medium">
-          <span class="w-10 h-10 rounded-full bg-gray-800 grid place-items-center mr-3 group-hover:bg-gray-700 transition shadow-md border border-gray-700">
-            <i class="fas fa-arrow-left text-sm transform group-hover:-translate-x-1 transition-transform"></i>
+    <main class="detail-wrap">
+      <div class="detail-inner">
+        
+        <a href="/page/news/news.html" class="btn-back">
+          <span class="icon-circle">
+            <i class="fas fa-arrow-left"></i>
           </span>
           Kembali ke Daftar Berita
         </a>
+
+        <article>
+          <header class="text-left">
+            <span id="detail-category">Loading...</span>
+            <h1 id="detail-title">Memuat Berita...</h1>
+            
+            <div class="detail-meta">
+              <div class="flex items-center gap-2">
+                <i class="far fa-calendar-alt"></i>
+                <span id="detail-date">...</span>
+              </div>
+              <div class="meta-dot"></div>
+              <div class="flex items-center">
+                <span>Oleh <strong class="text-white">Redaksi HMTE</strong></span>
+              </div>
+            </div>
+          </header>
+
+          <div class="detail-img-wrapper">
+            <img id="detail-image" src="" alt="Cover Berita" />
+          </div>
+
+          <div id="detail-content" class="max-w-none">
+            <p style="color: rgba(156,163,175,0.6); font-style: italic;">Memuat konten berita...</p>
+          </div>
+        </article>
+        
       </div>
-
-      <article class="container mx-auto px-4 md:px-8 lg:px-12 pb-24 fade-in">
-        <header class="mb-10 text-left max-w-5xl">
-          <span id="detail-category" class="inline-block px-4 py-1.5 bg-cyan-900/50 text-cyan-400 border border-cyan-800 rounded-full text-xs font-bold uppercase tracking-wider mb-5">Loading...</span>
-          <h1 id="detail-title" class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Memuat...</h1>
-          <div class="flex flex-wrap items-center text-sm text-gray-400 border-b border-gray-800 pb-8 gap-4">
-            <div class="flex items-center">
-              <i class="far fa-calendar-alt mr-2 text-green-500"></i>
-              <span id="detail-date">...</span>
-            </div>
-            <div class="hidden md:block w-1 h-1 bg-gray-700 rounded-full"></div>
-            <div class="flex items-center">
-              <span class="text-gray-500">Oleh Tim Redaksi HMTE</span>
-            </div>
-          </div>
-        </header>
-
-        <div class="max-w-5xl mb-14">
-          <div class="rounded-3xl overflow-hidden shadow-2xl border border-gray-800 bg-black/50">
-            <img id="detail-image" src="" alt="Cover Berita" class="w-full block" />
-          </div>
-        </div>
-
-        <div class="max-w-4xl">
-          <div id="detail-content" class="prose prose-invert prose-lg max-w-none text-gray-300 leading-loose">
-            <p class="text-gray-500 italic">Memuat konten berita...</p>
-          </div>
-        </div>
-      </article>
     </main>
 
     <div id="footer-placeholder"></div>
 
-    <!-- TIDAK ADA lagi script src="/js/data/news.js" — fetch langsung dari JSON -->
     <script src="/js/loader.js"></script>
     <script>
     (async function loadNewsContent() {
-      const newsId = new URLSearchParams(window.location.search).get('id');
+      const urlParams = new URLSearchParams(window.location.search);
+      const newsId = urlParams.get('id');
 
       const titleEl    = document.getElementById('detail-title');
       const dateEl     = document.getElementById('detail-date');
@@ -115,32 +235,33 @@
       const pageTitleEl = document.getElementById('page-title');
 
       try {
-        const res  = await fetch('/js/data/json/news.json');
+        // Fetch ke JSON hasil build CMS
+        const res  = await fetch('/js/data/json/news.json?t=' + new Date().getTime());
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const json = await res.json();
         const newsData = json.items || [];
 
-        // id di JSON bisa string (slug) atau number — coba keduanya
-        const newsItem = newsData.find(item =>
-          String(item.id) === String(newsId)
-        );
+        // Cari berita berdasarkan ID / Slug
+        const newsItem = newsData.find(item => String(item.id) === String(newsId));
 
         if (!newsItem) {
           document.querySelector('article').innerHTML = `
-            <div class="flex flex-col items-center justify-center py-20 text-center">
-              <h1 class="text-3xl font-bold text-white mb-4">Berita Tidak Ditemukan</h1>
-              <p class="text-gray-500 text-sm mb-6">ID: "${newsId}"</p>
-              <a href="/page/news/news.html" class="text-green-500 hover:underline font-medium">Kembali ke Daftar Berita</a>
+            <div style="text-align:center; padding: 60px 20px;">
+              <i class="fas fa-exclamation-circle" style="font-size:3rem; color:#ef4444; margin-bottom:16px;"></i>
+              <h1 style="font-size:1.8rem; font-weight:800; color:#fff; margin-bottom:8px;">Berita Tidak Ditemukan</h1>
+              <p style="color:#9ca3af; margin-bottom:24px;">URL atau ID Berita: "${newsId}" tidak valid.</p>
+              <a href="/page/news/news.html" style="color:#0fbc6d; font-weight:600; text-decoration:underline; text-underline-offset:4px;">Kembali ke Berita</a>
             </div>`;
           return;
         }
 
+        // Isi Data ke elemen HTML
         pageTitleEl.textContent = newsItem.title + ' - HMTE Unsoed';
         titleEl.textContent     = newsItem.title;
-        dateEl.textContent      = newsItem.date;
+        dateEl.textContent      = newsItem.date || 'Tanggal tidak tersedia';
         categoryEl.textContent  = newsItem.category || 'Berita Umum';
 
-        // Path gambar
+        // Path gambar dari CMS
         let imgSrc = newsItem.imgSrc || '';
         if (imgSrc && !imgSrc.startsWith('http') && !imgSrc.startsWith('/')) {
           imgSrc = '/' + imgSrc.replace(/^(\.\.\/|\.\/)+/, '');
@@ -149,18 +270,14 @@
           imageEl.src = imgSrc;
           imageEl.alt = newsItem.title;
         } else {
-          imageEl.parentElement.style.display = 'none';
+          imageEl.parentElement.style.display = 'none'; // Sembunyikan cover jika tidak ada
         }
 
-        // Konten — bisa HTML atau Markdown plain text
-        // Decap CMS markdown widget menyimpan sebagai markdown dengan \n
-        // innerHTML handles HTML langsung; untuk plain text/markdown, wrap dalam <p>
+        // Render Konten (Dukung HTML atau Markdown CMS)
         const rawContent = newsItem.content || '';
         if (rawContent.includes('<') && rawContent.includes('>')) {
-          // Konten HTML lama
           contentEl.innerHTML = rawContent;
         } else {
-          // Konten plain text/markdown baru dari CMS — render paragraf per baris kosong
           contentEl.innerHTML = rawContent
             .split(/\n\n+/)
             .filter(p => p.trim())
@@ -171,7 +288,11 @@
       } catch (e) {
         console.error('[news-detail] Gagal fetch:', e.message);
         titleEl.textContent    = 'Gagal Memuat Berita';
-        contentEl.innerHTML    = `<p class="text-red-400">Terjadi kesalahan saat memuat berita. Silakan coba lagi.</p>`;
+        categoryEl.textContent = 'ERROR';
+        categoryEl.style.background = '#7f1d1d';
+        categoryEl.style.color = '#fca5a5';
+        categoryEl.style.borderColor = '#991b1b';
+        contentEl.innerHTML    = `<p style="color:#f87171;">Terjadi kesalahan saat memuat berita atau koneksi internet terputus. Silakan muat ulang halaman.</p>`;
       }
     })();
     </script>
