@@ -41,46 +41,6 @@
       "content": "<h3>Detail Musyang</h3><p></p>",
       "id": 4,
       "description": "Kegiatan Musyawarah Anggota HMTE 2025"
-    },
-    {
-      "imgSrc": "/img/uploads/robloxscreenshot20260102_153650163.png",
-      "color": "green",
-      "time": "da",
-      "date": "2026-03-01",
-      "locationLink": "da",
-      "registrationLink": "https://www.google.com/search?gs_ssp=eJzj4tTP1TewzEouKzZg9GKvzC8tKU1KBQA_-AaN&q=youtube&oq=y&gs_lcrp=EgZjaHJvbWUqDQgCEC4YgwEYsQMYgAQyDwgAEEUYORiDARixAxiABDINCAEQABiDARixAxiABDINCAIQLhiDARixAxiABDITCAMQLhiDARjHARixAxjRAxiABDIGCAQQRRg8MgYIBRBFGDwyBggGEEUYPDIGCAcQRRg80gEIMTU1MGowajeoAgCwAgA&sourceid=chrome&ie=UTF-8",
-      "location": "da",
-      "title": "penyepok majid",
-      "isFeatured": true,
-      "content": "cacaca",
-      "id": 3,
-      "description": "da"
-    },
-    {
-      "imgSrc": "/img/uploads/robloxscreenshot20260102_153650163.png",
-      "color": "green",
-      "time": "dada",
-      "date": "2026-03-03",
-      "locationLink": "vava",
-      "registrationLink": "vava",
-      "location": "vava",
-      "title": "dada",
-      "isFeatured": true,
-      "content": "vavava",
-      "id": 5,
-      "description": "ava"
-    },
-    {
-      "imgSrc": "/img/uploads/robloxscreenshot20260102_153650163.png",
-      "color": "green",
-      "time": "davava",
-      "date": "2026-02-28",
-      "location": "vavav",
-      "title": "wacana",
-      "isFeatured": true,
-      "content": "vavavavav",
-      "id": 10,
-      "description": "dada"
     }
   ]
 }
