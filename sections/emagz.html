@@ -1,27 +1,25 @@
 <style>
   /* ══════════════════════════════════════════════════
-     EMAGZ SECTION — GAME LOADING UI THEME
+     EMAGZ SECTION — GAME LOADING + DYNAMIC TIPS
   ══════════════════════════════════════════════════ */
 
   @keyframes barGlow {
     0%, 100% { opacity: 0.4; box-shadow: 0 0 5px #0fbc6d; }
     50% { opacity: 1; box-shadow: 0 0 20px #0fbc6d; }
   }
-  @keyframes textPulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+  @keyframes tipFade {
+    0%, 100% { opacity: 0; transform: translateY(5px); }
+    10%, 90% { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── SECTION WRAPPER ── */
   .emagz-section {
     position: relative;
     padding: clamp(50px, 9vh, 100px) 0;
     overflow: hidden;
-    /* Background grid konsisten dari style.css */
     background: radial-gradient(circle at center, rgba(15,188,109,0.02) 0%, transparent 70%);
   }
 
-  /* ── SEKAT DIAMOND (GAME DIVIDER) ── */
+  /* ── SEKAT DIAMOND ── */
   .emagz-sekat {
     position: absolute; left: 0; right: 0; height: 1px;
     background: linear-gradient(90deg, transparent 0%, rgba(15,188,109,0.4) 50%, transparent 100%);
@@ -33,8 +31,7 @@
     content: ''; position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%) rotate(45deg);
     width: 10px; height: 10px; background: #0fbc6d;
-    box-shadow: 0 0 15px #0fbc6d, 0 0 30px rgba(15,188,109,0.5);
-    border-radius: 2px;
+    box-shadow: 0 0 15px #0fbc6d; border-radius: 2px;
   }
 
   .emagz-inner {
@@ -43,22 +40,7 @@
     display: flex; flex-direction: column; align-items: center;
   }
 
-  /* ── HEADER ── */
-  .emagz-header {
-    text-align: center; margin-bottom: 40px;
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
-  }
-  .emagz-eyebrow {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: #0fbc6d; font-weight: 800;
-  }
-  .emagz-title {
-    font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 900; color: #fff;
-    letter-spacing: -0.03em; line-height: 1.1; margin: 0;
-  }
-  .emagz-title em { font-style: normal; color: #0fbc6d; text-shadow: 0 0 20px rgba(15,188,109,0.3); }
-
-  /* ── GRID (PC DEFAULT) ── */
+  /* ── GRID (PC) ── */
   .emagz-grid {
     width: 100%; display: flex; flex-wrap: wrap; justify-content: center;
     gap: 24px; padding: 10px 0;
@@ -76,40 +58,39 @@
     transition: all 0.55s cubic-bezier(0.23,1,0.32,1);
   }
   .emagz-card.is-visible { opacity: 1; transform: translateY(0); }
-  .emagz-card:hover { transform: translateY(-8px); border-color: #0fbc6d; box-shadow: 0 15px 45px rgba(0,0,0,0.6), 0 0 20px rgba(15,188,109,0.1); }
 
-  /* Cover ratio 2:3 */
-  .emagz-card-cover { position: relative; aspect-ratio: 2/3; overflow: hidden; }
-  .emagz-card-cover img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); transition: 0.5s ease; }
-  .emagz-card:hover .emagz-card-cover img { transform: scale(1.06); filter: brightness(1); }
-
-  /* ── GAME LOADING BAR (NEW) ── */
+  /* ── LOADING AREA & TIPS ── */
   .emagz-loading-area {
-    width: 100%; max-width: 500px; margin-top: 32px; display: flex; flex-direction: column; align-items: center; gap: 8px;
-  }
-  .emagz-loading-text {
-    font-size: 0.65rem; color: #0fbc6d; letter-spacing: 0.2em; font-weight: 800;
-    text-transform: uppercase; animation: textPulse 1.5s infinite;
+    width: 100%; max-width: 500px; margin-top: 32px; 
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
   }
   .emagz-progress-bg {
-    width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; position: relative;
+    width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;
   }
   .emagz-progress-fill {
-    position: absolute; left: 0; top: 0; height: 100%; width: 65%;
-    background: #0fbc6d; border-radius: 10px; animation: barGlow 2s infinite;
+    height: 100%; width: 75%; background: #0fbc6d; animation: barGlow 2s infinite;
   }
+
+  /* Teks Tips Bergaya Game */
+  .emagz-tips-box {
+    text-align: center; min-height: 40px;
+  }
+  .emagz-tip-text {
+    font-size: 0.75rem; color: rgba(255,255,255,0.7);
+    letter-spacing: 0.05em; line-height: 1.4;
+    animation: tipFade 4s infinite; /* Efek ganti teks */
+  }
+  .emagz-tip-text strong { color: #0fbc6d; text-transform: uppercase; margin-right: 5px; }
 
   /* ══════════════════════════════════════════════════════
      ANDROID / MOBILE UI — GAME MENU SWIPE
   ══════════════════════════════════════════════════════ */
   @media (max-width: 768px) {
     .emagz-inner { padding: 0; }
-    .emagz-header, .emagz-footer, .emagz-loading-area { padding: 0 24px; }
+    .emagz-header, .emagz-loading-area { padding: 0 24px; }
 
-    /* Transform Grid ke Horizontal Swipe (Game Menu Style) */
     .emagz-grid {
       flex-wrap: nowrap !important;
-      justify-content: flex-start !important;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       padding: 15px 24px 35px !important;
@@ -119,19 +100,12 @@
     .emagz-grid::-webkit-scrollbar { display: none; }
 
     .emagz-card {
-      flex: 0 0 calc(70vw - 20px) !important; /* Ukuran menu kartu di HP */
+      flex: 0 0 calc(75vw - 20px) !important;
       max-width: 260px !important;
       scroll-snap-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
     
-    .emagz-card:active { transform: scale(0.96); }
-
-    /* Visual Adjustments for Mobile */
-    .emagz-title { font-size: 2rem !important; }
-    .emagz-subtitle { font-size: 0.85rem !important; }
-    
-    .emagz-loading-area { margin-top: 10px; }
+    .emagz-tip-text { font-size: 0.7rem !important; }
   }
 </style>
 
@@ -140,28 +114,23 @@
 
   <div class="emagz-inner">
     <div class="emagz-header">
-      <span class="emagz-eyebrow">Digital Archive</span>
+      <span class="emagz-eyebrow">Publikasi HMTE</span>
       <h2 class="emagz-title">Elektro <em>Magazine</em></h2>
-      <p class="emagz-subtitle">Akses koleksi publikasi dan kreativitas mahasiswa Teknik Elektro UNSOED.</p>
     </div>
 
     <div id="emagz-cards-container" class="emagz-grid">
-      <div class="emagz-card is-visible"><div class="emagz-card-cover"><div class="emagz-skel" style="width:100%;height:100%;"></div></div></div>
-      <div class="emagz-card is-visible"><div class="emagz-card-cover"><div class="emagz-skel" style="width:100%;height:100%;"></div></div></div>
-      <div class="emagz-card is-visible"><div class="emagz-card-cover"><div class="emagz-skel" style="width:100%;height:100%;"></div></div></div>
-    </div>
+      </div>
 
     <div class="emagz-loading-area">
-      <div class="emagz-loading-text">Establishing Connection... Arus Informasi Terdeteksi</div>
       <div class="emagz-progress-bg">
         <div class="emagz-progress-fill"></div>
       </div>
-    </div>
-
-    <div id="emagz-more-link" class="emagz-footer hidden">
-      <a href="/page/emagz/emagz.html" class="emagz-cta">
-        Enter Library <i class="fas fa-arrow-right"></i>
-      </a>
+      
+      <div class="emagz-tips-box">
+        <p id="game-tip-display" class="emagz-tip-text">
+          <strong>TIP:</strong> Geser ke samping untuk melihat koleksi edisi lainnya.
+        </p>
+      </div>
     </div>
   </div>
 
@@ -170,8 +139,31 @@
 
 <script>
 (function () {
+  const tips = [
+    "Geser ke samping untuk melihat koleksi edisi lainnya.",
+    "Gunakan koneksi stabil untuk pengalaman membaca PDF yang lancar.",
+    "E-Magz berisi ragam informasi teknologi dan kreativitas mahasiswa.",
+    "Klik pada cover majalah untuk masuk ke mode pembaca digital.",
+    "Semua edisi E-Magz dapat diakses secara gratis di perpustakaan kami.",
+    "Membaca E-Magz menambah wawasan seputar dunia Teknik Elektro."
+  ];
+
+  let currentTipIndex = 0;
+  const tipElement = document.getElementById('game-tip-display');
+
+  function rotateTips() {
+    if (!tipElement) return;
+    
+    // Ganti teks saat animasi fade sedang di posisi tidak terlihat (sekitar detik ke 4)
+    setTimeout(() => {
+      currentTipIndex = (currentTipIndex + 1) % tips.length;
+      tipElement.innerHTML = `<strong>TIP:</strong> ${tips[currentTipIndex]}`;
+      rotateTips();
+    }, 4000); 
+  }
+
   function initEmagzAnim() {
-    var targets = document.querySelectorAll('.emagz-header, .emagz-footer, .emagz-loading-area');
+    var targets = document.querySelectorAll('.emagz-header, .emagz-loading-area');
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
         if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
@@ -179,29 +171,9 @@
     }, { threshold: 0.1 });
     targets.forEach(function(el) { obs.observe(el); });
 
-    // Animasi Stagger untuk Kartu Majalah (Mendeteksi perubahan dari emagz.js)
-    var container = document.getElementById('emagz-cards-container');
-    if(container) {
-      var cardIO = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) { e.target.classList.add('is-visible'); cardIO.unobserve(e.target); }
-        });
-      }, { threshold: 0.05, rootMargin: '0px 20px -20px 20px' });
-
-      new MutationObserver(function() {
-        container.querySelectorAll('.emagz-card:not([data-obs])').forEach(function(card, i) {
-          card.setAttribute('data-obs', '1');
-          card.style.transitionDelay = (i * 0.1) + 's';
-          cardIO.observe(card);
-        });
-      }).observe(container, { childList: true });
-    }
+    rotateTips(); // Jalankan rotasi tips
   }
 
-  window.__components = window.__components || {};
-  window.__components['emagz'] = { init: initEmagzAnim };
-  window.initEmagzAnimations = initEmagzAnim;
-  
   if (document.readyState !== 'loading') initEmagzAnim();
   else document.addEventListener('DOMContentLoaded', initEmagzAnim);
 })();
