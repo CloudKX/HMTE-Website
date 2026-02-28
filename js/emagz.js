@@ -4,33 +4,42 @@
 window.emagzData = [];
 let isDataFetched = false;
 
-// 2. Fungsi asinkron untuk mengambil data JSON
+// 2. Fungsi asinkron untuk mengambil data JSON hasil dari CMS
 async function fetchEmagzData() {
   if (isDataFetched) return window.emagzData;
+  
   try {
+    // Tambahkan timestamp agar browser tidak membaca cache yang lama saat web baru diupdate
     const response = await fetch('/js/data/json/emagz.json?t=' + new Date().getTime());
     if (response.ok) {
       const data = await response.json();
+      // CMS menyimpan daftar di dalam key "items" (berdasarkan config.yml)
       window.emagzData = data.items || [];
+    } else {
+      console.warn("File emagz.json belum ada atau gagal dimuat.");
     }
   } catch (error) {
     console.error("Error fetching E-Magz data:", error);
   }
+  
   isDataFetched = true;
   return window.emagzData;
 }
 
 // ─────────────────────────────────────────────────────────────
 // CORE: createEmagzCardHTML
-// PERBAIKAN: Inline style transition-delay DIHAPUS. Delay diatur via Observer.
+// Mencetak markup bersih menggunakan class CSS custom (.emagz-card*)
 // ─────────────────────────────────────────────────────────────
 function createEmagzCardHTML(edition, index = 0) {
   const readerLink = `/page/emagz/emagz-reader.html?id=${edition.id}`;
+  
+  // Amankan gambar cover jika kosong
   const src = edition.coverSrc || '/img/logohmte.png';
   const imageSrc = src.startsWith('http') ? src : '/' + src.replace(/^\//, '');
+  const delayMs = index * 90; // 90ms stagger delay
 
   return `
-    <a href="${readerLink}" class="emagz-card" data-index="${index}">
+    <a href="${readerLink}" class="emagz-card" style="transition-delay:${delayMs}ms" data-index="${index}">
       <div class="emagz-card-cover">
         <span class="emagz-card-edition-badge">Vol. ${edition.id}</span>
         <img
@@ -55,49 +64,35 @@ function createEmagzCardHTML(edition, index = 0) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// PERBAIKAN ANIMASI OBSERVER (STAGGER EFFECT)
+// IntersectionObserver: trigger animasi .emagz-card → .is-visible
 // ─────────────────────────────────────────────────────────────
 function observeEmagzCards(container) {
-  if (!container || typeof IntersectionObserver === 'undefined') return;
+  if (!container || typeof IntersectionObserver === 'undefined') {
+    container && container.querySelectorAll('.emagz-card').forEach(function(c) {
+      c.classList.add('is-visible');
+    });
+    return;
+  }
 
-  // Observer untuk Header & Footer
-  const baseTargets = document.querySelectorAll('.emagz-header, .emagz-footer');
-  const baseObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+  var obs = new IntersectionObserver(function(entries, observer) {
+    entries.forEach(function(entry) {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        baseObs.unobserve(entry.target);
+        observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1 });
-  baseTargets.forEach(el => baseObs.observe(el));
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
-  // Observer khusus untuk Kartu (dengan delay berurutan)
-  const cards = container.querySelectorAll('.emagz-card');
-  const cardObs = new IntersectionObserver((entries) => {
-    entries.forEach((entry, idx) => {
-      if (entry.isIntersecting) {
-        // Tembak delay dinamis berdasarkan urutan elemen masuk layar
-        entry.target.style.transitionDelay = `${idx * 0.1}s`;
-        
-        // Timeout kecil agar browser me-render CSS delay-nya dulu
-        setTimeout(() => {
-           entry.target.classList.add('is-visible');
-        }, 10);
-        
-        cardObs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 20px -20px 20px' });
-
-  cards.forEach(card => cardObs.observe(card));
+  container.querySelectorAll('.emagz-card').forEach(function(card) {
+    obs.observe(card);
+  });
 }
 
 // ─────────────────────────────────────────────────────────────
-// HOMEPAGE SECTION
+// HOMEPAGE SECTION: render 3 kartu terbaru
 // ─────────────────────────────────────────────────────────────
 async function renderEmagzSection() {
-  await fetchEmagzData();
+  await fetchEmagzData(); // Minta data terbaru dari file JSON
   
   var container = document.getElementById('emagz-cards-container');
   var moreLink  = document.getElementById('emagz-more-link');
@@ -106,15 +101,20 @@ async function renderEmagzSection() {
   var latest = window.emagzData.slice(0, 3);
 
   if (latest.length === 0) {
-    container.innerHTML = '<p style="text-align:center;color:#9ca3af;width:100%;">Belum ada edisi E-Magazine.</p>';
+    container.innerHTML = '<p style="text-align:center;color:#9ca3af;">Belum ada edisi E-Magazine.</p>';
     if (moreLink) moreLink.classList.add('hidden');
     return;
   }
 
-  container.innerHTML = latest.map((ed, i) => createEmagzCardHTML(ed, i)).join('');
+  container.innerHTML = latest.map(function(ed, i) {
+    return createEmagzCardHTML(ed, i);
+  }).join('');
 
-  // Jalankan Observer Animasi baru
   observeEmagzCards(container);
+
+  if (typeof window.initEmagzAnimations === 'function') {
+    window.initEmagzAnimations();
+  }
 
   if (moreLink && window.emagzData.length > 3) {
     var link = moreLink.querySelector('a');
@@ -125,15 +125,19 @@ async function renderEmagzSection() {
 
 function checkAndRenderEmagzSection() {
   var container = document.getElementById('emagz-cards-container');
-  if (container) renderEmagzSection();
-  else setTimeout(checkAndRenderEmagzSection, 50);
+  if (container) {
+    renderEmagzSection();
+  } else {
+    setTimeout(checkAndRenderEmagzSection, 50);
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
-// ARCHIVE PAGE
+// ARCHIVE PAGE: render semua edisi
 // ─────────────────────────────────────────────────────────────
 async function loadEmagzArchivePage() {
-  await fetchEmagzData();
+  await fetchEmagzData(); // Minta data terbaru dari file JSON
+
   var container = document.getElementById('emagz-archive-container');
   if (!container) return;
 
@@ -142,37 +146,53 @@ async function loadEmagzArchivePage() {
     return;
   }
 
-  var sorted = window.emagzData.slice().sort((a, b) => b.id - a.id);
-  container.innerHTML = sorted.map((ed, i) => createEmagzCardHTML(ed, i)).join('');
+  // Urutkan dari ID terbesar (terbaru) ke terkecil
+  var sorted = window.emagzData.slice().sort(function(a, b) { return b.id - a.id; });
+
+  container.innerHTML = sorted.map(function(ed, i) {
+    return createEmagzCardHTML(ed, i);
+  }).join('');
 
   observeEmagzCards(container);
+  
+  // Memicu trigger untuk update angka stat (Total Edisi) di file HTML
   document.dispatchEvent(new Event('component:loaded'));
 }
 
 // ─────────────────────────────────────────────────────────────
-// READER PAGE
+// READER PAGE: embed PDF
 // ─────────────────────────────────────────────────────────────
 async function loadEmagzReader() {
-  await fetchEmagzData();
+  await fetchEmagzData(); // Minta data terbaru dari file JSON
+
   var readerContainer = document.getElementById('emagz-reader-container');
   if (!readerContainer) return;
 
   var urlParams  = new URLSearchParams(window.location.search);
   var editionId  = parseInt(urlParams.get('id'));
-  var edition    = window.emagzData.find(e => e.id === editionId);
+  var edition    = window.emagzData.find(function(e) { return e.id === editionId; });
 
   if (!edition) {
     readerContainer.innerHTML = '<p style="text-align:center;color:#f87171;">Error: Edisi tidak ditemukan.</p>';
     return;
   }
 
-  // Set Title
-  document.getElementById('page-title').textContent = 'Baca Emagz HMTE - Edisi ' + editionId + ': ' + edition.title;
-  document.querySelector('main h1').textContent = 'E-Magazine HMTE Edisi ' + editionId;
-  document.querySelector('main p.text-center').textContent = 'Membaca: ' + edition.title;
+  var pageTitle = document.getElementById('page-title');
+  if (pageTitle) pageTitle.textContent = 'Baca Emagz HMTE - Edisi ' + editionId + ': ' + edition.title;
+
+  var mainTitle = document.querySelector('main h1');
+  if (mainTitle) mainTitle.textContent = 'E-Magazine HMTE Edisi ' + editionId;
+
+  var subTitle = document.querySelector('main p.text-center');
+  if (subTitle) subTitle.textContent = 'Membaca: ' + edition.title;
 
   var src = edition.coverSrc || '/img/logohmte.png';
   var imgSrc = src.startsWith('http') ? src : '/' + src.replace(/^\//, '');
+
+  if (!edition.pdfLink) {
+    readerContainer.innerHTML = '<p style="text-align:center;color:#f87171;">Error: Tautan PDF tidak ditemukan.</p>';
+    return;
+  }
 
   readerContainer.innerHTML = `
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(15,188,109,0.15);border-radius:16px;padding:24px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-bottom:32px;">
@@ -197,13 +217,20 @@ async function loadEmagzReader() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// EXPOSE & AUTO INIT
+// AUTO INIT: Panggil eksekusi otomatis sesuai container yang ada
 // ─────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('emagz-archive-container')) loadEmagzArchivePage();
-  if (document.getElementById('emagz-reader-container')) loadEmagzReader();
+  if (document.getElementById('emagz-archive-container')) {
+    loadEmagzArchivePage();
+  }
+  if (document.getElementById('emagz-reader-container')) {
+    loadEmagzReader();
+  }
 });
 
+// ─────────────────────────────────────────────────────────────
+// Expose ke global
+// ─────────────────────────────────────────────────────────────
 window.renderEmagzSection         = renderEmagzSection;
 window.checkAndRenderEmagzSection = checkAndRenderEmagzSection;
 window.loadEmagzArchivePage       = loadEmagzArchivePage;
