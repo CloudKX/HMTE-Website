@@ -2,7 +2,7 @@
   "items": [
     {
       "id": 5,
-      "title": "E-Magz Vol.5 kontol",
+      "title": "E-Magz Vol.5",
       "description": "dadad",
       "coverSrc": "/img/uploads/robloxscreenshot20260102_153650163.png",
       "pdfLink": "/img/emagz/4.pdf",
@@ -39,6 +39,14 @@
       "coverSrc": "/img/emagz/Vol1.jpg",
       "pdfLink": "/img/emagz/1.pdf",
       "date": "2025-01-01"
+    },
+    {
+      "id": 40,
+      "title": "kokika",
+      "description": "vavav",
+      "coverSrc": "/img/uploads/robloxscreenshot20260102_153650163.png",
+      "pdfLink": "https://hmte-website.vercel.app/",
+      "date": "2026-02-28"
     }
   ]
 }
