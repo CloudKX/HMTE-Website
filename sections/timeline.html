@@ -61,12 +61,11 @@
     margin: 0; line-height: 1.6; max-width: 500px;
   }
 
-  /* ── KUNCI: GRID KANAN-KIRI ── */
+  /* ── GRID LAYOUT UTAMA (PC: 2 Kolom Kanan-Kiri) ── */
   .tl-main-grid {
     display: grid;
-    /* Desktop: Kalender 60%, Kegiatan 40% bersebelahan */
-    grid-template-columns: 1.6fr 1fr; 
-    gap: clamp(16px, 3vw, 40px);
+    grid-template-columns: 1.6fr 1fr; /* PC: Kalender besar di kiri, event di kanan */
+    gap: clamp(24px, 3vw, 40px);
     align-items: start;
   }
 
@@ -74,7 +73,7 @@
   .tl-calendar-card {
     background: linear-gradient(145deg, rgba(15,188,109,0.06) 0%, rgba(13,17,23,0.98) 35%, rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.03) 100%);
     border: 1px solid rgba(15,188,109,0.15); border-radius: 20px;
-    padding: clamp(16px, 2vw, 32px); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    padding: clamp(20px, 2vw, 32px); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     position: relative; width: 100%;
   }
   .tl-calendar-card::before {
@@ -84,7 +83,7 @@
 
   .tl-calendar-inner {
     background: rgba(7,10,16,0.85); border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 16px; padding: clamp(12px, 2vw, 24px);
+    border-radius: 16px; padding: clamp(16px, 2vw, 24px);
   }
 
   .tl-month-btn {
@@ -107,7 +106,7 @@
   .tl-upcoming-wrapper {
     background: linear-gradient(145deg, rgba(15,188,109,0.06) 0%, rgba(13,17,23,0.98) 35%, rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.03) 100%);
     border: 1px solid rgba(15,188,109,0.15); border-radius: 20px;
-    padding: clamp(16px, 2vw, 32px); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    padding: clamp(20px, 2vw, 32px); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     position: sticky; top: 100px;
   }
   .tl-upcoming-wrapper::before {
@@ -126,7 +125,7 @@
     gap: 12px;
   }
 
-  /* Style masing-masing event */
+  /* Style masing-masing event di PC */
   #upcoming-events > div {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
@@ -145,65 +144,78 @@
   }
 
   /* ══════════════════════════════════════════════════════
-     MOBILE OPTIMIZATION (Android & iOS) - DIPAKSA KANAN KIRI
+     MOBILE OPTIMIZATION (Android & iOS) - ATAS BAWAH + SWIPE
   ══════════════════════════════════════════════════════ */
   @media screen and (max-width: 768px) {
     .tl-main-grid {
-      /* Paksa bersebelahan di HP! */
-      grid-template-columns: 1.25fr 1fr; 
-      gap: 10px; /* Jarak dirapatkan agar muat */
+      /* PENTING: Di HP berubah jadi 1 Kolom (Atas-Bawah) agar tidak kacau */
+      grid-template-columns: 1fr !important; 
+      gap: 24px !important; 
     }
     
-    /* Pengecilan Kalender */
+    /* Ukuran Kalender dinormalkan kembali untuk layar HP */
     .tl-calendar-card {
-      padding: 12px 8px !important;
-      border-radius: 12px !important;
+      padding: 16px !important;
+      border-radius: 16px !important;
     }
     .tl-calendar-inner {
-      padding: 8px 4px !important;
-      border-radius: 8px !important;
-    }
-    #calendar-grid { gap: 2px !important; }
-    .tl-calendar-inner .grid-cols-7 > div:not(#calendar-grid) { font-size: 0.55rem !important; }
-    .tl-month-btn { width: 24px !important; height: 24px !important; font-size: 0.75rem !important; border-radius: 6px !important;}
-    #month-year-display { font-size: 0.8rem !important; }
-    #event-details { font-size: 0.6rem !important; padding: 8px 4px !important; margin-top: 10px !important; }
-
-    /* Pengecilan Upcoming Events */
-    .tl-upcoming-wrapper {
-      padding: 12px 8px !important;
+      padding: 12px !important;
       border-radius: 12px !important;
+    }
+    #calendar-grid { gap: 4px !important; }
+    .tl-calendar-inner .grid-cols-7 > div:not(#calendar-grid) { font-size: 0.7rem !important; }
+    .tl-month-btn { width: 36px !important; height: 36px !important; font-size: 0.9rem !important; }
+    #month-year-display { font-size: 1rem !important; }
+    #event-details { font-size: 0.75rem !important; padding: 12px !important; }
+
+    /* Upcoming Events berubah menjadi Carousel Geser (Swipe) di Bawah Kalender */
+    .tl-upcoming-wrapper {
+      padding: 20px 16px !important;
+      border-radius: 16px !important;
       position: relative; /* Matikan sticky di HP */
       top: 0;
     }
     .tl-upcoming-title { 
-      font-size: 0.8rem !important; 
-      margin-bottom: 12px !important; 
-      gap: 6px !important; 
+      font-size: 1rem !important; 
+      margin-bottom: 16px !important; 
+      justify-content: flex-start !important;
     }
-    .tl-upcoming-title i { font-size: 0.9rem !important; }
     
-    #upcoming-events { gap: 8px !important; }
+    /* Ubah list vertikal menjadi Horizontal Scroll (Swipeable) */
+    #upcoming-events { 
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 12px !important; /* Ruang untuk efek shadow */
+      gap: 12px !important;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; 
+    }
+    #upcoming-events::-webkit-scrollbar { display: none; }
+    
     #upcoming-events > div {
-      padding: 8px !important;
-      border-left: 2px solid #0fbc6d !important;
-      border-radius: 8px !important;
+      flex: 0 0 calc(80vw - 32px) !important; /* Lebar kartu sedikit lebih kecil dari layar agar kelihatan bisa digeser */
+      scroll-snap-align: center;
+      padding: 16px !important;
+      border-left: 3px solid #0fbc6d !important;
+      border-radius: 12px !important;
     }
 
-    /* Memaksa text event mengecil ekstrim agar tidak tumpang tindih */
+    /* Kembalikan ukuran teks ke ukuran normal yang enak dibaca */
     #upcoming-events > div p, 
     #upcoming-events > div span, 
     #upcoming-events > div div, 
     #upcoming-events > div h3, 
     #upcoming-events > div h4 {
-      font-size: 0.6rem !important;
-      line-height: 1.3 !important;
+      font-size: 0.8rem !important;
+      line-height: 1.4 !important;
       margin: 0 !important;
     }
-    
     #upcoming-events > div .font-bold,
     #upcoming-events > div strong {
-      font-size: 0.65rem !important;
+      font-size: 0.9rem !important;
     }
   }
 </style>
@@ -363,7 +375,7 @@
           <i class="fas fa-calendar-check"></i> Kegiatan Mendatang
         </h3>
         <div id="upcoming-events">
-          <p style="color: rgba(156,163,175,0.45); font-size:0.85rem; text-align:center; width:100%;" class="animate-pulse">Memuat kegiatan...</p>
+          <p style="color: rgba(156,163,175,0.45); font-size:0.85rem; text-align:center; width:100%; grid-column: 1 / -1;" class="animate-pulse">Memuat kegiatan...</p>
         </div>
       </div>
 
