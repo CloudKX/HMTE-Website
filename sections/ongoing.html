@@ -3,7 +3,7 @@
     0%,100% { opacity: 1; }
     50%      { opacity: 0.3; }
   }
-  @keyframes skelPulse3 {
+  @keyframes skelPulse {
     0%,100% { opacity: 0.3; }
     50%      { opacity: 0.6; }
   }
@@ -29,13 +29,14 @@
     display: flex; flex-direction: column; align-items: center;
   }
 
-  /* ── HEADER ── */
+  /* ── HEADER (Animasi dari atas ke bawah) ── */
   .ongoing-header {
     text-align: center;
     margin-bottom: clamp(24px, 4vh, 44px);
     display: flex; flex-direction: column; align-items: center;
     gap: 10px;
-    opacity: 0; transform: translateY(20px);
+    opacity: 0; 
+    transform: translateY(20px);
     transition: opacity 0.7s ease, transform 0.7s ease;
   }
   .ongoing-header.is-visible { opacity: 1; transform: translateY(0); }
@@ -61,29 +62,18 @@
     max-width: 480px; text-align: center;
   }
 
-  /* ── GRID: auto-fit ── */
+  /* ── GRID ── */
   .ongoing-grid {
     width: 100%;
-    max-width: 900px; /* Ditambahkan agar grid tidak melar di layar besar */
+    max-width: 900px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: clamp(12px, 2.5vw, 22px);
+    justify-items: stretch;
   }
 
-  /* ── 1. ANIMASI MURNI KIRI KE KANAN ── */
-  @keyframes slideInFromLeft {
-    0% {
-      opacity: 0;
-      transform: translateX(-50px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  /* ── 2. CARD ── */
+  /* ── CARD (Animasi dari kiri ke kanan) ── */
   .ongoing-card {
     position: relative; border-radius: 16px; overflow: hidden;
     background: linear-gradient(145deg,
@@ -94,33 +84,73 @@
     box-shadow: 0 4px 24px rgba(0,0,0,0.4);
     text-decoration: none; display: flex; flex-direction: column;
     
-    /* Animasi akan terpicu otomatis saat kartu dimuat oleh home.js! */
-    animation: slideInFromLeft 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
+    /* State awal sebelum di-scroll */
+    opacity: 0; 
+    transform: translateX(-40px);
     
-    /* Transisi ini sekarang hanya fokus untuk efek Hover saja */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    /* Transisi dipicu saat kelas is-visible ditambahkan oleh JS */
+    transition:
+      opacity 0.6s cubic-bezier(0.23,1,0.32,1),
+      transform 0.6s cubic-bezier(0.23,1,0.32,1),
+      border-color 0.3s ease, box-shadow 0.3s ease;
   }
-
-  /* Mengatur urutan delay agar muncul bergantian */
-  .ongoing-card:nth-child(1) { animation-delay: 0.1s; }
-  .ongoing-card:nth-child(2) { animation-delay: 0.25s; }
-  .ongoing-card:nth-child(3) { animation-delay: 0.4s; }
-  .ongoing-card:nth-child(4) { animation-delay: 0.55s; }
-  .ongoing-card:nth-child(5) { animation-delay: 0.7s; }
+  
+  /* State setelah di-scroll */
+  .ongoing-card.is-visible { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+  
+  /* Efek stagger (berurutan) */
+  .ongoing-card:nth-child(1) { transition-delay: 0.05s; }
+  .ongoing-card:nth-child(2) { transition-delay: 0.15s; }
+  .ongoing-card:nth-child(3) { transition-delay: 0.25s; }
+  .ongoing-card:nth-child(4) { transition-delay: 0.35s; }
 
   .ongoing-card::before {
     content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(15,188,109,0.4), transparent);
     z-index: 2;
   }
-  
   .ongoing-card:hover {
-    transform: translateY(-5px) scale(1.02) !important;
+    transform: translateY(-5px) !important;
     border-color: rgba(15,188,109,0.3);
     box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 24px rgba(15,188,109,0.08);
   }
-  
   .ongoing-card:active { transform: scale(0.98) !important; }
+
+  /* ── GAMBAR ── */
+  .ongoing-card-img {
+    position: relative; 
+    height: 220px !important; 
+    width: 100%; 
+    overflow: hidden; flex-shrink: 0;
+  }
+  .ongoing-card-img img {
+    width: 100%; height: 100%; 
+    object-fit: cover; object-position: center top;
+    filter: brightness(0.82) saturate(1.05);
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), filter 0.3s ease;
+  }
+  .ongoing-card:hover .ongoing-card-img img { transform: scale(1.05); filter: brightness(0.95); }
+  .ongoing-card-img::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
+    background: linear-gradient(to top, rgba(13,17,23,0.8), transparent); pointer-events: none;
+  }
+  .ongoing-badge {
+    position: absolute; top: 12px; right: 12px; z-index: 3;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px;
+    background: rgba(15,188,109,0.15); border: 1px solid rgba(15,188,109,0.35);
+    border-radius: 20px; font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: #0fbc6d;
+    backdrop-filter: blur(8px);
+  }
+  .ongoing-badge-dot {
+    width: 5px; height: 5px; background: #0fbc6d; border-radius: 50%;
+    box-shadow: 0 0 6px #0fbc6d;
+    animation: liveBlink 1.8s ease-in-out infinite;
+  }
 
   /* ── BODY ── */
   .ongoing-card-body {
@@ -181,13 +211,13 @@
   /* ── SKELETON ── */
   .ongoing-skel {
     background: rgba(255,255,255,0.04); border-radius: 6px;
-    animation: skelPulse3 1.6s ease-in-out infinite;
+    animation: skelPulse 1.6s ease-in-out infinite;
   }
 
   /* ══ MOBILE ≤ 479px ══ */
   @media (max-width: 479px) {
     .ongoing-grid { grid-template-columns: 1fr; gap: 12px; }
-    .ongoing-card-img { height: 200px !important; } /* Lebih lega di HP */
+    .ongoing-card-img { height: 200px !important; }
   }
 
   /* ══ TABLET 480–768px: 2 kolom ══ */
@@ -223,13 +253,6 @@
           <div class="ongoing-skel" style="height:14px;width:80%;"></div>
         </div>
       </div>
-      <div class="ongoing-card is-visible">
-        <div class="ongoing-card-img"><div class="ongoing-skel" style="width:100%;height:100%;"></div></div>
-        <div class="ongoing-card-body" style="gap:10px;">
-          <div class="ongoing-skel" style="height:9px;width:30%;"></div>
-          <div class="ongoing-skel" style="height:14px;width:85%;"></div>
-        </div>
-      </div>
     </div>
 
     <div class="ongoing-footer">
@@ -243,65 +266,48 @@
 
 <script>
 (function () {
-  /* ── Keyframe DIUBAH: Animasi JS dari Kiri ke Kanan ── */
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes ongoingCardIn {
-      from { opacity: 0; transform: translateX(-50px) scale(0.97); }
-      to   { opacity: 1; transform: translateX(0) scale(1); }
-    }
-    .ongoing-card-anim {
-      animation: ongoingCardIn 0.6s cubic-bezier(0.23,1,0.32,1) both;
-    }
-  `;
-  document.head.appendChild(style);
-
-  /* ── IntersectionObserver untuk header & footer ── */
-  function initStaticAnim() {
-    const statics = document.querySelectorAll('.ongoing-header, .ongoing-footer');
-    if (!statics.length) return;
+  /* ── Menggunakan JS Observer yang sama dengan news.html ── */
+  function initOngoingAnim() {
+    // Cari semua elemen yang mau dianimasikan
+    const targets = document.querySelectorAll(
+      '.ongoing-header, #home-ongoing-container .ongoing-card, .ongoing-footer'
+    );
+    if (!targets.length) return;
+    
+    // Setup observer
     const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
-    }, { threshold: 0.08 });
-    statics.forEach((el) => obs.observe(el));
-  }
-
-  /* ── MutationObserver: pantau container, animasikan kartu baru ── */
-  function watchContainer() {
-    const container = document.getElementById('home-ongoing-container');
-    if (!container) { setTimeout(watchContainer, 80); return; }
-
-    const cardObs = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add('is-visible', 'ongoing-card-anim');
-          cardObs.unobserve(e.target);
+        if (e.isIntersecting) { 
+          e.target.classList.add('is-visible'); 
+          obs.unobserve(e.target); 
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
-
-    /* Observe kartu skeleton yang sudah ada */
-    container.querySelectorAll('.ongoing-card').forEach((c, i) => {
-      c.style.animationDelay = `${i * 0.12}s`;
-      cardObs.observe(c);
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    
+    // Observe elemen
+    targets.forEach((el) => { 
+      // Reset state awal (khusus untuk JS inject)
+      el.classList.remove('is-visible'); 
+      obs.observe(el); 
     });
+  }
 
-    /* MutationObserver: tangkap kartu baru dari JS inject */
-    const mutObs = new MutationObserver(() => {
-      container.querySelectorAll('.ongoing-card:not(.ongoing-card-anim)').forEach((c, i) => {
-        c.style.animationDelay = `${i * 0.12}s`;
-        cardObs.observe(c);
-      });
-    });
-    mutObs.observe(container, { childList: true, subtree: false });
+  function init() {
+    initOngoingAnim();
+    // Expose fungsi agar file home.js bisa memanggil ulang setelah injeksi data
+    window.initOngoingAnimations = initOngoingAnim; 
   }
 
   window.__components = window.__components || {};
-  window.__components['ongoing'] = { init: () => { initStaticAnim(); watchContainer(); } };
+  window.__components['ongoing'] = { init };
 
-  document.addEventListener('component:loaded', (e) => {
-    if (e.detail?.name === 'ongoing') { initStaticAnim(); watchContainer(); }
+  // Listener untuk Mutation jika diperlukan sebagai backup
+  const observer = new MutationObserver(() => {
+     if(document.getElementById('home-ongoing-container')){
+         initOngoingAnim();
+     }
   });
-  window.addEventListener('load', () => { initStaticAnim(); watchContainer(); });
+  observer.observe(document.body, { childList: true, subtree: true });
+
 })();
 </script>
