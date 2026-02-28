@@ -1,9 +1,6 @@
 // js/emagz.js
 // =============================================================================
 //  Versi CMS: data di-fetch dari js/data/json/emagz.json
-//  Field name (coverSrc, pdfLink, id) TIDAK BERUBAH agar render tetap berjalan.
-//  Logika render createEmagzCardHTML, loadEmagzArchivePage, loadEmagzReader
-//  semuanya TIDAK DIUBAH.
 // =============================================================================
 
 const EMAGZ_JSON_PATH = "/js/data/json/emagz.json";
@@ -17,7 +14,6 @@ async function getEmagzData() {
     const res = await fetch(EMAGZ_JSON_PATH);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
-    // Format Decap CMS: { "items": [...] }
     _emagzCache = json.items || [];
     return _emagzCache;
   } catch (e) {
@@ -27,7 +23,7 @@ async function getEmagzData() {
 }
 
 // =============================================================================
-//  CARD RENDERING — tidak berubah sama sekali
+//  CARD RENDERING HOMEPAGE — Dipertahankan agar Beranda tidak rusak
 // =============================================================================
 
 function createEmagzCardHTML(edition) {
@@ -38,7 +34,6 @@ function createEmagzCardHTML(edition) {
 
   return `
     <div class="group relative flex flex-col w-full max-w-[280px] mx-auto bg-gray-900 rounded-2xl overflow-hidden shadow-lg border border-gray-800 hover:border-green-500 transition-all duration-500 hover:-translate-y-2 hover:shadow-green-500/30">
-      
       <div class="relative w-full aspect-[3/4] overflow-hidden">
         <img 
           src="${imagePath}" 
@@ -51,7 +46,6 @@ function createEmagzCardHTML(edition) {
           Edisi #${edition.id}
         </div>
       </div>
-
       <div class="p-5 flex flex-col flex-1 relative">
         <h3 class="text-lg font-bold text-white mb-2 line-clamp-1 group-hover:text-green-400 transition-colors">
           ${edition.title}
@@ -104,7 +98,7 @@ async function checkAndRenderEmagzSection() {
 }
 
 // =============================================================================
-//  HALAMAN ARSIP
+//  HALAMAN ARSIP (emagz.html) — DIUBAH AGAR MENDUKUNG ANIMASI CSS MURNI
 // =============================================================================
 
 async function loadEmagzArchivePage() {
@@ -118,14 +112,39 @@ async function loadEmagzArchivePage() {
     return;
   }
 
-  container.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mx-auto px-4";
+  // DIHAPUS: container.className = "grid grid-cols-1..." (Agar tidak merusak CSS kita)
+
+  // Mencetak format HTML bersih tanpa kelas bentrok Tailwind
   container.innerHTML = emagzData
     .slice()
     .sort((a, b) => b.id - a.id)
-    .map(createEmagzCardHTML)
+    .map((edition) => {
+      const readerLink = `/page/emagz/emagz-reader.html?id=${edition.id}`;
+      const imagePath  = edition.coverSrc
+        ? (edition.coverSrc.startsWith("http") ? edition.coverSrc : `/${edition.coverSrc.replace(/^\//, "")}`)
+        : "/img/logohmte.png";
+
+      return `
+        <a href="${readerLink}">
+          <div style="position:relative; width:100%; aspect-ratio:3/4; overflow:hidden;">
+            <img src="${imagePath}" alt="${edition.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';" />
+            <div style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.6); color:#4ade80; font-size:10px; font-weight:bold; padding:4px 10px; border-radius:20px; border:1px solid rgba(74,222,128,0.3); backdrop-filter:blur(4px);">
+              Edisi #${edition.id}
+            </div>
+          </div>
+          <div class="p-5">
+            <h3>${edition.title}</h3>
+            <p class="text-gray-400">${edition.description}</p>
+            <button>
+              Baca Sekarang <i class="fas fa-arrow-right ml-2 text-xs"></i>
+            </button>
+          </div>
+        </a>
+      `;
+    })
     .join("");
 
-  console.log("✅ Arsip E-Magz berhasil di-render!");
+  console.log("✅ Arsip E-Magz berhasil di-render dengan format HTML bersih!");
 }
 
 // =============================================================================
