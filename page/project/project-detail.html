@@ -2,71 +2,227 @@
 <html lang="id">
   <head>
     <base href="/" />
-
-    <title id="page-title">Memuat Detail Proyek...</title>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="page-title">Memuat Detail Proyek... - HMTE Unsoed</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/satoshi.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+      /* ══════════════════════════════════════════════════
+         1. BASE & BACKGROUND (GRID TEMA KONSISTEN)
+      ══════════════════════════════════════════════════ */
+      html { overflow-x: hidden !important; }
+      body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        color: #ffffff !important;
+        margin: 0; min-height: 100vh;
+        
+        /* Background kotak-kotak bawaan style.css */
+        background-color: #161616 !important;
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
+                          linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+        background-size: 55px 55px !important;
+      }
+
+      /* ── PAGE FADE IN ── */
+      .page-fade { animation: pageFadeIn 0.65s ease both; }
+      @keyframes pageFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ══════════════════════════════════════════════════
+         2. WRAPPER & CLEARANCE HEADER
+      ══════════════════════════════════════════════════ */
+      .detail-wrap {
+        /* Clearance agar tidak tertutup header di Desktop */
+        padding-top: 120px; 
+        padding-bottom: 80px;
+        position: relative;
+        min-height: 100vh;
+      }
+      /* Glow hijau di atas halaman */
+      .detail-wrap::before {
+        content: '';
+        position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+        width: min(700px, 100%); height: 300px;
+        background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .detail-inner {
+        max-width: 900px; /* Ukuran optimal untuk membaca artikel */
+        margin: 0 auto;
+        padding: 0 clamp(16px, 5vw, 48px);
+      }
+
+      /* ══════════════════════════════════════════════════
+         3. UI COMPONENTS
+      ══════════════════════════════════════════════════ */
+      /* Tombol Kembali - Premium Glassmorphism */
+      .btn-back {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 8px 20px 8px 8px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 50px;
+        color: rgba(255,255,255,0.7);
+        font-size: 0.85rem; font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        margin-bottom: 32px;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+      }
+      .btn-back:hover {
+        background: rgba(15,188,109,0.1);
+        border-color: rgba(15,188,109,0.3);
+        color: #0fbc6d;
+      }
+      .btn-back .icon-circle {
+        width: 32px; height: 32px;
+        background: rgba(0,0,0,0.4);
+        border-radius: 50%;
+        display: flex; justify-content: center; align-items: center;
+        transition: transform 0.3s;
+      }
+      .btn-back:hover .icon-circle { transform: translateX(-4px); background: #0fbc6d; color: #161616; }
+
+      /* Judul & Meta */
+      #detail-title {
+        font-size: clamp(1.8rem, 5vw, 3.5rem) !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.02em !important;
+        font-weight: 900 !important;
+        color: #ffffff !important;
+        margin-bottom: 24px !important;
+      }
+
+      .detail-meta {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 14px;
+        font-size: 0.85rem; color: rgba(156,163,175,0.7);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        padding-bottom: 24px; margin-bottom: 36px;
+      }
+
+      /* Gambar Cover */
+      .detail-img-wrapper {
+        border-radius: 20px;
+        overflow: hidden;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,255,255,0.06);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        margin-bottom: 40px;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .detail-img-wrapper img {
+        width: 100%; max-height: 500px; object-fit: cover; display: block;
+      }
+
+      /* Teks Konten */
+      #detail-content {
+        color: rgba(209,213,219,0.9) !important;
+        line-height: 1.8 !important;
+        font-size: clamp(1rem, 2vw, 1.12rem);
+      }
+
+      /* ══════════════════════════════════════════════════
+         4. MOBILE FIXES (Android & iOS)
+      ══════════════════════════════════════════════════ */
+      @media screen and (max-width: 768px) {
+        .detail-wrap { 
+          padding-top: 100px; /* Clearance ekstra agar lepas dari navbar */
+          padding-bottom: 40px; 
+        }
+        .btn-back {
+          font-size: 0.75rem;
+          padding: 6px 14px 6px 6px;
+          margin-bottom: 24px;
+        }
+        .btn-back .icon-circle { width: 28px; height: 28px; }
+        
+        #detail-title { font-size: clamp(1.6rem, 7vw, 2.2rem) !important; margin-bottom: 16px !important; }
+        .detail-meta { font-size: 0.75rem; padding-bottom: 16px; margin-bottom: 24px; gap: 10px; }
+        
+        .detail-img-wrapper { border-radius: 14px; margin-bottom: 28px; }
+        .detail-img-wrapper img { max-height: 250px !important; }
+      }
+    </style>
   </head>
-  <body class="text-white min-h-screen flex flex-col font-satoshi">
+  
+  <body class="page-fade">
     <div id="header-placeholder"></div>
 
-    <main class="flex-grow">
-      <div class="container mx-auto px-4 md:px-8 lg:px-20 py-6">
-        <button onclick="window.history.back()" class="group flex items-center text-gray-400 hover:text-white transition text-sm font-medium">
-          <i class="fas fa-arrow-left mr-2 transform group-hover:-translate-x-1 transition-transform"></i>
+    <main class="detail-wrap">
+      <div class="detail-inner">
+        
+        <a onclick="window.history.back()" class="btn-back">
+          <span class="icon-circle">
+            <i class="fas fa-arrow-left"></i>
+          </span>
           Kembali ke Daftar Proyek
-        </button>
-      </div>
+        </a>
 
-      <article class="container mx-auto px-4 md:px-8 lg:px-40 pb-20 fade-in">
-        <header class="mb-8 text-center md:text-left max-w-4xl mx-auto">
-          <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-4">
-            <span id="detail-category-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"> Loading... </span>
-            <span id="detail-status-badge" class="text-xs font-medium text-gray-400 bg-gray-800 px-2 py-1 rounded border border-gray-700"> ... </span>
+        <article>
+          <header class="text-left">
+            <div class="flex flex-wrap items-center gap-3 mb-5">
+              <span id="detail-category-badge" class="inline-block px-4 py-1.5 bg-[rgba(15,188,109,0.12)] text-[#0fbc6d] border border-[rgba(15,188,109,0.25)] rounded-full text-[0.65rem] font-bold uppercase tracking-[0.15em]">
+                Loading...
+              </span>
+              <span id="detail-status-badge" class="inline-block px-3 py-1 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg text-xs font-medium">
+                ...
+              </span>
+            </div>
+
+            <h1 id="detail-title">Memuat Judul Proyek...</h1>
+
+            <div class="detail-meta">
+              <div class="flex items-center gap-2">
+                <i class="far fa-calendar-alt text-[#0fbc6d]"></i>
+                <span id="detail-date">...</span>
+              </div>
+            </div>
+          </header>
+
+          <div id="detail-image-container" class="detail-img-wrapper">
+            <p class="text-gray-500 animate-pulse text-sm">Memuat gambar...</p>
           </div>
 
-          <h1 id="detail-title" class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight">Memuat Judul Proyek...</h1>
-
-          <div class="flex items-center justify-center md:justify-start text-sm text-gray-400 border-b border-gray-800 pb-8">
-            <i class="far fa-calendar-alt mr-2 text-green-500"></i>
-            <span id="detail-date">...</span>
-          </div>
-        </header>
-
-        <div class="max-w-5xl mx-auto mb-12">
-          <div id="detail-image-container" class="rounded-2xl overflow-hidden shadow-2xl border border-gray-800 bg-black/50 relative min-h-[200px] flex items-center justify-center">
-            <p class="text-gray-500 animate-pulse">Memuat gambar...</p>
-          </div>
-        </div>
-
-        <div class="max-w-3xl mx-auto">
-          <div class="prose prose-invert prose-lg max-w-none text-gray-300 leading-relaxed">
+          <div class="prose prose-invert prose-lg max-w-none text-gray-300 leading-relaxed mb-12">
             <div id="detail-content">
-              <p>Memuat deskripsi lengkap...</p>
+              <p class="italic text-gray-500">Memuat deskripsi lengkap...</p>
             </div>
           </div>
 
-          <div id="documentation-section" class="mt-12 pt-8 border-t border-gray-800 hidden">
-            <h3 class="text-lg font-bold text-white mb-4 flex items-center"><i class="fas fa-paperclip mr-2 text-yellow-500"></i> Tautan & Dokumen</h3>
+          <div id="documentation-section" class="mt-8 pt-8 border-t border-gray-800 hidden">
+            <h3 class="text-lg font-bold text-white mb-5 flex items-center">
+              <i class="fas fa-paperclip mr-3 text-[#0fbc6d]"></i> Tautan & Dokumen
+            </h3>
 
             <a
               id="documentation-link"
               href="#"
               target="_blank"
-              class="group flex items-center p-4 bg-gray-800 hover:bg-gray-750 border border-gray-700 rounded-xl transition-all hover:border-yellow-500/50 hover:shadow-lg hover:shadow-yellow-500/10"
+              class="group flex items-center p-4 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl transition-all hover:border-[#0fbc6d]/50 hover:shadow-lg hover:shadow-[#0fbc6d]/10 text-decoration-none"
             >
-              <div class="w-12 h-12 rounded-lg bg-gray-700 flex items-center justify-center text-yellow-500 text-xl mr-4 group-hover:bg-yellow-500 group-hover:text-black transition-colors">
+              <div class="w-12 h-12 rounded-lg bg-gray-700 flex items-center justify-center text-[#0fbc6d] text-xl mr-4 group-hover:bg-[#0fbc6d] group-hover:text-black transition-colors">
                 <i class="fas fa-link"></i>
               </div>
 
               <div class="flex-grow">
-                <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">External Link</p>
-                <p class="text-white font-semibold group-hover:text-yellow-400 transition-colors">Buka Dokumentasi / Press Release</p>
+                <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">External Link</p>
+                <p class="text-white font-semibold group-hover:text-[#0fbc6d] transition-colors m-0 leading-none">Buka Dokumentasi / Press Release</p>
               </div>
 
               <div class="ml-4 text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all">
@@ -74,8 +230,9 @@
               </div>
             </a>
           </div>
-        </div>
-      </article>
+          
+        </article>
+      </div>
     </main>
 
     <div id="footer-placeholder"></div>
