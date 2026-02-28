@@ -1,90 +1,77 @@
 <style>
-  /* ══════════════════════════════════════════════════════════
-     1. ROOT FOOTER - PREMIUM DARK THEME
-  ══════════════════════════════════════════════════════════ */
+  /* ── ROOT ── */
   .footer-root {
     color: #fff;
-    /* Background gradient gelap elegan */
-    background: linear-gradient(180deg, rgba(12, 16, 24, 0.95) 0%, rgba(7, 10, 15, 1) 100%);
+    /* FIX: background eksplisit agar konsisten di semua halaman */
+    background: rgba(10, 14, 20, 0.85);
     border-top: 1px solid rgba(15,188,109,0.15);
     position: relative;
     overflow: hidden;
-    font-family: 'Satoshi-Regular', sans-serif;
   }
-  
-  /* Glow hijau menyebar dari atas tengah */
   .footer-root::before {
     content: '';
     position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: min(800px, 100%); height: 200px;
-    background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+    width: min(700px, 100%); height: 180px;
+    background: radial-gradient(ellipse, rgba(15,188,109,0.05) 0%, transparent 70%);
     pointer-events: none;
   }
 
-  /* ══════════════════════════════════════════════════════════
-     2. MAIN GRID (DESKTOP: 3 KOLOM)
-  ══════════════════════════════════════════════════════════ */
+  /* ── MAIN GRID (Desktop: 3 kolom) ── */
   .footer-grid {
-    max-width: 1200px; 
-    margin: 0 auto;
-    padding: clamp(48px, 6vh, 64px) clamp(24px, 5vw, 48px) 32px;
+    max-width: 1100px; margin: 0 auto;
+    padding: clamp(36px, 6vh, 64px) clamp(24px, 5vw, 48px) clamp(24px, 4vh, 40px);
     display: grid;
-    /* Pembagian porsi: Brand lebih besar, Tautan, Kontak */
-    grid-template-columns: 1.5fr 1fr 1.2fr;
-    gap: clamp(32px, 4vw, 64px);
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: clamp(28px, 5vw, 48px);
     align-items: start;
   }
 
-  /* ── A. KOLOM BRAND ── */
-  .footer-brand { display: flex; flex-direction: column; gap: 16px; }
+  /* ── BRAND ── */
+  .footer-brand { display: flex; flex-direction: column; gap: 14px; }
 
   .footer-brand-logo {
-    display: inline-flex; align-items: center; gap: 12px;
+    display: flex; align-items: center; gap: 10px;
     text-decoration: none;
-    width: fit-content;
   }
   .footer-brand-logo img {
-    width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+    width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
     border: 1px solid rgba(15,188,109,0.3); flex-shrink: 0;
-    box-shadow: 0 0 16px rgba(15,188,109,0.15);
   }
-  .footer-brand-name { font-size: 1.2rem; font-weight: 900; color: #fff; line-height: 1.2; letter-spacing: 0.02em; }
-  .footer-brand-sub  { font-size: 0.75rem; color: rgba(156,163,175,0.6); margin-top: 2px; }
+  .footer-brand-name { font-size: 1.1rem; font-weight: 800; color: #fff; line-height: 1.2; }
+  .footer-brand-sub  { font-size: 0.72rem; color: rgba(156,163,175,0.6); margin-top: 2px; }
 
   .footer-brand-desc {
-    font-size: 0.85rem; color: rgba(156,163,175,0.65);
-    line-height: 1.7; max-width: 320px;
+    font-size: 0.8rem; color: rgba(156,163,175,0.65);
+    line-height: 1.7; max-width: 280px;
   }
 
-  .footer-socials { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+  .footer-socials { display: flex; gap: 8px; flex-wrap: wrap; }
   .footer-social-btn {
-    width: 36px; height: 36px;
+    width: 34px; height: 34px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
     color: rgba(255,255,255,0.7);
-    font-size: 0.9rem; text-decoration: none;
-    transition: all 0.3s ease;
+    font-size: 0.8rem; text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
   }
   .footer-social-btn:hover {
-    transform: translateY(-3px);
-    background: rgba(15,188,109,0.15);
-    border-color: rgba(15,188,109,0.4);
+    background: rgba(15,188,109,0.12);
+    border-color: rgba(15,188,109,0.35);
     color: #0fbc6d;
-    box-shadow: 0 4px 12px rgba(15,188,109,0.15);
   }
 
-  /* ── B & C. KOLOM UMUM (TAUTAN & KONTAK) ── */
-  .footer-col { display: flex; flex-direction: column; gap: 16px; }
+  /* ── COLUMNS ── */
+  .footer-col { display: flex; flex-direction: column; gap: 14px; }
 
   .footer-col-title {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 0.8rem; font-weight: 800;
-    letter-spacing: 0.15em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase;
     color: #0fbc6d;
   }
-  .footer-col-title i { font-size: 0.75rem; }
+  .footer-col-title i { font-size: 0.7rem; }
   .footer-col-title::after {
     content: ''; flex: 1; height: 1px;
     background: linear-gradient(90deg, rgba(15,188,109,0.3), transparent);
@@ -92,86 +79,119 @@
 
   .footer-col ul {
     list-style: none; margin: 0; padding: 0;
-    display: flex; flex-direction: column; gap: 8px;
+    display: flex; flex-direction: column; gap: 4px;
   }
   .footer-col ul li a {
-    font-size: 0.85rem; color: rgba(156,163,175,0.75);
-    text-decoration: none; display: inline-block;
-    transition: color 0.2s, transform 0.2s;
+    font-size: 0.82rem; color: rgba(156,163,175,0.75);
+    text-decoration: none; display: block; padding: 4px 0;
+    transition: color 0.2s, padding-left 0.2s;
   }
-  .footer-col ul li a:hover { color: #0fbc6d; transform: translateX(6px); }
+  .footer-col ul li a:hover { color: #0fbc6d; padding-left: 4px; }
 
   .footer-contact-item {
-    display: flex; align-items: flex-start; gap: 12px;
-    font-size: 0.85rem; color: rgba(156,163,175,0.75); line-height: 1.6;
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.82rem; color: rgba(156,163,175,0.75); line-height: 1.5;
   }
   .footer-contact-item i {
-    color: #0fbc6d; font-size: 0.8rem;
-    margin-top: 4px; flex-shrink: 0; width: 16px; text-align: center;
+    color: #0fbc6d; font-size: 0.75rem;
+    margin-top: 3px; flex-shrink: 0; width: 14px; text-align: center;
   }
-  .footer-contact-item a { color: inherit; text-decoration: none; transition: color 0.2s; }
-  .footer-contact-item a:hover { color: #0fbc6d; }
 
-  /* ══════════════════════════════════════════════════════════
-     3. BOTTOM BAR (COPYRIGHT)
-  ══════════════════════════════════════════════════════════ */
+  /* ── BOTTOM BAR ── */
   .footer-bottom {
     border-top: 1px solid rgba(255,255,255,0.06);
-    padding: 20px clamp(24px, 5vw, 48px);
+    padding: 18px clamp(24px, 5vw, 48px);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    text-align: center;
-    background: rgba(0,0,0,0.2);
+    gap: 4px; text-align: center;
+    /* TIDAK ada background — diwarisi dari .footer-root */
   }
-  .footer-copy { font-size: 0.8rem; color: rgba(156,163,175,0.5); }
-  .footer-copy span { color: rgba(15,188,109,0.8); font-weight: 700; }
+  .footer-copy {
+    font-size: 0.78rem; color: rgba(156,163,175,0.5);
+  }
+  .footer-copy span { color: rgba(15,188,109,0.7); font-weight: 700; }
+  .footer-badge {
+    font-size: 0.68rem; color: rgba(156,163,175,0.3);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
 
-  /* ══════════════════════════════════════════════════════════
-     4. RESPONSIVE TABLET (641px - 960px)
-  ══════════════════════════════════════════════════════════ */
-  @media screen and (min-width: 641px) and (max-width: 960px) {
+  /* ══ TABLET 641–960px: 2 kolom ══ */
+  @media (min-width: 641px) and (max-width: 960px) {
     .footer-grid { grid-template-columns: 1fr 1fr; }
-    .footer-brand { grid-column: 1 / -1; margin-bottom: 12px; }
+    .footer-brand { grid-column: 1 / -1; }
     .footer-brand-desc { max-width: 100%; }
   }
 
-  /* ══════════════════════════════════════════════════════════
-     5. RESPONSIVE MOBILE ANDROID (< 640px)
-     Diubah menjadi 1 kolom vertikal (Stacked) agar lega & rapi.
-  ══════════════════════════════════════════════════════════ */
-  @media screen and (max-width: 640px) {
+  /* ══════════════════════════════════════════════════════
+     MOBILE ≤ 640px
+     Layout: Brand (kiri) | Kontak (kanan) sejajar
+              © copyright di bawah, full width
+  ══════════════════════════════════════════════════════ */
+  @media (max-width: 640px) {
+
+    .footer-root {
+      display: block !important;
+      width: 100% !important;
+      /* background diwarisi dari rule utama di atas */
+    }
+
+    .footer-tautan-col { display: none !important; }
+
     .footer-grid {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 36px !important; /* Jarak lega antar blok */
-      padding: 40px 24px 32px !important;
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
     }
 
-    /* Brand Section */
-    .footer-brand-desc { max-width: 100%; font-size: 0.8rem; }
-    
-    /* Tautan dikembalikan (tidak disembunyikan) & dibuat 2 kolom */
-    .footer-tautan-col { display: flex !important; }
-    .footer-col ul {
-      display: grid; 
-      grid-template-columns: 1fr 1fr; /* Tautan berjejer 2 menyamping */
-      gap: 12px;
+    /* Brand — Kolom Kiri */
+    .footer-brand {
+      grid-column: 1 / 2 !important;
+      padding: 24px 12px 24px 16px !important;
+      border-bottom: 1px solid rgba(15,188,109,0.1) !important;
+      border-right: 1px solid rgba(15,188,109,0.08) !important;
     }
-    
-    /* Perbaikan icon dan text di HP */
-    .footer-col-title { font-size: 0.75rem !important; }
-    .footer-contact-item { font-size: 0.8rem !important; gap: 10px !important; }
-    .footer-social-btn { width: 34px; height: 34px; font-size: 0.85rem; }
 
-    /* Bottom bar */
-    .footer-bottom { padding: 16px 20px !important; }
-    .footer-copy { font-size: 0.75rem !important; }
+    /* Kontak — Kolom Kanan */
+    .footer-col:not(.footer-tautan-col) {
+      grid-column: 2 / 3 !important;
+      padding: 24px 16px 24px 12px !important;
+      border-bottom: 1px solid rgba(15,188,109,0.1) !important;
+    }
+
+    .footer-brand-logo img  { width: 32px !important; height: 32px !important; }
+    .footer-brand-name      { font-size: 0.85rem !important; }
+    .footer-brand-sub       { font-size: 0.6rem !important; }
+    .footer-brand-desc      { display: none !important; }
+    .footer-social-btn      { width: 28px !important; height: 28px !important; }
+
+    .footer-col-title       { font-size: 0.68rem !important; letter-spacing: 0.08em !important; }
+    .footer-contact-item    { font-size: 0.72rem !important; gap: 7px !important; }
+    .footer-contact-item i  { font-size: 0.68rem !important; }
+
+    /* Bottom bar — full width di bawah, TANPA background sendiri */
+    .footer-bottom {
+      display: block !important;
+      width: 100% !important;
+      padding: 16px !important;
+      text-align: center !important;
+      border-top: 1px solid rgba(15,188,109,0.1) !important;
+      background: unset !important; /* reset semua background override */
+    }
+
+    .footer-copy {
+      font-size: 0.7rem !important;
+      display: block !important;
+      width: 100% !important;
+    }
   }
 </style>
 
 <footer class="footer-root">
   <div class="footer-grid">
 
+    <!-- Brand -->
     <div class="footer-brand">
       <a href="/" class="footer-brand-logo">
         <img src="/img/logohmte.webp" alt="Logo HMTE" />
@@ -191,23 +211,25 @@
       </div>
     </div>
 
+    <!-- Tautan (disembunyikan di mobile via CSS) -->
     <div class="footer-col footer-tautan-col">
-      <span class="footer-col-title"><i class="fas fa-link"></i> Tautan Navigasi</span>
+      <span class="footer-col-title"><i class="fas fa-link"></i> Tautan</span>
       <ul>
         <li><a href="/kepengurusan.html">Profil Kabinet</a></li>
-        <li><a href="/page/news/news.html">Portal Berita</a></li>
-        <li><a href="/page/event/event.html">Agenda Event</a></li>
-        <li><a href="/page/emagz/emagz.html">E-Magazine</a></li>
-        <li><a href="/page/project/project.html">Program Kerja</a></li>
+        <li><a href="/page/news/news.html">Berita</a></li>
+        <li><a href="/page/event/event.html">Event</a></li>
+        <li><a href="/page/emagz/emagz.html">Emagz</a></li>
+        <li><a href="/page/project/project.html">Proker</a></li>
       </ul>
     </div>
 
+    <!-- Kontak -->
     <div class="footer-col">
-      <span class="footer-col-title"><i class="fas fa-envelope"></i> Hubungi Kami</span>
-      <div style="display:flex;flex-direction:column;gap:12px;">
+      <span class="footer-col-title"><i class="fas fa-envelope"></i> Kontak</span>
+      <div style="display:flex;flex-direction:column;gap:10px;">
         <div class="footer-contact-item">
           <i class="fas fa-envelope"></i>
-          <span><a href="mailto:hmtehmte@gmail.com">hmtehmte@gmail.com</a></span>
+          <span><a href="mailto:hmtehmte@gmail.com" style="color:inherit;text-decoration:none;">hmtehmte@gmail.com</a></span>
         </div>
         <div class="footer-contact-item">
           <i class="fas fa-phone"></i>
@@ -219,13 +241,14 @@
         </div>
         <div class="footer-contact-item">
           <i class="fas fa-map-marker-alt"></i>
-          <span>Fakultas Teknik, Universitas Jenderal Soedirman, Purwokerto, Jawa Tengah</span>
+          <span>Fakultas Teknik, Universitas Jenderal Soedirman, Purwokerto</span>
         </div>
       </div>
     </div>
 
   </div>
 
+  <!-- Bottom Bar -->
   <div class="footer-bottom">
     <p class="footer-copy">© 2025 <span>HMTE UNSOED. </span>Semua hak cipta dilindungi.</p>
   </div>
