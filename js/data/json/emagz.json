@@ -1,28 +1,12 @@
 {
   "items": [
     {
-      "id": 1,
-      "title": "E-Magz Vol.1",
-      "description": "Kumpulan konten E-MAGZ EDISI 8 HMTE UNSOED 2025",
-      "coverSrc": "/img/emagz/Vol1.jpg",
-      "pdfLink": "/img/emagz/1.pdf",
-      "date": "2025-01-01"
-    },
-    {
-      "id": 2,
-      "title": "E-Magz Vol.2",
-      "description": "E-Magz HMTE UNSOED Vol. 2: Rekomendasi Channel Teknik Elektro, Series 2025, dan Hiburan",
-      "coverSrc": "/img/emagz/Vol2.jpg",
-      "pdfLink": "/img/emagz/2.pdf",
-      "date": "2025-02-01"
-    },
-    {
-      "id": 3,
-      "title": "E-Magz Vol.3",
-      "description": "Panduan E-Magz HMTE UNSOED 2025: Kiat Meningkatkan Skill, Manfaat Olahraga, dan Rekomendasi Musik untuk Mahasiswa",
-      "coverSrc": "/img/emagz/Vol3.jpg",
-      "pdfLink": "/img/emagz/3.pdf",
-      "date": "2025-03-01"
+      "id": 5,
+      "title": "adfa",
+      "description": "daaf",
+      "coverSrc": "/img/uploads/robloxscreenshot20260102_153650163.png",
+      "pdfLink": "/img/emagz/4.pdf",
+      "date": "2026-02-27"
     },
     {
       "id": 4,
@@ -33,12 +17,28 @@
       "date": "2025-04-01"
     },
     {
-      "id": 5,
-      "title": "adfa",
-      "description": "daaf",
-      "coverSrc": "/img/uploads/robloxscreenshot20260102_153650163.png",
-      "pdfLink": "/img/emagz/4.pdf",
-      "date": "2026-02-27"
+      "id": 3,
+      "title": "E-Magz Vol.3",
+      "description": "Panduan E-Magz HMTE UNSOED 2025: Kiat Meningkatkan Skill, Manfaat Olahraga, dan Rekomendasi Musik untuk Mahasiswa",
+      "coverSrc": "/img/emagz/Vol3.jpg",
+      "pdfLink": "/img/emagz/3.pdf",
+      "date": "2025-03-01"
+    },
+    {
+      "id": 2,
+      "title": "E-Magz Vol.2",
+      "description": "E-Magz HMTE UNSOED Vol. 2: Rekomendasi Channel Teknik Elektro, Series 2025, dan Hiburan",
+      "coverSrc": "/img/emagz/Vol2.jpg",
+      "pdfLink": "/img/emagz/2.pdf",
+      "date": "2025-02-01"
+    },
+    {
+      "id": 1,
+      "title": "E-Magz Vol.1",
+      "description": "Kumpulan konten E-MAGZ EDISI 8 HMTE UNSOED 2025",
+      "coverSrc": "/img/emagz/Vol1.jpg",
+      "pdfLink": "/img/emagz/1.pdf",
+      "date": "2025-01-01"
     }
   ]
 }
