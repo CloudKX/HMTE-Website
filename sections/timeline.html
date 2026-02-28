@@ -2,11 +2,25 @@
   /* ── ROOT TIMELINE ── */
   .timeline-section {
     position: relative;
-    padding: clamp(40px, 6vh, 80px) 0;
+    padding: clamp(60px, 8vh, 100px) 0;
     overflow: hidden;
+    background: radial-gradient(circle at top, rgba(15,188,109,0.03) 0%, transparent 60%);
   }
 
-  /* Glow Background - Diubah menggunakan min() agar tidak meluber di HP */
+  /* ── SEKAT ATAS (DIVIDER) ── */
+  .tl-sekat {
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(15,188,109,0.4) 50%, transparent 100%);
+    z-index: 5; opacity: 0.7;
+  }
+  .tl-sekat::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 8px; height: 8px; background: #0fbc6d;
+    box-shadow: 0 0 16px rgba(15,188,109,0.9);
+  }
+
+  /* Glow Background */
   .timeline-section::before {
     content: '';
     position: absolute;
@@ -14,12 +28,12 @@
     transform: translateX(-50%);
     width: min(600px, 100%); 
     height: 300px;
-    background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(15,188,109,0.08) 0%, transparent 70%);
     pointer-events: none;
   }
 
   .timeline-inner {
-    max-width: 1100px;
+    max-width: 1150px;
     margin: 0 auto;
     padding: 0 clamp(16px, 4vw, 48px);
   }
@@ -27,165 +41,146 @@
   /* ── HEADER ── */
   .timeline-header {
     text-align: center;
-    margin-bottom: clamp(28px, 4vh, 48px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+    margin-bottom: clamp(36px, 5vh, 56px);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
   }
-
   .timeline-eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
-    font-size: 0.68rem; letter-spacing: 0.22em;
-    text-transform: uppercase; color: #0fbc6d; font-weight: 700;
+    font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: #0fbc6d; font-weight: 800;
   }
   .timeline-eyebrow::before, .timeline-eyebrow::after {
-    content: ''; display: block; width: 20px; height: 1px;
-    background: #0fbc6d; opacity: 0.6;
+    content: ''; display: block; width: 24px; height: 1px; background: #0fbc6d; opacity: 0.6;
   }
-
   .timeline-title {
-    font-size: clamp(1.8rem, 4vw, 3.2rem);
-    font-weight: 900; color: #fff;
-    letter-spacing: -0.04em; line-height: 1; margin: 0;
+    font-size: clamp(1.8rem, 5vw, 3.5rem); font-weight: 900; color: #fff;
+    letter-spacing: -0.03em; line-height: 1.1; margin: 0;
   }
   .timeline-title em { font-style: normal; color: #0fbc6d; }
-
   .timeline-subtitle {
-    font-size: clamp(0.82rem, 1.2vw, 0.92rem);
-    color: rgba(156,163,175,0.6);
-    margin: 0; line-height: 1.6;
+    font-size: clamp(0.85rem, 2vw, 0.95rem); color: rgba(156,163,175,0.65);
+    margin: 0; line-height: 1.6; max-width: 500px;
   }
 
-  /* ── CALENDAR CARD ── */
+  /* ── GRID LAYOUT UTAMA (PC: 1 Kolom Full, lalu dipecah di dalam) ── */
+  .tl-main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* ── CALENDAR CARD (Full Width Elegan) ── */
   .tl-calendar-card {
-    background: linear-gradient(145deg,
-      rgba(15,188,109,0.06) 0%,
-      rgba(13,17,23,0.98) 40%,
-      rgba(13,17,23,0.98) 60%,
-      rgba(15,188,109,0.03) 100%
-    );
-    border: 1px solid rgba(15,188,109,0.1);
-    border-radius: 20px;
-    padding: clamp(16px, 2vw, 32px);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.45);
-    position: relative;
+    background: linear-gradient(145deg, rgba(15,188,109,0.06) 0%, rgba(13,17,23,0.98) 35%, rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.03) 100%);
+    border: 1px solid rgba(15,188,109,0.15); border-radius: 20px;
+    padding: clamp(20px, 3vw, 40px); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    position: relative; max-width: 800px; margin: 0 auto; width: 100%;
   }
-
   .tl-calendar-card::before {
     content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(15,188,109,0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(15,188,109,0.4), transparent);
   }
 
-  /* ── CALENDAR INNER ── */
   .tl-calendar-inner {
-    background: rgba(7,10,16,0.85);
-    border: 1px solid rgba(255,255,255,0.04);
-    border-radius: 14px;
-    padding: clamp(12px, 1.5vw, 24px);
+    background: rgba(7,10,16,0.85); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px; padding: clamp(16px, 2vw, 24px);
   }
 
-  /* ── NAV BUTTONS ── */
   .tl-month-btn {
-    width: 36px; height: 36px;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(15,188,109,0.08);
-    border: 1px solid rgba(15,188,109,0.2);
-    border-radius: 10px;
-    color: #0fbc6d; font-size: 1rem; cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    background: rgba(15,188,109,0.08); border: 1px solid rgba(15,188,109,0.25); border-radius: 12px;
+    color: #0fbc6d; font-size: 1.1rem; cursor: pointer; transition: all 0.2s ease;
   }
-  .tl-month-btn:hover {
-    background: rgba(15,188,109,0.18);
-    border-color: rgba(15,188,109,0.4);
-  }
+  .tl-month-btn:hover { background: rgba(15,188,109,0.2); border-color: rgba(15,188,109,0.5); transform: scale(1.05); }
 
-  #month-year-display {
-    font-size: clamp(0.95rem, 1.5vw, 1.25rem);
-    font-weight: 800; color: #fff; letter-spacing: -0.02em;
-  }
+  #month-year-display { font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 900; color: #fff; letter-spacing: -0.02em; }
 
   #event-details {
-    margin-top: 16px;
-    padding: 14px 16px;
-    background: rgba(7,10,16,0.85);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 12px;
-    color: rgba(156,163,175,0.55);
-    font-size: 0.8rem;
-    text-align: center;
+    margin-top: 20px; padding: 16px; background: rgba(15,188,109,0.05);
+    border: 1px dashed rgba(15,188,109,0.2); border-radius: 12px;
+    color: #0fbc6d; font-size: 0.85rem; font-weight: 600; text-align: center;
+    animation: tlFadeUp 0.5s ease;
   }
 
-  /* ── UPCOMING CARD ── */
-  .tl-upcoming-card {
-    background: rgba(12,16,24,0.98);
-    border: 1px solid rgba(15,188,109,0.1);
-    border-radius: 20px;
-    padding: 24px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-    position: sticky; top: 24px;
+  /* ── UPCOMING EVENTS AREA (Gaya Kiri-Kanan) ── */
+  .tl-upcoming-wrapper {
+    margin-top: 20px;
+    padding-top: 40px;
+    border-top: 1px dashed rgba(255,255,255,0.1);
   }
-
-  .tl-upcoming-card::before {
-    content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(15,188,109,0.3), transparent);
-  }
-
   .tl-upcoming-title {
-    color: #fff; font-weight: 800; font-size: 1rem;
-    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    color: #fff; font-weight: 900; font-size: 1.3rem; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px; justify-content: center;
   }
-  .tl-upcoming-title i { color: #0fbc6d; }
+  .tl-upcoming-title i { color: #0fbc6d; font-size: 1.5rem; }
+
+  /* Kunci: Grid Kiri-Kanan untuk event mendatang */
+  #upcoming-events {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  /* Style setiap item event yang di-inject JS */
+  #upcoming-events > div {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border-left: 3px solid #0fbc6d; /* Aksen garis kiri */
+  }
+  #upcoming-events > div:hover {
+    background: rgba(15,188,109,0.08);
+    border-color: rgba(15,188,109,0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
 
   /* ══════════════════════════════════════════════════════
      MOBILE OPTIMIZATION (Android & iOS)
   ══════════════════════════════════════════════════════ */
   @media screen and (max-width: 768px) {
-    .timeline-title {
-      font-size: clamp(1.6rem, 7vw, 2.2rem) !important;
-    }
+    .tl-main-grid { gap: 32px; }
     
-    /* Mengurangi padding luar agar kalender punya ruang lega di layar kecil */
     .tl-calendar-card {
       padding: 16px 12px !important;
       border-radius: 16px !important;
     }
 
-    /* Padding dalam dikurangi, memberikan space maksimal untuk angka tanggal */
     .tl-calendar-inner {
       padding: 12px 6px !important;
       border-radius: 12px !important;
     }
 
-    /* Jarak grid hari dirapatkan sedikit agar tidak pecah ke bawah */
-    #calendar-grid {
-      gap: 4px !important;
-    }
+    #calendar-grid { gap: 4px !important; }
+    .tl-calendar-inner .grid-cols-7 > div:not(#calendar-grid) { font-size: 0.65rem !important; }
+    
+    #event-details { font-size: 0.75rem !important; padding: 12px !important; }
 
-    /* Ukuran header hari (Sen, Sel, dll) */
-    .tl-calendar-inner .grid-cols-7 > div:not(#calendar-grid) {
-      font-size: 0.65rem !important;
+    /* Upcoming di HP diubah jadi scroll horizontal (anti-monoton) */
+    .tl-upcoming-wrapper {
+      margin-top: 10px;
+      padding-top: 32px;
     }
-
-    /* Memperbesar target sentuh panah navigasi (touch-friendly) */
-    .tl-month-btn {
-      width: 40px !important; 
-      height: 40px !important;
+    .tl-upcoming-title { font-size: 1.1rem; justify-content: flex-start; padding-left: 8px; }
+    
+    #upcoming-events {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 20px; /* Ruang scrollbar */
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; 
     }
-
-    #month-year-display {
-      font-size: 1.05rem !important;
-    }
-
-    #event-details {
-      font-size: 0.75rem !important;
-      padding: 12px !important;
-    }
-
-    /* Mengurangi padding card upcoming */
-    .tl-upcoming-card {
-      padding: 20px 16px !important;
-      border-radius: 16px !important;
+    #upcoming-events::-webkit-scrollbar { display: none; }
+    
+    #upcoming-events > div {
+      flex: 0 0 calc(85vw - 16px);
+      scroll-snap-align: center;
     }
   }
 </style>
@@ -201,36 +196,23 @@
         from { opacity: 0; transform: translateY(28px); }
         to   { opacity: 1; transform: translateY(0); }
       }
-      @keyframes tlFadeRight {
-        from { opacity: 0; transform: translateX(-18px); }
-        to   { opacity: 1; transform: translateX(0); }
-      }
-
-      .tl-anim-up    { animation: tlFadeUp    0.65s cubic-bezier(0.23,1,0.32,1) both; }
-      .tl-anim-right { animation: tlFadeRight 0.55s cubic-bezier(0.23,1,0.32,1) both; }
+      .tl-anim-up { animation: tlFadeUp 0.65s cubic-bezier(0.23,1,0.32,1) both; }
 
       /* Upcoming event items */
       #upcoming-events > * {
-        opacity: 0;
-        transform: translateX(-14px);
-        transition: opacity 0.45s cubic-bezier(0.23,1,0.32,1),
-                    transform 0.45s cubic-bezier(0.23,1,0.32,1);
+        opacity: 0; transform: translateY(14px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
       }
       #upcoming-events > *.tl-item-visible {
-        opacity: 1 !important;
-        transform: translateX(0) !important;
+        opacity: 1 !important; transform: translateY(0) !important;
       }
 
       /* Header timeline */
       .timeline-header {
-        opacity: 0;
-        transform: translateY(20px);
+        opacity: 0; transform: translateY(20px);
         transition: opacity 0.7s ease, transform 0.7s ease;
       }
-      .timeline-header.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      .timeline-header.is-visible { opacity: 1; transform: translateY(0); }
     `;
     document.head.appendChild(s);
   }
@@ -247,20 +229,21 @@
       hIO.observe(header);
     }
 
-    /* Calendar card & upcoming card — slide in saat terlihat */
-    const cards = document.querySelectorAll('.tl-calendar-card, .tl-upcoming-card');
-    const cardIO = new IntersectionObserver((entries) => {
-      entries.forEach((e, idx) => {
-        if (e.isIntersecting) {
-          e.target.style.animationDelay = `${idx * 0.12}s`;
-          e.target.classList.add('tl-anim-up');
-          cardIO.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.08 });
-    cards.forEach((c) => cardIO.observe(c));
+    /* Calendar card */
+    const card = document.querySelector('.tl-calendar-card');
+    if(card) {
+        const cardIO = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+            if (e.isIntersecting) {
+            e.target.classList.add('tl-anim-up');
+            cardIO.unobserve(e.target);
+            }
+        });
+        }, { threshold: 0.08 });
+        cardIO.observe(card);
+    }
 
-    /* Upcoming events list — pantau inject dari calendar.js */
+    /* Upcoming events list */
     const upcomingContainer = document.getElementById('upcoming-events');
     if (!upcomingContainer) return;
 
@@ -268,11 +251,11 @@
       entries.forEach((e) => {
         if (e.isIntersecting) { e.target.classList.add('tl-item-visible'); itemIO.unobserve(e.target); }
       });
-    }, { threshold: 0.05 });
+    }, { threshold: 0.05, rootMargin: '0px 20px -20px 20px' });
 
     const mutIO = new MutationObserver(() => {
       upcomingContainer.querySelectorAll(':scope > *:not(.tl-item-visible)').forEach((item, i) => {
-        item.style.transitionDelay = `${i * 0.09}s`;
+        item.style.transitionDelay = `${i * 0.08}s`;
         itemIO.observe(item);
       });
     });
@@ -280,7 +263,7 @@
 
     /* Observe yang sudah ada */
     upcomingContainer.querySelectorAll(':scope > *').forEach((item, i) => {
-      item.style.transitionDelay = `${i * 0.09}s`;
+      item.style.transitionDelay = `${i * 0.08}s`;
       itemIO.observe(item);
     });
   }
@@ -302,47 +285,47 @@
 </script>
 
 <section class="timeline-section fade-in">
+  <div class="tl-sekat"></div>
+
   <div class="timeline-inner">
 
     <div class="timeline-header">
       <span class="timeline-eyebrow">Jadwal HMTE</span>
       <h2 class="timeline-title">Timeline <em>Kegiatan</em></h2>
-      <p class="timeline-subtitle">Jadwal kegiatan dan program kerja terdekat.</p>
+      <p class="timeline-subtitle">Jadwal kegiatan dan program kerja yang akan dilaksanakan dalam waktu dekat.</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+    <div class="tl-main-grid">
 
-      <div class="lg:col-span-2 tl-calendar-card">
-        <div class="flex items-center justify-between mb-5">
-          <button onclick="changeMonth(-1)" class="tl-month-btn">←</button>
+      <div class="tl-calendar-card">
+        <div class="flex items-center justify-between mb-6">
+          <button onclick="changeMonth(-1)" class="tl-month-btn"><i class="fas fa-chevron-left"></i></button>
           <h3 id="month-year-display">November 2025</h3>
-          <button onclick="changeMonth(1)" class="tl-month-btn">→</button>
+          <button onclick="changeMonth(1)" class="tl-month-btn"><i class="fas fa-chevron-right"></i></button>
         </div>
 
         <div class="tl-calendar-inner">
           <div class="grid grid-cols-7 gap-1 md:gap-2 text-center mb-3">
-            <div style="color:#0fbc6d; font-weight:700; font-size:0.72rem;">Min</div>
-            <div style="color:#0fbc6d; font-weight:700; font-size:0.72rem;">Sen</div>
-            <div style="color:#0fbc6d; font-weight:700; font-size:0.72rem;">Sel</div>
-            <div style="color:#0fbc6d; font-weight:700; font-size:0.72rem;">Rab</div>
-            <div style="color:#0fbc6d; font-weight:700; font-size:0.72rem;">Kam</div>
-            <div style="color:#0fbc6d; font-weight:700; font-size:0.72rem;">Jum</div>
-            <div style="color:#0fbc6d; font-weight:700; font-size:0.72rem;">Sab</div>
+            <div style="color:#0fbc6d; font-weight:800; font-size:0.75rem;">Min</div>
+            <div style="color:#0fbc6d; font-weight:800; font-size:0.75rem;">Sen</div>
+            <div style="color:#0fbc6d; font-weight:800; font-size:0.75rem;">Sel</div>
+            <div style="color:#0fbc6d; font-weight:800; font-size:0.75rem;">Rab</div>
+            <div style="color:#0fbc6d; font-weight:800; font-size:0.75rem;">Kam</div>
+            <div style="color:#0fbc6d; font-weight:800; font-size:0.75rem;">Jum</div>
+            <div style="color:#0fbc6d; font-weight:800; font-size:0.75rem;">Sab</div>
           </div>
           <div id="calendar-grid" class="grid grid-cols-7 gap-1 md:gap-2"></div>
         </div>
 
-        <div id="event-details">Klik tanggal untuk melihat detail kegiatan</div>
+        <div id="event-details"><i class="fas fa-hand-pointer mr-2"></i> Klik tanggal untuk melihat detail kegiatan</div>
       </div>
 
-      <div class="lg:col-span-1">
-        <div class="tl-upcoming-card">
-          <h3 class="tl-upcoming-title">
-            <i class="ri-calendar-todo-line"></i> Kegiatan Mendatang
-          </h3>
-          <div id="upcoming-events" class="space-y-4">
-            <p style="color: rgba(156,163,175,0.45); font-size:0.82rem;" class="animate-pulse">Memuat kegiatan...</p>
-          </div>
+      <div class="tl-upcoming-wrapper">
+        <h3 class="tl-upcoming-title">
+          <i class="fas fa-calendar-check"></i> Kegiatan Mendatang
+        </h3>
+        <div id="upcoming-events">
+          <p style="color: rgba(156,163,175,0.45); font-size:0.85rem; text-align:center; width:100%;" class="animate-pulse">Memuat kegiatan...</p>
         </div>
       </div>
 
