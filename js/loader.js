@@ -136,6 +136,16 @@ document.addEventListener('DOMContentLoaded', () => {
     ['hero','news','emagz','proker','podcast','timeline','ongoing'].forEach((name) => {
       loads.push(loadComponent(`${name}-placeholder`, `../sections/${name}.html`));
     });
+
+    // Load project.js agar createProkerCardHTML & getHomeProjects tersedia
+    loads.push(new Promise((resolve) => {
+      if (typeof window.createProkerCardHTML === 'function') { resolve(); return; }
+      const s = document.createElement('script');
+      s.src = '../js/pages/project.js';
+      s.onload  = resolve;
+      s.onerror = resolve; // jangan blok render jika gagal
+      document.head.appendChild(s);
+    }));
   }
 
   Promise.all(loads).then(() => {
@@ -153,6 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
       call(window.generateLatestNews,         'generateLatestNews');
       call(window.initCalendar,               'initCalendar');
       call(window.checkAndRenderEmagzSection, 'checkAndRenderEmagzSection');
+      // Render proker — project.js sudah di-load di atas
+      if (typeof window.renderHomeProker === 'function') {
+        window.renderHomeProker();
+      }
     }
     if (isNews)    call(window.initNewsPage,        'initNewsPage');
     if (isEvent)   call(window.loadEventListPage,   'loadEventListPage');

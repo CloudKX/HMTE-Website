@@ -1,4 +1,5 @@
 <style>
+  /* ── SECTION WRAPPER ── */
   .proker-section {
     position: relative;
     padding: clamp(36px, 7vh, 80px) 0;
@@ -19,6 +20,7 @@
     display: flex; flex-direction: column; align-items: center;
   }
 
+  /* ── HEADER ── */
   .proker-header {
     text-align: center;
     margin-bottom: clamp(24px, 4vh, 44px);
@@ -48,8 +50,8 @@
     max-width: 520px; text-align: center;
   }
 
-  /* ── GRID: flex wrap + center agar otomatis center kalau card sedikit ── */
-  .proker-grid {
+  /* ── GRID: flex wrap + center — homepage ── */
+  #home-proker-container {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -57,13 +59,125 @@
     gap: clamp(12px, 2vw, 20px);
   }
 
-  /* Tiap card: min 220px, max 260px, tapi fleksibel */
-  .proker-grid > * {
+  /* ── PROKER CARD — Glassmorphism (sama persis dengan halaman arsip) ── */
+  .proker-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(145deg,
+      rgba(15,188,109,0.07) 0%,
+      rgba(13,17,23,0.98) 35%,
+      rgba(13,17,23,0.98) 65%,
+      rgba(15,188,109,0.04) 100%
+    );
+    border: 1px solid rgba(15,188,109,0.1);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.45);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    /* Homepage: batasi lebar agar tidak melar */
     flex: 1 1 220px;
     max-width: 260px;
     min-width: 200px;
+    /* Animasi awal */
+    opacity: 0;
+    transform: translateY(36px);
+    transition:
+      opacity 0.55s cubic-bezier(0.23,1,0.32,1),
+      transform 0.55s cubic-bezier(0.23,1,0.32,1),
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  .proker-card::before {
+    content: '';
+    position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(15,188,109,0.4), transparent);
+    z-index: 2; pointer-events: none;
+  }
+  .proker-card.card-ongoing   { border-top: 4px solid #22c55e !important; }
+  .proker-card.card-upcoming  { border-top: 4px solid #eab308 !important; }
+  .proker-card.card-completed { border-top: 4px solid #06b6d4 !important; }
+
+  /* IntersectionObserver set class ini */
+  .proker-card.is-visible { opacity: 1; transform: translateY(0); }
+
+  .proker-card:hover {
+    transform: translateY(-5px) !important;
+    border-color: rgba(15,188,109,0.28) !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 24px rgba(15,188,109,0.08) !important;
   }
 
+  /* Cover — anti-gepeng aspect-ratio */
+  .proker-card-cover {
+    position: relative; width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden; flex-shrink: 0;
+  }
+  .proker-card-cover img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85) saturate(1.05);
+    transition: transform 0.45s ease, filter 0.3s ease;
+  }
+  .proker-card:hover .proker-card-cover img { transform: scale(1.06); filter: brightness(0.98); }
+  .proker-card-cover::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+    background: linear-gradient(to top, rgba(13,17,23,0.75), transparent);
+    pointer-events: none;
+  }
+
+  /* Badge */
+  .proker-badge {
+    position: absolute; top: 10px; left: 10px; z-index: 3;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px;
+    font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+    background: rgba(10,14,20,0.78); backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; color: #fff;
+  }
+  .proker-badge-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    display: inline-block; flex-shrink: 0;
+  }
+
+  /* Body */
+  .proker-card-body {
+    padding: 14px 16px 18px;
+    display: flex; flex-direction: column; gap: 6px;
+    flex: 1;
+  }
+  .proker-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .proker-card-tag {
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 700; padding: 2px 7px;
+    background: rgba(15,188,109,0.1); border: 1px solid rgba(15,188,109,0.2);
+    border-radius: 999px; color: #0fbc6d;
+  }
+  .proker-card-date { font-size: 0.65rem; color: rgba(156,163,175,0.5); }
+  .proker-card-title {
+    font-size: clamp(0.85rem, 2vw, 0.96rem); font-weight: 800;
+    color: rgba(255,255,255,0.92); line-height: 1.35; margin: 0;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+    transition: color 0.2s ease;
+  }
+  .proker-card:hover .proker-card-title { color: #fff; }
+  .proker-card-desc {
+    font-size: 0.77rem; color: rgba(156,163,175,0.62);
+    line-height: 1.55; margin: 0;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .proker-card-status {
+    margin-top: auto; padding-top: 8px;
+    font-size: 0.68rem; color: rgba(156,163,175,0.45);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .proker-card-status.status-ongoing   { color: rgba(34,197,94,0.7); }
+  .proker-card-status.status-upcoming  { color: rgba(234,179,8,0.7); }
+  .proker-card-status.status-completed { color: rgba(6,182,212,0.7); }
+
+  /* ── FOOTER CTA ── */
   .proker-footer {
     margin-top: clamp(20px, 3vh, 36px); display: flex; justify-content: center;
     opacity: 0; transform: translateY(16px);
@@ -78,119 +192,14 @@
   }
   .proker-cta:hover { border-color: rgba(15,188,109,0.4); color: #0fbc6d; background: rgba(15,188,109,0.05); }
 
-  /* ══ MOBILE ≤ 479px: 2 kolom penuh ══ */
+  /* ══ MOBILE ≤ 479px: 1 kolom, center ══ */
   @media (max-width: 479px) {
-    .proker-grid > * {
-      flex: 1 1 calc(50% - 12px);
-      max-width: calc(50% - 6px);
-      min-width: 0;
-    }
+    #home-proker-container { flex-direction: column !important; align-items: center !important; }
+    .proker-card { flex: none !important; width: min(300px, 90vw) !important; max-width: min(300px, 90vw) !important; min-width: 0 !important; }
   }
-
-  /* ══ TABLET 480–768px: 2–3 kolom ══ */
-  @media (min-width: 480px) and (max-width: 768px) {
-    .proker-grid > * {
-      flex: 1 1 calc(33.33% - 14px);
-      max-width: calc(33.33% - 10px);
-      min-width: 160px;
-    }
-  }
-
-  /* ══ OVERRIDE: kartu yang di-generate project.js (Tailwind classes) ══ */
-  #home-proker-container > div,
-  #home-proker-container > a {
-    position: relative;
-    border-radius: 16px !important;
-    overflow: hidden !important;
-    background: linear-gradient(145deg,
-      rgba(15,188,109,0.07) 0%,
-      rgba(13,17,23,0.98) 35%,
-      rgba(13,17,23,0.98) 65%,
-      rgba(15,188,109,0.04) 100%
-    ) !important;
-    border: 1px solid rgba(15,188,109,0.1) !important;
-    border-top: 4px solid rgba(15,188,109,0.35) !important;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.45) !important;
-    text-decoration: none;
-    /* Batasi lebar agar tidak melar saat hanya 1 card */
-    flex: 1 1 220px !important;
-    max-width: 280px !important;
-    min-width: 200px !important;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
-    opacity: 0;
-    transform: translateY(28px);
-    animation: prokerCardIn 0.55s cubic-bezier(0.23,1,0.32,1) forwards;
-  }
-
-  /* Perbaiki tinggi gambar dari h-72 Tailwind — paksa pakai aspect ratio */
-  #home-proker-container .h-72 {
-    height: auto !important;
-    aspect-ratio: 3 / 4 !important;
-  }
-  #home-proker-container > div:nth-child(1),
-  #home-proker-container > a:nth-child(1) { animation-delay: 0.05s; }
-  #home-proker-container > div:nth-child(2),
-  #home-proker-container > a:nth-child(2) { animation-delay: 0.13s; }
-  #home-proker-container > div:nth-child(3),
-  #home-proker-container > a:nth-child(3) { animation-delay: 0.21s; }
-
-  @keyframes prokerCardIn {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Garis aksen tipis di atas card */
-  #home-proker-container > div::before,
-  #home-proker-container > a::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 8%; right: 8%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(15,188,109,0.4), transparent);
-    z-index: 2;
-    pointer-events: none;
-  }
-
-  #home-proker-container > div:hover,
-  #home-proker-container > a:hover {
-    transform: translateY(-5px) !important;
-    border-color: rgba(15,188,109,0.28) !important;
-    box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 24px rgba(15,188,109,0.08) !important;
-  }
-
-  /* Hapus background bawaan Tailwind dari dalam kartu */
-  #home-proker-container .bg-gray-800,
-  #home-proker-container .bg-gray-900 {
-    background: transparent !important;
-  }
-
-  /* Teks & warna di dalam kartu */
-  #home-proker-container h3       { color: rgba(255,255,255,0.92) !important; }
-  #home-proker-container p        { color: rgba(156,163,175,0.75) !important; }
-  #home-proker-container .text-green-400 { color: #0fbc6d !important; }
-  #home-proker-container .text-cyan-400  { color: #22d3ee !important; }
-  #home-proker-container .text-yellow-400 { color: #facc15 !important; }
-
-  /* ══ MOBILE OVERRIDE ≤ 600px: 1 kolom, center, tidak melar ══ */
-  @media (max-width: 600px) {
-    /* Grid jadi kolom tunggal, center */
-    #home-proker-container.proker-grid {
-      flex-direction: column !important;
-      align-items: center !important;
-    }
-
-    /* Tiap card: lebar tetap, tidak melar */
-    #home-proker-container > div,
-    #home-proker-container > a {
-      flex: none !important;
-      width: min(300px, 90vw) !important;
-      max-width: min(300px, 90vw) !important;
-      min-width: unset !important;
-    }
-
-    /* Tinggi gambar proporsional di mobile */
-    #home-proker-container .h-72 {
-      height: auto !important;
-      aspect-ratio: 4 / 3 !important;
-    }
+  /* ══ TABLET 480–767px: 2 kolom ══ */
+  @media (min-width: 480px) and (max-width: 767px) {
+    .proker-card { flex: 1 1 calc(50% - 14px); max-width: calc(50% - 7px); min-width: 0; }
   }
 </style>
 
@@ -203,13 +212,13 @@
       <p class="proker-subtitle">Ragam proyek dan kegiatan yang sedang, akan, dan telah kami laksanakan.</p>
     </div>
 
-    <div id="home-proker-container" class="proker-grid">
-      <!-- Diisi oleh renderProjects() dari project.js -->
+    <div id="home-proker-container">
+      <!-- Diisi oleh renderHomeProker() dari home.js -->
     </div>
 
     <div class="proker-footer">
       <a href="/page/project/project.html" class="proker-cta">
-        Lihat Program Kerja Lainnya <i class="fas fa-arrow-right"></i>
+        Lihat Semua Program Kerja <i class="fas fa-arrow-right"></i>
       </a>
     </div>
 
@@ -218,77 +227,64 @@
 
 <script>
 (function () {
-  /* Inject keyframe sekali */
-  if (!document.getElementById('proker-anim-style')) {
-    const s = document.createElement('style');
-    s.id = 'proker-anim-style';
-    s.textContent = `
-      @keyframes prokerCardReveal {
-        from { opacity: 0; transform: translateY(32px) scale(0.97); }
-        to   { opacity: 1; transform: translateY(0) scale(1); }
-      }
-      .proker-card-anim {
-        animation: prokerCardReveal 0.6s cubic-bezier(0.23,1,0.32,1) both !important;
-      }
-    `;
-    document.head.appendChild(s);
-  }
-
-  /* IntersectionObserver untuk header & footer */
+  /* ── Animasi header & footer ── */
   function initStaticAnim() {
-    const els = document.querySelectorAll('.proker-header, .proker-footer');
+    var els = document.querySelectorAll('.proker-header, .proker-footer');
     if (!els.length) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
         if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
       });
     }, { threshold: 0.08 });
-    els.forEach((el) => io.observe(el));
+    els.forEach(function(el) { io.observe(el); });
   }
 
-  /* Animasikan kartu yang masuk container */
-  function watchProkerContainer() {
-    const container = document.getElementById('home-proker-container');
-    if (!container) { setTimeout(watchProkerContainer, 80); return; }
+  /* ── Animasi kartu via IntersectionObserver ── */
+  function watchProkerCards() {
+    var container = document.getElementById('home-proker-container');
+    if (!container) { setTimeout(watchProkerCards, 80); return; }
 
-    const cardIO = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
+    var cardObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
         if (e.isIntersecting) {
-          e.target.classList.add('proker-card-anim');
-          cardIO.unobserve(e.target);
+          e.target.classList.add('is-visible');
+          cardObs.unobserve(e.target);
         }
       });
     }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
 
-    /* MutationObserver: tangkap kartu baru dari renderHomeProker() */
-    const mutIO = new MutationObserver(() => {
-      container.querySelectorAll('div:not(.proker-card-anim), a:not(.proker-card-anim)').forEach((c, i) => {
-        c.style.animationDelay = `${i * 0.13}s`;
-        cardIO.observe(c);
+    /* MutationObserver: tangkap kartu yang diinjeksi secara async */
+    var mutObs = new MutationObserver(function() {
+      container.querySelectorAll('.proker-card:not([data-obs])').forEach(function(card) {
+        card.setAttribute('data-obs', '1');
+        cardObs.observe(card);
       });
     });
-    mutIO.observe(container, { childList: true });
+    mutObs.observe(container, { childList: true, subtree: false });
 
-    /* Observe apapun yang sudah ada saat ini */
-    container.querySelectorAll('div, a').forEach((c, i) => {
-      c.style.animationDelay = `${i * 0.13}s`;
-      cardIO.observe(c);
+    /* Observe kartu yang sudah ada */
+    container.querySelectorAll('.proker-card:not([data-obs])').forEach(function(card) {
+      card.setAttribute('data-obs', '1');
+      cardObs.observe(card);
     });
   }
 
+  /* ── Daftarkan komponen ── */
   window.__components = window.__components || {};
   window.__components['proker'] = {
-    init: () => { initStaticAnim(); watchProkerContainer(); }
+    init: function() { initStaticAnim(); watchProkerCards(); }
   };
+  /* Expose agar home.js bisa panggil ulang setelah render */
+  window.initProkerAnimations = function() { initStaticAnim(); watchProkerCards(); };
 
-  /* Fallback: trigger saat DOMContentLoaded atau komponen loaded */
-  document.addEventListener('component:loaded', (e) => {
-    if (e.detail?.name === 'proker') { initStaticAnim(); watchProkerContainer(); }
+  /* Jalankan langsung */
+  document.addEventListener('component:loaded', function(e) {
+    if (e.detail && e.detail.name === 'proker') { initStaticAnim(); watchProkerCards(); }
   });
   if (document.readyState !== 'loading') {
-    initStaticAnim(); watchProkerContainer();
+    initStaticAnim(); watchProkerCards();
   } else {
-    document.addEventListener('DOMContentLoaded', () => { initStaticAnim(); watchProkerContainer(); });
+    document.addEventListener('DOMContentLoaded', function() { initStaticAnim(); watchProkerCards(); });
   }
 })();
 </script>

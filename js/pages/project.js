@@ -1,235 +1,327 @@
 // js/pages/project.js
 // Versi CMS: data di-fetch dari JSON.
-// + Support field showOnHome untuk tampil di Beranda.
+// ─────────────────────────────────────────────────────────────
+//  PERUBAHAN UTAMA:
+//  1. createProkerCardHTML(project, index) — generate markup
+//     bersih dengan class .proker-card + transition-delay stagger
+//  2. render*Projects() memakai createProkerCardHTML
+//  3. observeProkerCards() — IntersectionObserver terpusat
+//  4. Semua fungsi di-expose ke window.*
+// ─────────────────────────────────────────────────────────────
 
-const JSON_PATHS = {
-  ongoing:   "/js/data/json/ongoing-projects.json",
-  upcoming:  "/js/data/json/upcoming-projects.json",
-  completed: "/js/data/json/completed-projects.json",
+var JSON_PATHS = {
+  ongoing:   '/js/data/json/ongoing-projects.json',
+  upcoming:  '/js/data/json/upcoming-projects.json',
+  completed: '/js/data/json/completed-projects.json',
 };
-const FALLBACK_IMAGE = "/img/logohmte.png";
+var FALLBACK_IMAGE = '/img/logohmte.png';
 
+// ── Fetch helper ─────────────────────────────────────────────
 async function fetchProjectData(category) {
   try {
-    const res = await fetch(JSON_PATHS[category]);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    return (json.items || []).map((p) => ({
-      ...p,
-      category,
-      image: p.image || FALLBACK_IMAGE,
-    }));
+    var res  = await fetch(JSON_PATHS[category]);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var json = await res.json();
+    return (json.items || []).map(function (p) {
+      return Object.assign({}, p, {
+        category: category,
+        image: p.image || FALLBACK_IMAGE,
+      });
+    });
   } catch (e) {
-    console.warn(`[project.js] Gagal fetch ${category}:`, e.message);
+    console.warn('[project.js] Gagal fetch ' + category + ':', e.message);
     return [];
   }
 }
 
+// ── getAllProjects ─────────────────────────────────────────────
 async function getAllProjects() {
-  const [ongoing, upcoming, completed] = await Promise.all([
-    fetchProjectData("ongoing"),
-    fetchProjectData("upcoming"),
-    fetchProjectData("completed"),
+  var results = await Promise.all([
+    fetchProjectData('ongoing'),
+    fetchProjectData('upcoming'),
+    fetchProjectData('completed'),
   ]);
+  var ongoing   = results[0];
+  var upcoming  = results[1];
+  var completed = results[2];
 
-  const withMeta = (arr, categoryLabel, statusFn, contentFn) =>
-    arr.map((p) => ({
-      ...p,
-      categoryLabel,
-      statusText: statusFn(p),
-      content: contentFn(p),
-    }));
+  function withMeta(arr, categoryLabel, statusFn, contentFn) {
+    return arr.map(function (p) {
+      return Object.assign({}, p, {
+        categoryLabel: categoryLabel,
+        statusText:    statusFn(p),
+        content:       contentFn(p),
+      });
+    });
+  }
 
-  const all = [
-    ...withMeta(ongoing,   "Sedang Berjalan", (p) => `Progres: ${p.status}`, (p) => p.description),
-    ...withMeta(upcoming,  "Akan Datang",     ()  => "Segera Hadir",          (p) => p.description),
-    ...withMeta(completed, "Arsip Kegiatan",  ()  => "Selesai",               (p) => p.releaseDescription || p.description),
-  ];
+  var all = [].concat(
+    withMeta(ongoing,   'Sedang Berjalan', function (p) { return 'Progres: ' + (p.status || '-'); }, function (p) { return p.description; }),
+    withMeta(upcoming,  'Akan Datang',     function ()  { return 'Segera Hadir'; },                  function (p) { return p.description; }),
+    withMeta(completed, 'Arsip Kegiatan',  function ()  { return 'Selesai'; },                       function (p) { return p.release || p.releaseDescription || p.description; })
+  );
 
-  return all.map((p, i) => ({ ...p, id: p.id ?? i + 1 }));
+  return all.map(function (p, i) {
+    return Object.assign({}, p, { id: p.id != null ? p.id : i + 1 });
+  });
 }
 
-/**
- * getHomeProjects — ambil proker yang showOnHome: true
- * Dipanggil oleh home.js / renderHomeProker()
- * Fallback: jika tidak ada yang showOnHome, ambil 1 dari tiap kategori
- */
+// ── getHomeProjects ───────────────────────────────────────────
 async function getHomeProjects() {
-  const all = await getAllProjects();
-  const featured = all.filter((p) => p.showOnHome === true);
-
+  var all      = await getAllProjects();
+  var featured = all.filter(function (p) { return p.showOnHome === true; });
   if (featured.length > 0) return featured.slice(0, 4);
 
-  // ── Fallback: 1 ongoing + 1 upcoming + 1 completed ──
-  const fallback = [];
-  const o = all.find((p) => p.category === 'ongoing');
-  const u = all.filter((p) => p.category === 'upcoming')
-               .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
-  const c = all.filter((p) => p.category === 'completed')
-               .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+  // Fallback: 1 tiap kategori
+  var fallback = [];
+  var o = all.find(function (p) { return p.category === 'ongoing'; });
+  var u = all.filter(function (p) { return p.category === 'upcoming'; })
+             .sort(function (a, b) { return new Date(a.date) - new Date(b.date); })[0];
+  var c = all.filter(function (p) { return p.category === 'completed'; })
+             .sort(function (a, b) { return new Date(b.date) - new Date(a.date); })[0];
   if (o) fallback.push(o);
   if (u) fallback.push(u);
   if (c) fallback.push(c);
   return fallback;
 }
 
-// ── Halaman project.html ─────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+//  createProkerCardHTML
+//  Mencetak markup .proker-card yang BERSIH (tanpa class Tailwind).
+//  `index` → transition-delay stagger (90ms per card).
+// ─────────────────────────────────────────────────────────────
+function createProkerCardHTML(project, index) {
+  index = index || 0;
+
+  var categoryClass = {
+    ongoing:   'card-ongoing',
+    upcoming:  'card-upcoming',
+    completed: 'card-completed',
+  }[project.category] || 'card-completed';
+
+  var badgeDotColor = {
+    ongoing:   '#22c55e',
+    upcoming:  '#eab308',
+    completed: '#06b6d4',
+  }[project.category] || '#06b6d4';
+
+  var badgeLabel = {
+    ongoing:   'ONGOING',
+    upcoming:  'UPCOMING',
+    completed: 'COMPLETED',
+  }[project.category] || 'COMPLETED';
+
+  var statusClass = 'status-' + project.category;
+
+  var imageSrc = (project.image || FALLBACK_IMAGE).replace(/^\/\//, '/');
+  if (!imageSrc.startsWith('/') && !imageSrc.startsWith('http')) {
+    imageSrc = '/' + imageSrc;
+  }
+
+  var link = '/page/project/project-detail.html?id=' + project.id;
+  var delayMs = index * 90;
+
+  var dateText = '';
+  if (project.date) {
+    var d = new Date(project.date);
+    dateText = isNaN(d.getTime())
+      ? project.date
+      : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  var desc = (project.description || '');
+  if (desc.length > 90) desc = desc.substring(0, 90) + '…';
+
+  return '<a href="' + link + '" class="proker-card ' + categoryClass + '" style="transition-delay:' + delayMs + 'ms" data-index="' + index + '">' +
+    '<div class="proker-card-cover">' +
+      '<span class="proker-badge">' +
+        '<span class="proker-badge-dot" style="background:' + badgeDotColor + ';box-shadow:0 0 6px ' + badgeDotColor + ';"></span>' +
+        badgeLabel +
+      '</span>' +
+      '<img src="' + imageSrc + '" alt="' + project.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + FALLBACK_IMAGE + '\';"/>' +
+    '</div>' +
+    '<div class="proker-card-body">' +
+      '<div class="proker-card-meta">' +
+        '<span class="proker-card-tag">' + (project.categoryLabel || badgeLabel) + '</span>' +
+        (dateText ? '<span class="proker-card-date">' + dateText + '</span>' : '') +
+      '</div>' +
+      '<h3 class="proker-card-title">' + project.title + '</h3>' +
+      '<p class="proker-card-desc">' + desc + '</p>' +
+      '<div class="proker-card-status ' + statusClass + '">' +
+        '<i class="fas fa-circle" style="font-size:0.4rem;"></i>' +
+        (project.statusText || '') +
+      '</div>' +
+    '</div>' +
+  '</a>';
+}
+
+// ─────────────────────────────────────────────────────────────
+//  observeProkerCards — IntersectionObserver terpusat
+//  Dipanggil setelah kartu di-inject ke container.
+// ─────────────────────────────────────────────────────────────
+function observeProkerCards(container) {
+  if (!container || typeof IntersectionObserver === 'undefined') {
+    if (container) {
+      container.querySelectorAll('.proker-card').forEach(function (c) {
+        c.classList.add('is-visible');
+      });
+    }
+    return;
+  }
+
+  var obs = new IntersectionObserver(function (entries, observer) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+
+  container.querySelectorAll('.proker-card:not([data-obs])').forEach(function (card) {
+    card.setAttribute('data-obs', '1');
+    obs.observe(card);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Render functions — halaman project.html
+// ─────────────────────────────────────────────────────────────
+function renderOngoingProjects(projects) {
+  var container = document.getElementById('ongoing-projects-container');
+  if (!container) return;
+  if (!projects.length) {
+    container.innerHTML = '<p class="loading-text">Tidak ada proyek yang sedang berjalan.</p>';
+    return;
+  }
+  container.innerHTML = '<div class="proker-archive-grid">' +
+    projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') +
+  '</div>';
+  observeProkerCards(container);
+}
+
+function renderUpcomingProjects(projects) {
+  var container = document.getElementById('upcoming-projects-container');
+  if (!container) return;
+  if (!projects.length) {
+    container.innerHTML = '<p class="loading-text">Tidak ada proyek yang dijadwalkan.</p>';
+    return;
+  }
+  container.innerHTML = '<div class="proker-archive-grid">' +
+    projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') +
+  '</div>';
+  observeProkerCards(container);
+}
+
+function renderCompletedProjects(projects) {
+  var container = document.getElementById('completed-projects-container');
+  if (!container) return;
+  if (!projects.length) {
+    container.innerHTML = '<p class="loading-text">Belum ada proyek selesai.</p>';
+    return;
+  }
+  container.innerHTML = '<div class="proker-archive-grid">' +
+    projects.map(function (p, i) { return createProkerCardHTML(p, i); }).join('') +
+  '</div>';
+  observeProkerCards(container);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  loadProjectSections — entry point halaman project.html
+// ─────────────────────────────────────────────────────────────
 async function loadProjectSections() {
-  const all      = await getAllProjects();
-  const ongoing  = all.filter((p) => p.category === "ongoing");
-  const upcoming = all.filter((p) => p.category === "upcoming")
-                      .sort((a, b) => new Date(a.date) - new Date(b.date));
-  const completed = all.filter((p) => p.category === "completed")
-                       .sort((a, b) => new Date(b.date) - new Date(a.date));
-  renderOngoingProjects(ongoing.slice(0, 3));
+  var all = await getAllProjects();
+
+  var ongoing = all.filter(function (p) { return p.category === 'ongoing'; });
+  var upcoming = all.filter(function (p) { return p.category === 'upcoming'; })
+                    .sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+  var completed = all.filter(function (p) { return p.category === 'completed'; })
+                     .sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+
+  renderOngoingProjects(ongoing);
   renderUpcomingProjects(upcoming);
   renderCompletedProjects(completed);
 }
 
-// ── Halaman project-detail.html ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+//  loadProjectDetailPage — halaman project-detail.html
+// ─────────────────────────────────────────────────────────────
 async function loadProjectDetailPage() {
-  const id  = new URLSearchParams(window.location.search).get("id");
-  const all = await getAllProjects();
-  const project = all.find((p) => String(p.id) === String(id));
+  var id  = new URLSearchParams(window.location.search).get('id');
+  var all = await getAllProjects();
+  var project = all.find(function (p) { return String(p.id) === String(id); });
 
-  const titleEl       = document.getElementById("detail-title");
-  const contentEl     = document.getElementById("detail-content");
-  const dateEl        = document.getElementById("detail-date");
-  const categoryBadge = document.getElementById("detail-category-badge");
-  const statusBadge   = document.getElementById("detail-status-badge");
-  const imgContainer  = document.getElementById("detail-image-container");
-  const docSection    = document.getElementById("documentation-section");
-  const docLink       = document.getElementById("documentation-link");
+  var titleEl       = document.getElementById('detail-title');
+  var contentEl     = document.getElementById('detail-content');
+  var dateEl        = document.getElementById('detail-date');
+  var categoryBadge = document.getElementById('detail-category-badge');
+  var statusBadge   = document.getElementById('detail-status-badge');
+  var imgContainer  = document.getElementById('detail-image-container');
+  var docSection    = document.getElementById('documentation-section');
+  var docLink       = document.getElementById('documentation-link');
 
   if (!project) {
-    if (titleEl)      titleEl.textContent = "Proyek Tidak Ditemukan";
-    if (contentEl)    contentEl.innerHTML = '<p class="text-red-400 text-center py-10">Maaf, proyek tidak tersedia.</p>';
-    if (imgContainer) imgContainer.style.display = "none";
-    if (docSection)   docSection.style.display   = "none";
+    if (titleEl)      titleEl.textContent = 'Proyek Tidak Ditemukan';
+    if (contentEl)    contentEl.innerHTML = '<p style="color:#f87171;text-align:center;padding:40px 0;">Maaf, proyek tidak tersedia.</p>';
+    if (imgContainer) imgContainer.style.display = 'none';
+    if (docSection)   docSection.style.display   = 'none';
     return;
   }
 
-  document.getElementById("page-title").textContent = `${project.title} - Detail`;
-  titleEl.textContent       = project.title;
-  statusBadge.textContent   = project.statusText;
-  categoryBadge.textContent = project.categoryLabel;
+  var pageTitle = document.getElementById('page-title');
+  if (pageTitle) pageTitle.textContent = project.title + ' - Detail';
+  if (titleEl)       titleEl.textContent       = project.title;
+  if (statusBadge)   statusBadge.textContent   = project.statusText;
+  if (categoryBadge) categoryBadge.textContent = project.categoryLabel;
 
-  const badgeMap = {
-    completed: "px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-green-900/50 text-green-400 border border-green-800",
-    ongoing:   "px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-900/50 text-blue-400 border border-blue-800",
-    upcoming:  "px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-yellow-900/50 text-yellow-400 border border-yellow-800",
+  var badgeMap = {
+    completed: 'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-cyan-900/50 text-cyan-400 border border-cyan-800',
+    ongoing:   'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-green-900/50 text-green-400 border border-green-800',
+    upcoming:  'px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-yellow-900/50 text-yellow-400 border border-yellow-800',
   };
-  categoryBadge.className = badgeMap[project.category] || badgeMap.upcoming;
+  if (categoryBadge) categoryBadge.className = badgeMap[project.category] || badgeMap.upcoming;
 
-  if (project.date) {
-    const d = new Date(project.date);
-    dateEl.textContent = isNaN(d.getTime())
-      ? "Tanggal belum ditentukan"
-      : d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
-  } else {
-    dateEl.textContent = "-";
+  if (dateEl) {
+    if (project.date) {
+      var d = new Date(project.date);
+      dateEl.textContent = isNaN(d.getTime())
+        ? 'Tanggal belum ditentukan'
+        : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    } else {
+      dateEl.textContent = '-';
+    }
   }
 
-  const imgSrc = project.image.startsWith("/") ? project.image : `/${project.image}`;
+  var imgSrc = (project.image || FALLBACK_IMAGE);
+  if (!imgSrc.startsWith('/') && !imgSrc.startsWith('http')) imgSrc = '/' + imgSrc;
+
   if (imgContainer) {
-    imgContainer.innerHTML = `<img src="${imgSrc}" alt="${project.title}"
-      class="w-full h-auto rounded-lg shadow-lg"
-      onerror="this.onerror=null;this.src='/img/logohmte.png';" />`;
+    imgContainer.innerHTML = '<img src="' + imgSrc + '" alt="' + project.title + '" ' +
+      'style="width:100%;height:auto;border-radius:12px;display:block;" ' +
+      'onerror="this.onerror=null;this.src=\'' + FALLBACK_IMAGE + '\';" />';
   }
-  contentEl.innerHTML = project.content || '';
+  if (contentEl) contentEl.innerHTML = project.content || '';
 
   if (project.link && docSection && docLink) {
     docLink.href = project.link;
-    docSection.classList.remove("hidden");
+    docSection.classList.remove('hidden');
   } else if (docSection) {
-    docSection.classList.add("hidden");
+    docSection.classList.add('hidden');
   }
 }
 
-// ── Render Functions ─────────────────────────────────────────────────────────
-function renderOngoingProjects(projects) {
-  const container = document.getElementById("ongoing-projects-container");
-  if (!container) return;
-  if (!projects.length) {
-    container.innerHTML = '<p class="text-gray-400">Tidak ada proyek yang sedang berjalan saat ini.</p>';
-    return;
-  }
-  container.innerHTML = `<div class="cards-grid">${projects.map((p) => {
-    const img  = p.image.startsWith("/") ? p.image : `/${p.image}`;
-    const link = `/page/project/project-detail.html?id=${p.id}`;
-    return `<a href="${link}" class="project-card border-t-green group">
-      <div class="card-img-wrap">
-        <img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';">
-        <span class="card-badge">ONGOING</span>
-      </div>
-      <div class="p-5 flex flex-col flex-grow">
-        <h3 class="card-title text-base font-bold text-white mb-2 group-hover:text-green-400 transition">${p.title}</h3>
-        <p class="card-desc text-gray-400 text-sm mb-3">${p.description}</p>
-        <p class="text-gray-500 text-xs mt-auto">${p.statusText}</p>
-      </div>
-    </a>`;
-  }).join("")}</div>`;
-}
-
-function renderUpcomingProjects(projects) {
-  const container = document.getElementById("upcoming-projects-container");
-  if (!container) return;
-  if (!projects.length) {
-    container.innerHTML = '<p class="text-gray-400">Tidak ada proyek yang dijadwalkan.</p>';
-    return;
-  }
-  container.innerHTML = `<div class="cards-grid">${projects.map((p) => {
-    const img  = p.image.startsWith("/") ? p.image : `/${p.image}`;
-    const link = `/page/project/project-detail.html?id=${p.id}`;
-    return `<a href="${link}" class="project-card border-t-yellow group">
-      <div class="card-img-wrap">
-        <img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';">
-        <span class="card-badge">UPCOMING</span>
-      </div>
-      <div class="p-5 flex flex-col flex-grow">
-        <h3 class="card-title text-base font-bold text-white mb-2 group-hover:text-yellow-400 transition">${p.title}</h3>
-        <p class="card-desc text-gray-400 text-sm mb-3">${p.description}</p>
-        <p class="text-yellow-400 text-xs mt-auto">${p.statusText}</p>
-      </div>
-    </a>`;
-  }).join("")}</div>`;
-}
-
-function renderCompletedProjects(projects) {
-  const container = document.getElementById("completed-projects-container");
-  if (!container) return;
-  if (!projects.length) {
-    container.innerHTML = '<p class="text-gray-400">Belum ada proyek selesai.</p>';
-    return;
-  }
-  container.innerHTML = `<div class="cards-grid">${projects.map((p) => {
-    const img  = p.image.startsWith("/") ? p.image : `/${p.image}`;
-    const link = `/page/project/project-detail.html?id=${p.id}`;
-    return `<a href="${link}" class="project-card border-t-cyan group">
-      <div class="card-img-wrap">
-        <img src="${img}" alt="${p.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';">
-        <span class="card-badge">COMPLETED</span>
-      </div>
-      <div class="p-5 flex flex-col flex-grow">
-        <h3 class="card-title text-base font-bold text-white mb-2 group-hover:text-cyan-400 transition">${p.title}</h3>
-        <p class="card-desc text-gray-400 text-sm mb-3">${p.description}</p>
-        <p class="text-gray-500 text-xs mt-auto mb-2">${p.statusText}</p>
-        <span class="text-cyan-400 text-sm font-semibold group-hover:underline mt-auto">Lihat Detail →</span>
-      </div>
-    </a>`;
-  }).join("")}</div>`;
-}
-
-// ── Auto-run berdasarkan URL ──────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
-  const path = window.location.pathname;
-  if (path.includes("project-detail.html")) loadProjectDetailPage();
-  else if (path.includes("project.html"))   loadProjectSections();
+// ── Auto-run ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  var path = window.location.pathname;
+  if (path.includes('project-detail.html')) loadProjectDetailPage();
+  else if (path.includes('project.html'))   loadProjectSections();
 });
 
-// ── Expose ke global ─────────────────────────────────────────────────────────
-window.getAllProjects         = getAllProjects;
-window.getHomeProjects        = getHomeProjects;
-window.loadProjectSections    = loadProjectSections;
-window.loadProjectDetailPage  = loadProjectDetailPage;
-window.renderProjects         = loadProjectSections; // alias untuk loader.js
+// ── Expose ke global ──────────────────────────────────────────
+window.getAllProjects          = getAllProjects;
+window.getHomeProjects         = getHomeProjects;
+window.createProkerCardHTML    = createProkerCardHTML;
+window.observeProkerCards      = observeProkerCards;
+window.loadProjectSections     = loadProjectSections;
+window.loadProjectDetailPage   = loadProjectDetailPage;
+window.renderProjects          = loadProjectSections; // alias loader.js

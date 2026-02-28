@@ -6,105 +6,185 @@
   <meta name="robots" content="noindex" />
   <title>HMTE Admin Panel</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    /* Loading screen sementara CMS dimuat */
+    #cms-loading {
+      position: fixed; inset: 0;
+      background: #0a0e14;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; z-index: 9999;
+      font-family: system-ui, sans-serif;
+      transition: opacity 0.4s ease;
+    }
+    #cms-loading.hidden { opacity: 0; pointer-events: none; }
+    #cms-loading svg { animation: spin 1s linear infinite; }
+    #cms-loading p { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
+    #cms-loading strong { color: #0fbc6d; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
+
+  <!-- Loading screen -->
+  <div id="cms-loading">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0fbc6d" stroke-width="2">
+      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+    </svg>
+    <p><strong>HMTE Admin Panel</strong><br>Memuat antarmuka...</p>
+  </div>
+
   <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
   <script>
-  /**
-   * ════════════════════════════════════════════════════════
-   *  AUTO-SLUG GENERATOR untuk Decap CMS
-   *  Cara kerja: setiap kali field "Judul" berubah pada
-   *  collection Berita, field "ID / Slug" diisi otomatis
-   *  dengan versi slug-nya (lowercase, strip spasi → "-").
-   * ════════════════════════════════════════════════════════
-   */
+  // ═══════════════════════════════════════════════════════════
+  //  HMTE ADMIN PANEL — SCRIPT UTAMA
+  //  1. Sembunyikan loading screen setelah CMS siap
+  //  2. Auto-slug dari field Judul → field ID/Slug
+  //  3. Preview otomatis setelah gambar diupload
+  // ═══════════════════════════════════════════════════════════
+
+  // ── 1. SEMBUNYIKAN LOADING ──────────────────────────────
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      var loader = document.getElementById('cms-loading');
+      if (loader) loader.classList.add('hidden');
+    }, 1800);
+  });
+
+  // ── 2. SLUGIFY HELPER ───────────────────────────────────
   function slugify(text) {
-    return text
+    return (text || '')
       .toString()
       .toLowerCase()
       .trim()
-      .replace(/\s+/g, '-')        // spasi → -
-      .replace(/[^\w\-]+/g, '')    // hapus karakter non-word
-      .replace(/\-\-+/g, '-')      // double -- → -
-      .replace(/^-+/, '')           // hapus - di awal
-      .replace(/-+$/, '');          // hapus - di akhir
+      // Transliterasi karakter Indonesia umum
+      .replace(/[àáâãäå]/g, 'a')
+      .replace(/[èéêë]/g, 'e')
+      .replace(/[ìíîï]/g, 'i')
+      .replace(/[òóôõö]/g, 'o')
+      .replace(/[ùúûü]/g, 'u')
+      .replace(/[ñ]/g, 'n')
+      .replace(/[ç]/g, 'c')
+      // Ganti spasi & karakter khusus
+      .replace(/[\s\-–—_]+/g, '-')   // spasi/dash → -
+      .replace(/[^\w\-]+/g, '')       // hapus non-word
+      .replace(/\-{2,}/g, '-')        // double -- → -
+      .replace(/^-+|-+$/g, '');       // trim -
   }
 
-  /**
-   * Pantau DOM sampai field slug & title tersedia,
-   * lalu pasang listener. Retry tiap 600ms.
-   */
+  // ── 3. AUTO-SLUG ENGINE ─────────────────────────────────
+  // Strategi: MutationObserver memantau DOM CMS (React SPA).
+  // Setiap kali ada input baru terdeteksi, cari pasangan
+  // field "Judul" + field "ID/Slug" lalu pasang listener.
+
+  var _slugWatcherMap = new WeakMap(); // cegah duplikasi listener
+
+  function findFieldInput(labelTexts) {
+    // Cari <label> yang teksnya cocok, lalu ambil <input> terdekat
+    var labels = document.querySelectorAll('label, [class*="ControlLabel"]');
+    for (var i = 0; i < labels.length; i++) {
+      var txt = labels[i].textContent.trim().toLowerCase();
+      for (var j = 0; j < labelTexts.length; j++) {
+        if (txt.includes(labelTexts[j])) {
+          // Cari input saudara atau di dalam wrapper parent
+          var wrap = labels[i].closest('[class*="ControlWrapper"], [class*="control"]')
+                  || labels[i].parentElement;
+          if (wrap) {
+            var inp = wrap.querySelector('input[type="text"], input:not([type])');
+            if (inp) return inp;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
   function attachSlugWatcher() {
-    // Cari semua input di panel CMS
-    const allInputs = document.querySelectorAll('input[id], input[name]');
+    // Pasangan label yang dicari (case-insensitive substring)
+    var titleInput = findFieldInput(['judul', 'title', 'nama event', 'judul episode']);
+    var slugInput  = findFieldInput(['id / slug', 'slug', 'id/slug']);
 
-    // Cari field title & id/slug berdasarkan label atau placeholder
-    let titleInput = null;
-    let slugInput  = null;
+    if (!titleInput || !slugInput) return; // belum siap, retry via MutationObserver
+    if (_slugWatcherMap.has(titleInput)) return; // sudah terpasang
 
-    document.querySelectorAll('label').forEach(label => {
-      const text = label.textContent.trim().toLowerCase();
-      const input = label.closest('[data-slate-editor]')
-                 || label.parentElement?.querySelector('input');
+    _slugWatcherMap.set(titleInput, true);
 
-      if (!input) return;
+    // Setter native React agar perubahan value terdeteksi CMS
+    var nativeSetter = Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype, 'value'
+    ).set;
 
-      if (text.includes('judul') && !titleInput) titleInput = input;
-      if ((text.includes('id') || text.includes('slug')) && !slugInput) slugInput = input;
-    });
-
-    if (!titleInput || !slugInput) {
-      setTimeout(attachSlugWatcher, 600);
-      return;
+    function triggerReactChange(el, val) {
+      nativeSetter.call(el, val);
+      el.dispatchEvent(new Event('input',  { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
-    // Jangan override jika slug sudah ada isinya
-    if (slugInput._slugWatcherAttached) return;
-    slugInput._slugWatcherAttached = true;
+    var lastAutoSlug = '';
 
     titleInput.addEventListener('input', function () {
-      // Hanya auto-fill jika slug masih kosong atau sama dengan slug sebelumnya
-      const currentSlug = slugInput.value;
-      const prevTitle   = titleInput._prevTitle || '';
-      const prevSlug    = slugify(prevTitle);
-
-      if (currentSlug === '' || currentSlug === prevSlug) {
-        const newSlug = slugify(this.value);
-        // Trigger native React input event agar Decap CMS mendeteksi perubahan
-        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-          window.HTMLInputElement.prototype, 'value'
-        ).set;
-        nativeInputValueSetter.call(slugInput, newSlug);
-        slugInput.dispatchEvent(new Event('input', { bubbles: true }));
+      var currentSlug = slugInput.value.trim();
+      // Hanya auto-fill jika:
+      //   a) slug kosong, ATAU
+      //   b) slug sama dengan slug yang terakhir kita generate (belum diubah manual)
+      if (currentSlug === '' || currentSlug === lastAutoSlug) {
+        var newSlug = slugify(this.value);
+        lastAutoSlug = newSlug;
+        triggerReactChange(slugInput, newSlug);
       }
-      titleInput._prevTitle = this.value;
     });
 
-    console.log('[HMTE Admin] Auto-slug watcher aktif ✅');
+    console.log('%c[HMTE Admin] ✅ Auto-slug aktif', 'color:#0fbc6d;font-weight:bold;');
   }
 
-  /**
-   * Mulai pantau setelah CMS siap
-   */
-  if (window.CMS) {
+  // ── 4. MUTATION OBSERVER — pantau perubahan CMS SPA ────
+  var cmsObserver = new MutationObserver(function (mutations) {
+    // Throttle: jalankan max 1x per 300ms
+    clearTimeout(cmsObserver._timer);
+    cmsObserver._timer = setTimeout(attachSlugWatcher, 300);
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    cmsObserver.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    // Coba pasang segera setelah CMS load (SPA mungkin sudah render)
+    setTimeout(attachSlugWatcher, 2000);
+    setTimeout(attachSlugWatcher, 4000); // retry sekali lagi
+  });
+
+  // ── 5. CMS EVENT HOOKS ─────────────────────────────────
+  // Jalankan setelah objek CMS tersedia
+  var _cmsReady = setInterval(function () {
+    if (!window.CMS) return;
+    clearInterval(_cmsReady);
+
+    // Hook sebelum simpan: pastikan slug sudah ter-generate
     CMS.registerEventListener({
-      name: 'prePublish',
-      handler: () => {}
+      name: 'preSave',
+      handler: function (entry) {
+        // Tidak blokir save, hanya log untuk debug
+        console.log('[HMTE Admin] preSave entry:', entry && entry.get && entry.get('collection'));
+        return entry;
+      }
+    });
+
+    console.log('%c[HMTE Admin] ✅ CMS hooks terpasang', 'color:#0fbc6d;font-weight:bold;');
+  }, 500);
+
+  // ── 6. NETLIFY IDENTITY REDIRECT ───────────────────────
+  if (window.netlifyIdentity) {
+    netlifyIdentity.on('init', function (user) {
+      if (!user) {
+        netlifyIdentity.on('login', function () {
+          document.location.href = '/admin/';
+        });
+      }
     });
   }
-
-  // Pantau perubahan route/halaman di dalam CMS SPA
-  const observer = new MutationObserver(() => {
-    attachSlugWatcher();
-  });
-
-  document.addEventListener('DOMContentLoaded', () => {
-    observer.observe(document.body, { childList: true, subtree: true });
-    // Mulai cek pertama
-    setTimeout(attachSlugWatcher, 1500);
-  });
   </script>
 </body>
 </html>

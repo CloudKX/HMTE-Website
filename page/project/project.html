@@ -12,22 +12,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
       integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
+      crossorigin="anonymous" referrerpolicy="no-referrer"
     />
-
     <style>
-      /* ══════════════════════════════════════════
-         1. FIXED HEADER CLEARANCE
-         ══════════════════════════════════════════ */
-      section.py-clearance {
-        padding-top: 120px !important;
-        padding-bottom: 80px !important;
-      }
-
-      /* ══════════════════════════════════════════
-         2. BASE THEME
-         ══════════════════════════════════════════ */
+      /* ── BASE ── */
       html { overflow-x: hidden !important; }
       body {
         overflow-x: hidden !important;
@@ -36,232 +24,217 @@
         color: #ffffff !important;
       }
 
-      /* ══════════════════════════════════════════
-         3. GRADIENT TEXT
-         ══════════════════════════════════════════ */
-      .gradient-text {
-        background: linear-gradient(135deg, #fff 0%, #0fbc6d 60%, #22c55e 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-size: clamp(2.2rem, 6vw, 3.5rem) !important;
-        line-height: 1.2 !important;
-        display: block;
+      /* ── FIXED HEADER CLEARANCE ── */
+      section.py-clearance {
+        padding-top: 120px !important;
+        padding-bottom: 80px !important;
       }
 
-      /* ══════════════════════════════════════════
-         4. SECTION DIVIDER
-         ══════════════════════════════════════════ */
+      /* ── GRADIENT TEXT ── */
+      .gradient-text {
+        background: linear-gradient(135deg, #fff 0%, #0fbc6d 60%, #22c55e 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: clamp(2.2rem, 6vw, 3.5rem) !important;
+        line-height: 1.2 !important; display: block;
+      }
+
+      /* ── SECTION DIVIDER ── */
       .section-divider {
-        border: 0;
-        position: relative;
-        margin: 3rem 0;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border: 0; position: relative; margin: 3rem 0;
+        height: 32px; display: flex; align-items: center; justify-content: center;
       }
       .section-divider::before {
-        content: '';
-        position: absolute;
-        left: 0; right: 0; top: 50%;
-        transform: translateY(-50%);
-        height: 1px;
-        background: linear-gradient(
-          to right,
-          transparent 0%,
-          rgba(15,188,109,0.15) 8%,
-          rgba(15,188,109,0.45) 30%,
-          rgba(15,188,109,0.45) 70%,
-          rgba(15,188,109,0.15) 92%,
-          transparent 100%
+        content: ''; position: absolute; left: 0; right: 0; top: 50%;
+        transform: translateY(-50%); height: 1px;
+        background: linear-gradient(to right,
+          transparent 0%, rgba(15,188,109,0.15) 8%,
+          rgba(15,188,109,0.45) 30%, rgba(15,188,109,0.45) 70%,
+          rgba(15,188,109,0.15) 92%, transparent 100%
         );
       }
       .section-divider::after {
-        content: '';
-        position: relative;
-        width: 8px; height: 8px;
-        background: #0fbc6d;
-        border-radius: 2px;
-        transform: rotate(45deg);
+        content: ''; position: relative;
+        width: 8px; height: 8px; background: #0fbc6d;
+        border-radius: 2px; transform: rotate(45deg);
         box-shadow: 0 0 12px rgba(15,188,109,0.6);
-        flex-shrink: 0;
-        z-index: 1;
+        flex-shrink: 0; z-index: 1;
       }
 
-      /* ══════════════════════════════════════════
-         5. CARD GRID
-         ══════════════════════════════════════════ */
-      .cards-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.25rem;
-      }
-      @media (min-width: 640px)  { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
-      @media (min-width: 1024px) { .cards-grid { grid-template-columns: repeat(3, 1fr); } }
-
-      /* ══════════════════════════════════════════
-         6. PROJECT CARD — GLASSMORPHISM
-         ══════════════════════════════════════════ */
-      .project-card {
-        width: 100%;
-        background: rgba(255,255,255,0.04) !important;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255,255,255,0.07) !important;
-        border-radius: 1rem !important;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      }
-      .project-card:hover {
-        transform: translateY(-6px) scale(1.01);
-        box-shadow: 0 16px 48px rgba(15,188,109,0.15);
-        border-color: rgba(15,188,109,0.3) !important;
-      }
-      .project-card.border-t-green  { border-top: 4px solid #22c55e !important; }
-      .project-card.border-t-yellow { border-top: 4px solid #eab308 !important; }
-      .project-card.border-t-cyan   { border-top: 4px solid #06b6d4 !important; }
-
-      .project-card .card-img-wrap {
-        position: relative;
-        height: 180px;
-        overflow: hidden;
-        flex-shrink: 0;
-      }
-      .project-card .card-img-wrap img {
-        width: 100%; height: 100%;
-        object-fit: cover;
-        transition: transform 0.35s ease;
-      }
-      .project-card:hover .card-img-wrap img { transform: scale(1.08); }
-
-      /* ══════════════════════════════════════════
-         7. CARD CONTENT CONSISTENCY
-         ══════════════════════════════════════════ */
-      .card-title {
-        min-height: 3.2rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-      .card-desc {
-        min-height: 4.5rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      /* ══════════════════════════════════════════
-         8. BADGE
-         ══════════════════════════════════════════ */
-      .card-badge {
-        position: absolute;
-        top: 0.5rem; left: 0.5rem;
-        background: rgba(10,14,20,0.75);
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        border: 1px solid rgba(255,255,255,0.1);
-        color: #fff;
-        font-size: 0.65rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        padding: 0.2rem 0.65rem;
-        border-radius: 999px;
-      }
-
-      /* ══════════════════════════════════════════
-         9. SECTION HEADING
-         ══════════════════════════════════════════ */
+      /* ── SECTION HEADING ── */
       .section-heading {
-        font-size: 1.35rem;
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 1.25rem;
-        padding-left: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        font-size: 1.35rem; font-weight: 700; color: #fff;
+        margin-bottom: 1.25rem; padding-left: 1rem;
+        display: flex; align-items: center; gap: 0.5rem;
       }
       .section-heading .heading-bar {
-        display: inline-block;
-        width: 4px; height: 1.4em;
-        border-radius: 2px;
-        margin-right: 0.75rem;
-        flex-shrink: 0;
+        display: inline-block; width: 4px; height: 1.4em;
+        border-radius: 2px; margin-right: 0.75rem; flex-shrink: 0;
       }
 
       .loading-text {
         color: #6b7280;
         animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;
       }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.4; }
+      @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+      /* ══════════════════════════════════════════
+         PROKER ARCHIVE GRID
+         Desktop: max 3 kolom, tiap card max 300px
+         Agar tidak raksasa saat card sedikit
+         ══════════════════════════════════════════ */
+      .proker-archive-grid {
+        /* Flex wrap + center: kartu tidak melar kalau jumlahnya sedikit */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: clamp(12px, 2vw, 20px);
+        /* Batas lebar container: 3 × 300px + 2 × gap ≈ 960px */
+        max-width: 980px;
+        margin: 0 auto;
+      }
+      /* Tiap card: lebar tetap, tidak melar */
+      .proker-archive-grid .proker-card {
+        flex: 0 1 calc(33.33% - 14px);   /* 3 kolom desktop */
+        max-width: 300px;
+        min-width: 220px;
+      }
+
+      /* Tablet: 2 kolom */
+      @media (max-width: 768px) {
+        .proker-archive-grid .proker-card {
+          flex: 0 1 calc(50% - 10px);
+          max-width: none;
+          min-width: 0;
+        }
+      }
+      /* Mobile: 1 kolom */
+      @media (max-width: 480px) {
+        .proker-archive-grid { justify-content: center; }
+        .proker-archive-grid .proker-card {
+          flex: none;
+          width: min(320px, 100%);
+          max-width: min(320px, 100%);
+        }
       }
 
       /* ══════════════════════════════════════════
-         10. SCROLL ANIMATIONS
+         PROKER CARD — Glassmorphism
+         Sama persis dengan sections/proker.html
          ══════════════════════════════════════════ */
-
-      /* Page fade-in */
-      .fade-in {
-        animation: fadeInPage 0.7s ease both;
-      }
-      @keyframes fadeInPage {
-        from { opacity: 0; transform: translateY(24px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
-
-      /* Section heading slide-in dari kiri */
-      .reveal-left {
-        opacity: 0;
-        transform: translateX(-32px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
-      }
-      .reveal-left.is-visible {
-        opacity: 1;
-        transform: translateX(0);
-      }
-
-      /* Divider scale-in */
-      .reveal-divider {
-        opacity: 0;
-        transform: scaleX(0.4);
-        transform-origin: center;
-        transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.23,1,0.32,1);
-      }
-      .reveal-divider.is-visible {
-        opacity: 1;
-        transform: scaleX(1);
-      }
-
-      /* Card stagger fade-up — applied per card oleh JS */
-      .reveal-card {
-        opacity: 0;
-        transform: translateY(36px);
+      .proker-card {
+        position: relative; border-radius: 16px; overflow: hidden;
+        background: linear-gradient(145deg,
+          rgba(15,188,109,0.07) 0%, rgba(13,17,23,0.98) 35%,
+          rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.04) 100%
+        );
+        border: 1px solid rgba(15,188,109,0.1);
+        box-shadow: 0 4px 24px rgba(0,0,0,0.45);
+        text-decoration: none; display: flex; flex-direction: column;
+        opacity: 0; transform: translateY(36px);
         transition:
           opacity 0.55s cubic-bezier(0.23,1,0.32,1),
-          transform 0.55s cubic-bezier(0.23,1,0.32,1);
+          transform 0.55s cubic-bezier(0.23,1,0.32,1),
+          border-color 0.3s ease, box-shadow 0.3s ease;
       }
-      .reveal-card.is-visible {
-        opacity: 1;
-        transform: translateY(0);
+      .proker-card::before {
+        content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(15,188,109,0.4), transparent);
+        z-index: 2; pointer-events: none;
+      }
+      .proker-card.card-ongoing   { border-top: 4px solid #22c55e !important; }
+      .proker-card.card-upcoming  { border-top: 4px solid #eab308 !important; }
+      .proker-card.card-completed { border-top: 4px solid #06b6d4 !important; }
+      .proker-card.is-visible { opacity: 1; transform: translateY(0); }
+      .proker-card:hover {
+        transform: translateY(-5px) !important;
+        border-color: rgba(15,188,109,0.28) !important;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 24px rgba(15,188,109,0.08) !important;
       }
 
-      /* Page header text reveal */
-      .reveal-up {
-        opacity: 0;
-        transform: translateY(20px);
+      .proker-card-cover {
+        position: relative; width: 100%; aspect-ratio: 4 / 3;
+        overflow: hidden; flex-shrink: 0;
+      }
+      .proker-card-cover img {
+        width: 100%; height: 100%; object-fit: cover;
+        filter: brightness(0.85) saturate(1.05);
+        transition: transform 0.45s ease, filter 0.3s ease;
+      }
+      .proker-card:hover .proker-card-cover img { transform: scale(1.06); filter: brightness(0.98); }
+      .proker-card-cover::after {
+        content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+        background: linear-gradient(to top, rgba(13,17,23,0.75), transparent);
+        pointer-events: none;
+      }
+
+      .proker-badge {
+        position: absolute; top: 10px; left: 10px; z-index: 3;
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 3px 10px;
+        font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+        background: rgba(10,14,20,0.78); backdrop-filter: blur(6px);
+        border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; color: #fff;
+      }
+      .proker-badge-dot {
+        width: 5px; height: 5px; border-radius: 50%;
+        display: inline-block; flex-shrink: 0;
+      }
+
+      .proker-card-body {
+        padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1;
+      }
+      .proker-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+      .proker-card-tag {
+        font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+        font-weight: 700; padding: 2px 7px;
+        background: rgba(15,188,109,0.1); border: 1px solid rgba(15,188,109,0.2);
+        border-radius: 999px; color: #0fbc6d;
+      }
+      .proker-card-date { font-size: 0.65rem; color: rgba(156,163,175,0.5); }
+      .proker-card-title {
+        font-size: clamp(0.85rem, 2vw, 0.96rem); font-weight: 800;
+        color: rgba(255,255,255,0.92); line-height: 1.35; margin: 0;
+        display: -webkit-box; -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical; overflow: hidden;
+        transition: color 0.2s ease;
+      }
+      .proker-card:hover .proker-card-title { color: #fff; }
+      .proker-card-desc {
+        font-size: 0.77rem; color: rgba(156,163,175,0.62); line-height: 1.55; margin: 0;
+        display: -webkit-box; -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical; overflow: hidden;
+      }
+      .proker-card-status {
+        margin-top: auto; padding-top: 8px;
+        font-size: 0.68rem; color: rgba(156,163,175,0.45);
+        display: flex; align-items: center; gap: 5px;
+      }
+      .proker-card-status.status-ongoing   { color: rgba(34,197,94,0.7); }
+      .proker-card-status.status-upcoming  { color: rgba(234,179,8,0.7); }
+      .proker-card-status.status-completed { color: rgba(6,182,212,0.7); }
+
+      /* ── Scroll Reveals ── */
+      .fade-in { animation: fadeInPage 0.7s ease both; }
+      @keyframes fadeInPage { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+      .reveal-left {
+        opacity: 0; transform: translateX(-32px);
         transition: opacity 0.6s ease, transform 0.6s ease;
       }
-      .reveal-up.is-visible {
-        opacity: 1;
-        transform: translateY(0);
+      .reveal-left.is-visible { opacity: 1; transform: translateX(0); }
+
+      .reveal-divider {
+        opacity: 0; transform: scaleX(0.4); transform-origin: center;
+        transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.23,1,0.32,1);
       }
+      .reveal-divider.is-visible { opacity: 1; transform: scaleX(1); }
+
+      .reveal-up {
+        opacity: 0; transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      .reveal-up.is-visible { opacity: 1; transform: translateY(0); }
     </style>
   </head>
 
@@ -270,17 +243,17 @@
 
     <main>
       <section class="py-clearance fade-in">
-        <div class="mx-auto px-6 max-w-7xl">
+        <div class="mx-auto px-6" style="max-width:1040px;">
 
-          <!-- ── PAGE HEADER ── -->
+          <!-- Page Header -->
           <h1 class="font-bold gradient-text text-center mb-4 pb-2 reveal-up">Program Kerja HMTE</h1>
           <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto text-center mb-16 reveal-up" style="transition-delay:0.1s">
             Ragam proyek dan kegiatan yang sedang, akan, dan telah kami laksanakan.
           </p>
 
-          <hr class="section-divider reveal-divider opacity-50">
+          <hr class="section-divider reveal-divider" style="opacity:.5;">
 
-          <!-- ── PROYEK BERJALAN ── -->
+          <!-- Proyek Berjalan -->
           <div class="mb-12">
             <h2 class="section-heading reveal-left">
               <span class="heading-bar" style="background:#22c55e;"></span>
@@ -293,7 +266,7 @@
 
           <hr class="section-divider reveal-divider">
 
-          <!-- ── PROYEK MENDATANG ── -->
+          <!-- Proyek Mendatang -->
           <div class="mb-12">
             <h2 class="section-heading reveal-left">
               <span class="heading-bar" style="background:#eab308;"></span>
@@ -306,7 +279,7 @@
 
           <hr class="section-divider reveal-divider">
 
-          <!-- ── PROYEK SELESAI ── -->
+          <!-- Proyek Selesai -->
           <div class="mb-12">
             <h2 class="section-heading reveal-left">
               <span class="heading-bar" style="background:#06b6d4;"></span>
@@ -327,76 +300,53 @@
     <script src="../../js/pages/project.js"></script>
 
     <script>
-    // ── SCROLL ANIMATION ENGINE ──
     (function () {
-      // Observer untuk elemen statis (heading, divider, page header)
+      /* ── Observer untuk elemen statis ── */
       function observeStatic() {
         var els = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-divider');
-        if (!els.length) return;
         var obs = new IntersectionObserver(function(entries) {
           entries.forEach(function(e) {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-visible');
-              obs.unobserve(e.target);
-            }
+            if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
           });
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
         els.forEach(function(el) { obs.observe(el); });
       }
 
-      // Observer untuk card yang di-inject JS — pakai MutationObserver
-      // agar animasi tetap jalan meski card dimuat setelah DOM ready
-      function observeCards(containerId) {
+      /* ── Observer untuk kartu di-inject async ── */
+      function watchContainer(containerId) {
         var container = document.getElementById(containerId);
         if (!container) return;
 
-        function applyReveal(root) {
-          var cards = root.querySelectorAll('.project-card:not(.reveal-card)');
-          cards.forEach(function(card, i) {
-            card.classList.add('reveal-card');
-            card.style.transitionDelay = (i * 0.08) + 's';
+        var cardObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) { e.target.classList.add('is-visible'); cardObs.unobserve(e.target); }
           });
+        }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
 
-          // Observe card baru
-          var toObserve = root.querySelectorAll('.reveal-card:not([data-observed])');
-          toObserve.forEach(function(card) {
-            card.setAttribute('data-observed', '1');
+        function apply() {
+          container.querySelectorAll('.proker-card:not([data-obs])').forEach(function(card) {
+            card.setAttribute('data-obs', '1');
             cardObs.observe(card);
           });
         }
 
-        var cardObs = new IntersectionObserver(function(entries) {
-          entries.forEach(function(e) {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-visible');
-              cardObs.unobserve(e.target);
-            }
-          });
-        }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+        /* MutationObserver agar tangkap inject async */
+        new MutationObserver(apply).observe(container, { childList: true, subtree: true });
 
-        // Cek tiap 200ms sampai container berisi card (karena inject async)
+        /* Polling fallback */
         var tries = 0;
         var poll = setInterval(function() {
           tries++;
-          if (container.querySelector('.project-card') || tries > 50) {
-            clearInterval(poll);
-            applyReveal(container);
+          if (container.querySelector('.proker-card') || tries > 60) {
+            clearInterval(poll); apply();
           }
         }, 200);
-
-        // Fallback: MutationObserver untuk inject yg sangat lambat
-        var mo = new MutationObserver(function() {
-          applyReveal(container);
-        });
-        mo.observe(container, { childList: true, subtree: true });
       }
 
-      // Jalankan setelah DOM siap
       document.addEventListener('DOMContentLoaded', function() {
         observeStatic();
-        observeCards('ongoing-projects-container');
-        observeCards('upcoming-projects-container');
-        observeCards('completed-projects-container');
+        ['ongoing-projects-container', 'upcoming-projects-container', 'completed-projects-container']
+          .forEach(watchContainer);
       });
     })();
     </script>

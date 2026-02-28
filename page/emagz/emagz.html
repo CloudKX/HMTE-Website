@@ -1,178 +1,308 @@
 <!DOCTYPE html>
 <html lang="id">
   <head>
+    <base href="/" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Arsip E-Magz - HMTE UNSOED</title>
-
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/satoshi.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-
+    <title>E-Magazine Arsip - HMTE Unsoed</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="/js/loader.js" defer></script>
-    <script src="/js/emagz.js" defer></script>
+    <link rel="stylesheet" href="../../css/style.css" />
+    <link rel="stylesheet" href="../../css/satoshi.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
 
     <style>
-      /* ══════════════════════════════════════════
-         EMAGZ PAGE — PURE CSS ANIMATION
-      ══════════════════════════════════════════ */
-
+      /* ── BASE ── */
+      html { overflow-x: hidden !important; }
       body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
         background-color: #0a0e14 !important;
         color: #ffffff !important;
       }
 
-      /* ── ANIMASI HEADER ── */
-      .anim-header {
-        opacity: 0;
-        animation: emagzFadeUp 0.8s ease forwards;
+      /* ── HEADER CLEARANCE ── */
+      .archive-section {
+        padding-top: 120px;
+        padding-bottom: 80px;
+        position: relative;
+      }
+      .archive-section::before {
+        content: '';
+        position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+        width: min(700px, 100%); height: 300px;
+        background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+        pointer-events: none;
       }
 
       /* ── PAGE HEADER ── */
-      .gradient-text {
-        background: linear-gradient(135deg, #fff 0%, #0fbc6d 60%, #22c55e 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-size: clamp(2rem, 7vw, 4rem) !important;
-        line-height: 1.3 !important; 
-        padding-bottom: 0.1em !important; 
+      .archive-page-header {
+        text-align: center;
+        margin-bottom: clamp(32px, 5vh, 56px);
+        opacity: 0; transform: translateY(24px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+      .archive-page-header.is-visible { opacity: 1; transform: translateY(0); }
+
+      .archive-eyebrow {
+        display: inline-flex; align-items: center; gap: 10px;
+        font-size: 0.68rem; letter-spacing: 0.22em;
+        text-transform: uppercase; color: #0fbc6d; font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .archive-eyebrow::before, .archive-eyebrow::after {
+        content: ''; display: block; width: 24px; height: 1px;
+        background: #0fbc6d; opacity: 0.6;
+      }
+      .archive-title {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        font-weight: 900; color: #fff;
+        letter-spacing: -0.04em; line-height: 1.1;
+        margin: 0 0 12px;
+      }
+      .archive-title em { font-style: normal; color: #0fbc6d; }
+      .archive-subtitle {
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        color: rgba(156,163,175,0.6);
+        max-width: 480px; margin: 0 auto; line-height: 1.65;
       }
 
-      main.py-16 {
-        padding-top: 120px !important;
-        padding-bottom: 80px !important;
+      /* ── STATS BAR ── */
+      .archive-stats {
+        display: flex; justify-content: center; gap: 32px;
+        margin-bottom: clamp(28px, 4vh, 44px);
+        opacity: 0; transform: translateY(16px);
+        transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
+      }
+      .archive-stats.is-visible { opacity: 1; transform: translateY(0); }
+      .archive-stat {
+        display: flex; flex-direction: column; align-items: center; gap: 2px;
+      }
+      .archive-stat-num {
+        font-size: 1.5rem; font-weight: 900; color: #0fbc6d;
+        line-height: 1;
+      }
+      .archive-stat-label {
+        font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+        color: rgba(156,163,175,0.45); font-weight: 600;
       }
 
-      .page-subtitle {
-        color: rgba(209, 213, 219, 0.8) !important;
-        font-size: clamp(0.95rem, 1.5vw, 1.15rem) !important;
-        line-height: 1.6;
+      /* ── DIVIDER ── */
+      .archive-divider {
+        border: 0; height: 1px; margin: 0 0 clamp(28px, 4vh, 44px);
+        background: linear-gradient(to right, transparent, rgba(15,188,109,0.3) 30%, rgba(15,188,109,0.3) 70%, transparent);
+        opacity: 0; transform: scaleX(0.5);
+        transform-origin: center;
+        transition: opacity 0.5s ease 0.2s, transform 0.6s cubic-bezier(0.23,1,0.32,1) 0.2s;
       }
+      .archive-divider.is-visible { opacity: 1; transform: scaleX(1); }
 
-      /* ── GRID CONTAINER ── */
-      #emagz-archive-container {
-        display: grid !important;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
-        gap: clamp(16px, 3vw, 28px) !important;
-        align-items: stretch !important;
+      /* ── GRID — kunci max-width agar tidak raksasa di desktop ── */
+      .archive-grid {
+        display: grid;
+        /* Mobile: 2 kolom | Tablet: 3 kolom | Desktop: 4 kolom */
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(12px, 2vw, 20px);
+        /* Max-width container: 4 × 260px + 3 × gap = ~1100px */
+        max-width: 1100px;
+        margin: 0 auto;
       }
+      @media (min-width: 480px)  { .archive-grid { grid-template-columns: repeat(3, 1fr); } }
+      @media (min-width: 768px)  { .archive-grid { grid-template-columns: repeat(4, 1fr); } }
 
-      /* ══ CSS MURNI UNTUK KARTU (SINKRON 100% DENGAN EMAGZ.JS) ══ */
-      .emagz-card-visible {
+      /* ── CARD — identik dengan sections/emagz.html ── */
+      .emagz-card {
+        position: relative; border-radius: 14px; overflow: hidden;
         background: linear-gradient(145deg,
-          rgba(15,188,109,0.06) 0%,
-          rgba(13,17,23,0.98) 40%,
-          rgba(13,17,23,0.98) 100%
-        ) !important;
-        border-radius: 16px !important;
-        overflow: hidden !important;
-        border: 1px solid rgba(15,188,109,0.12) !important;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.4) !important;
-        display: flex !important;
-        flex-direction: column !important;
-        position: relative !important;
-        margin: 0 !important;
-        text-decoration: none !important;
-
-        /* INI KUNCI ANIMASINYA! (Otomatis terpicu saat kartu dicetak) */
-        opacity: 0;
-        animation: emagzFadeUp 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards !important;
-        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+          rgba(15,188,109,0.07) 0%, rgba(13,17,23,0.98) 35%,
+          rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.04) 100%
+        );
+        border: 1px solid rgba(15,188,109,0.1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        text-decoration: none; display: flex; flex-direction: column;
+        /* Animasi awal */
+        opacity: 0; transform: translateY(32px);
+        transition:
+          opacity 0.55s cubic-bezier(0.23,1,0.32,1),
+          transform 0.55s cubic-bezier(0.23,1,0.32,1),
+          border-color 0.3s ease, box-shadow 0.3s ease;
       }
-
-      @keyframes emagzFadeUp {
-        from { opacity: 0; transform: translateY(40px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
-
-      /* Shimmer line atas */
-      .emagz-card-visible::before {
+      .emagz-card.is-visible { opacity: 1; transform: translateY(0); }
+      .emagz-card::before {
         content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
         background: linear-gradient(90deg, transparent, rgba(15,188,109,0.35), transparent);
         z-index: 2;
       }
-
-      .emagz-card-visible:hover {
-        transform: translateY(-5px) scale(1.02) !important;
-        border-color: rgba(15,188,109,0.3) !important;
-        box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 24px rgba(15,188,109,0.08) !important;
+      .emagz-card:hover {
+        transform: translateY(-5px) !important;
+        border-color: rgba(15,188,109,0.3);
+        box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 20px rgba(15,188,109,0.08);
       }
 
-      /* ── COVER MAJALAH ── */
-      .emagz-card-visible img {
-        width: 100% !important; aspect-ratio: 3 / 4 !important; object-fit: cover !important;
-        filter: brightness(0.85) saturate(1.05) !important;
-        transition: transform 0.5s ease, filter 0.3s ease !important;
+      /* Cover dengan aspect-ratio 2:3 — anti-gepeng */
+      .emagz-card-cover {
+        position: relative; width: 100%;
+        aspect-ratio: 2 / 3;
+        overflow: hidden; flex-shrink: 0;
       }
-      .emagz-card-visible:hover img {
-        transform: scale(1.04) !important; filter: brightness(0.95) saturate(1.1) !important;
+      .emagz-card-cover img {
+        width: 100%; height: 100%; object-fit: cover;
+        filter: brightness(0.88) saturate(1.05);
+        transition: transform 0.5s ease, filter 0.3s ease;
       }
-
-      /* ── BODY KONTEN ── */
-      .emagz-card-visible .p-5 {
-        background: transparent !important; padding: 16px 20px 20px !important;
-        flex: 1 !important; display: flex !important; flex-direction: column !important; gap: 8px !important;
-      }
-
-      .emagz-card-visible h3 {
-        font-size: clamp(1.05rem, 1.5vw, 1.2rem) !important; font-weight: 800 !important;
-        color: rgba(255,255,255,0.95) !important; line-height: 1.3 !important; margin: 0 0 4px 0 !important;
+      .emagz-card:hover .emagz-card-cover img { transform: scale(1.05); filter: brightness(0.98); }
+      .emagz-card-cover::after {
+        content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+        background: linear-gradient(to top, rgba(13,17,23,0.8), transparent);
+        pointer-events: none;
       }
 
-      .emagz-card-visible p.text-gray-400 {
-        color: rgba(156,163,175,0.7) !important; font-size: 0.85rem !important; line-height: 1.6 !important;
-        display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important;
-        overflow: hidden !important; margin: 0 !important;
+      .emagz-card-edition-badge {
+        position: absolute; top: 8px; right: 8px; z-index: 3;
+        padding: 3px 8px; border-radius: 20px;
+        font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        background: rgba(15,188,109,0.18); border: 1px solid rgba(15,188,109,0.35);
+        color: #0fbc6d; backdrop-filter: blur(8px);
       }
 
-      /* ── TOMBOL BACA / DOWNLOAD ── */
-      .emagz-card-visible button {
-        background: #16a34a !important; color: white !important; border-radius: 50px !important;
-        font-size: 0.85rem !important; font-weight: 600 !important; padding: 10px 20px !important;
-        box-shadow: 0 0 16px rgba(15,188,109,0.2) !important; transition: all 0.25s ease !important;
-        text-align: center !important; margin-top: auto !important; display: flex !important;
-        justify-content: center !important; align-items: center !important; gap: 6px !important; border: none; cursor: pointer;
+      .emagz-card-body {
+        padding: 10px 12px 14px;
+        display: flex; flex-direction: column; gap: 4px;
+        flex: 1;
       }
-      .emagz-card-visible:hover button {
-        background: #15803d !important; box-shadow: 0 0 24px rgba(15,188,109,0.4) !important; transform: translateY(-2px) !important;
+      .emagz-card-meta { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+      .emagz-card-date { font-size: 0.6rem; color: rgba(156,163,175,0.45); }
+      .emagz-card-dot  { width: 2px; height: 2px; background: rgba(156,163,175,0.3); border-radius: 50%; }
+      .emagz-card-tag  {
+        font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase;
+        color: #0fbc6d; font-weight: 700; padding: 2px 5px;
+        background: rgba(15,188,109,0.1); border-radius: 20px;
+        border: 1px solid rgba(15,188,109,0.18);
+      }
+      .emagz-card-title {
+        font-size: clamp(0.78rem, 1.8vw, 0.88rem); font-weight: 800;
+        color: rgba(255,255,255,0.9); line-height: 1.3; margin: 0;
+        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        transition: color 0.2s ease;
+      }
+      .emagz-card:hover .emagz-card-title { color: #fff; }
+      .emagz-card-desc {
+        font-size: 0.68rem; color: rgba(156,163,175,0.5); line-height: 1.5; margin: 0;
+        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+      }
+      .emagz-card-read {
+        display: inline-flex; align-items: center; gap: 4px; margin-top: 6px;
+        font-size: 0.67rem; color: rgba(15,188,109,0.6); font-weight: 600;
+        transition: color 0.2s ease, gap 0.2s ease;
+      }
+      .emagz-card:hover .emagz-card-read { color: #0fbc6d; gap: 7px; }
+
+      /* ── PAGE FADE IN ── */
+      .page-fade {
+        animation: pageFadeIn 0.65s ease both;
+      }
+      @keyframes pageFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
       }
 
-      /* ════════════════════════════════════
-         MOBILE OVERRIDE (≤ 768px)
-      ════════════════════════════════════ */
-      @media screen and (max-width: 768px) {
-        main.py-16 { padding-top: 110px !important; padding-bottom: 40px !important; }
-        .gradient-text { font-size: clamp(2rem, 8vw, 2.6rem) !important; }
-        #emagz-archive-container { grid-template-columns: 1fr !important; gap: 20px !important; }
-        .emagz-card-visible { max-width: 340px !important; margin: 0 auto !important; width: 100% !important; }
-      }
-      
-      @media screen and (min-width: 480px) and (max-width: 768px) {
-        #emagz-archive-container { grid-template-columns: repeat(2, 1fr) !important; }
-        .emagz-card-visible { max-width: 100% !important; }
+      /* ── EMPTY STATE ── */
+      .archive-empty {
+        grid-column: 1 / -1;
+        text-align: center; padding: 48px 0;
+        color: rgba(156,163,175,0.5); font-size: 0.9rem;
       }
     </style>
   </head>
-  
-  <body class="min-h-screen">
+
+  <body class="min-h-screen page-fade">
     <div id="header-placeholder"></div>
 
-    <main class="py-16 md:py-24 text-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <h1 class="gradient-text font-bold text-center mb-4 anim-header">E-Magazine</h1>
-        <p class="page-subtitle text-center mb-12 max-w-2xl mx-auto anim-header" style="animation-delay: 0.15s;">Kumpulan karya, buletin, dan majalah elektronik resmi HMTE Unsoed.</p>
+    <main>
+      <section class="archive-section">
+        <div style="max-width:1100px;margin:0 auto;padding:0 clamp(16px,5vw,48px);">
 
-        <div id="emagz-archive-container" class="mt-10">
-          <p class="text-center text-gray-400">Memuat arsip E-Magz...</p>
+          <!-- Page Header -->
+          <div class="archive-page-header">
+            <div class="archive-eyebrow">Publikasi HMTE</div>
+            <h1 class="archive-title">Elektro <em>Magazine</em></h1>
+            <p class="archive-subtitle">Seluruh edisi E-Magz HMTE Unsoed — informasi, kreativitas, dan inspirasi mahasiswa Teknik Elektro.</p>
+          </div>
+
+          <!-- Stats -->
+          <div class="archive-stats">
+            <div class="archive-stat">
+              <span class="archive-stat-num" id="total-editions">—</span>
+              <span class="archive-stat-label">Total Edisi</span>
+            </div>
+            <div class="archive-stat">
+              <span class="archive-stat-num">2025</span>
+              <span class="archive-stat-label">Tahun Terbit</span>
+            </div>
+            <div class="archive-stat">
+              <span class="archive-stat-num">PDF</span>
+              <span class="archive-stat-label">Format</span>
+            </div>
+          </div>
+
+          <hr class="archive-divider" />
+
+          <!-- Card Grid -->
+          <div id="emagz-archive-container" class="archive-grid">
+            <!-- Diisi oleh loadEmagzArchivePage() dari emagz.js -->
+            <div style="grid-column:1/-1;text-align:center;padding:48px 0;color:rgba(156,163,175,0.4);">
+              <i class="fas fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:12px;display:block;color:#0fbc6d;"></i>
+              Memuat edisi...
+            </div>
+          </div>
+
         </div>
-      </div>
+      </section>
     </main>
 
     <div id="footer-placeholder"></div>
+
+    <script src="../../js/loader.js"></script>
+    <script src="../../js/emagz.js"></script>
+
+    <script>
+    (function () {
+      // Animasi elemen statis (header, stats, divider)
+      function initPageAnimations() {
+        var targets = document.querySelectorAll('.archive-page-header, .archive-stats, .archive-divider');
+        if (!targets.length) return;
+        var obs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+          });
+        }, { threshold: 0.1 });
+        targets.forEach(function(el) { obs.observe(el); });
+      }
+
+      // Update angka total edisi setelah data tersedia
+      function updateStats() {
+        var el = document.getElementById('total-editions');
+        if (el && typeof emagzData !== 'undefined') {
+          el.textContent = emagzData.length;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        initPageAnimations();
+      });
+
+      // Dipanggil setelah loadEmagzArchivePage selesai
+      document.addEventListener('component:loaded', function(e) {
+        updateStats();
+      });
+
+      // Fallback: update setelah 500ms
+      setTimeout(updateStats, 500);
+    })();
+    </script>
   </body>
 </html>
