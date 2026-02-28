@@ -101,7 +101,7 @@
     animation: tlFadeUp 0.5s ease;
   }
 
-  /* ── UPCOMING EVENTS AREA (Gaya Kiri-Kanan) ── */
+  /* ── UPCOMING EVENTS AREA ── */
   .tl-upcoming-wrapper {
     margin-top: 20px;
     padding-top: 40px;
@@ -160,27 +160,41 @@
     
     #event-details { font-size: 0.75rem !important; padding: 12px !important; }
 
-    /* Upcoming di HP diubah jadi scroll horizontal (anti-monoton) */
+    /* Upcoming Event Wrapper Mobile */
     .tl-upcoming-wrapper {
       margin-top: 10px;
       padding-top: 32px;
     }
-    .tl-upcoming-title { font-size: 1.1rem; justify-content: flex-start; padding-left: 8px; }
+    .tl-upcoming-title { font-size: 1.1rem; justify-content: center; }
     
+    /* FIX: KANAN - KIRI DI MOBILE ANDROID */
     #upcoming-events {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 20px; /* Ruang scrollbar */
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none; 
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Paksa 2 Kolom sejajar */
+      gap: 10px; /* Jarak dirapatkan agar muat */
     }
-    #upcoming-events::-webkit-scrollbar { display: none; }
     
     #upcoming-events > div {
-      flex: 0 0 calc(85vw - 16px);
-      scroll-snap-align: center;
+      padding: 12px 10px; /* Padding card dikecilkan */
+      border-left: 2px solid #0fbc6d; /* Garis aksen sedikit ditipiskan */
+      gap: 4px;
+    }
+
+    /* Memaksa text yang di-inject JS untuk mengecil agar tidak keluar batas box 2 kolom */
+    #upcoming-events > div p, 
+    #upcoming-events > div span, 
+    #upcoming-events > div div, 
+    #upcoming-events > div h3, 
+    #upcoming-events > div h4 {
+      font-size: clamp(0.65rem, 3vw, 0.8rem) !important;
+      line-height: 1.4 !important;
+      margin: 0 !important;
+    }
+    
+    /* Sedikit pertegas font untuk judul event di mobile */
+    #upcoming-events > div .font-bold,
+    #upcoming-events > div strong {
+      font-size: clamp(0.7rem, 3.5vw, 0.85rem) !important;
     }
   }
 </style>
@@ -325,7 +339,7 @@
           <i class="fas fa-calendar-check"></i> Kegiatan Mendatang
         </h3>
         <div id="upcoming-events">
-          <p style="color: rgba(156,163,175,0.45); font-size:0.85rem; text-align:center; width:100%;" class="animate-pulse">Memuat kegiatan...</p>
+          <p style="color: rgba(156,163,175,0.45); font-size:0.85rem; text-align:center; width:100%; grid-column: 1 / -1;" class="animate-pulse">Memuat kegiatan...</p>
         </div>
       </div>
 
