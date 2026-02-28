@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
   <head>
-    <meta charset="UTF-8" />
     <base href="/" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title id="page-title">Halaman Berita</title>
+    <title id="page-title">Halaman Berita - HMTE Unsoed</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../css/style.css" />
@@ -19,284 +19,251 @@
     />
 
     <style>
-      /* ══════════════════════════════════════
-         NEWS PAGE — PREMIUM DARK OVERRIDE
-         Override Tailwind class lama dari JS generator
-      ══════════════════════════════════════ */
-
-      /* ── PAGE HEADER ── */
-      .gradient-text {
-        background: linear-gradient(135deg, #fff 0%, #0fbc6d 60%, #22c55e 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-size: clamp(2rem, 7vw, 4rem) !important;
+      /* ══════════════════════════════════════════════════
+         1. BASE & BACKGROUND (GRID TEMA KONSISTEN)
+      ══════════════════════════════════════════════════ */
+      html { overflow-x: hidden !important; }
+      body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        color: #ffffff !important;
+        margin: 0; min-height: 100vh;
+        
+        /* Background kotak-kotak bawaan style.css */
+        background-color: #161616 !important;
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
+                          linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+        background-size: 55px 55px !important;
       }
 
-      /* Jarak aman untuk Desktop agar tidak menabrak header */
-      section.py-16 {
-        padding-top: 120px !important; 
+      /* ── PAGE FADE IN ── */
+      .page-fade { animation: pageFadeIn 0.65s ease both; }
+      @keyframes pageFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
       }
 
-      /* ── GRID CONTAINER ── */
+      /* ══════════════════════════════════════════════════
+         2. PAGE WRAPPER & AMBIENT GLOW
+      ══════════════════════════════════════════════════ */
+      .news-wrap {
+        padding-top: 120px;
+        padding-bottom: 80px;
+        position: relative;
+      }
+      /* Glow hijau di atas halaman */
+      .news-wrap::before {
+        content: '';
+        position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+        width: min(700px, 100%); height: 300px;
+        background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .news-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 clamp(16px, 5vw, 48px);
+      }
+
+      /* ══════════════════════════════════════════════════
+         3. TITLE BLOCK & SOLID TEXT
+      ══════════════════════════════════════════════════ */
+      .news-title-block {
+        text-align: center;
+        margin-bottom: clamp(32px, 5vh, 56px);
+      }
+      .news-eyebrow {
+        display: inline-flex; align-items: center; gap: 10px;
+        font-size: 0.68rem; letter-spacing: 0.22em;
+        text-transform: uppercase; color: #0fbc6d; font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .news-eyebrow::before, .news-eyebrow::after {
+        content: ''; display: block; width: 24px; height: 1px;
+        background: #0fbc6d; opacity: 0.6;
+      }
+      
+      /* Teks Solid Putih */
+      .solid-title {
+        color: #ffffff !important;
+        font-size: clamp(2.2rem, 6vw, 3.5rem) !important;
+        font-weight: 900 !important;
+        line-height: 1.2 !important; 
+        display: block;
+        margin-bottom: 12px;
+        letter-spacing: -0.04em;
+      }
+      /* Highlight Hijau */
+      .solid-title em {
+        color: #0fbc6d !important;
+        font-style: normal;
+      }
+
+      .news-subtitle {
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        color: rgba(156,163,175,0.6);
+        max-width: 500px; margin: 0 auto; line-height: 1.65;
+      }
+
+      /* ══════════════════════════════════════════════════
+         4. GRID CONTAINER BERITA
+      ══════════════════════════════════════════════════ */
       #all-news-container {
-        gap: clamp(12px, 2vw, 24px) !important;
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: clamp(16px, 2vw, 24px) !important;
+        margin-bottom: 40px !important;
       }
 
-      /* ══ OVERRIDE CARD dari JS generator ══
-         Target: .bg-gray-800.rounded-xl (class yg di-inject JS)
-      */
+      /* ══════════════════════════════════════════════════
+         5. OVERRIDE CARD JS & ANIMASI
+      ══════════════════════════════════════════════════ */
       #all-news-container > div {
         background: linear-gradient(145deg,
-          rgba(15,188,109,0.07) 0%,
-          rgba(13,17,23,0.98) 35%,
-          rgba(13,17,23,0.98) 65%,
-          rgba(15,188,109,0.04) 100%
+          rgba(15,188,109,0.07) 0%, rgba(13,17,23,0.98) 35%,
+          rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.04) 100%
         ) !important;
-        border: 1px solid rgba(15,188,109,0.12) !important;
-        border-radius: 16px !important;
+        border: 1px solid rgba(15,188,109,0.1) !important;
+        border-radius: 14px !important;
         overflow: hidden !important;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.45) !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
         position: relative !important;
         cursor: pointer !important;
-        transition: transform 0.3s cubic-bezier(0.23,1,0.32,1),
-                    border-color 0.3s ease,
-                    box-shadow 0.3s ease !important;
         display: flex !important;
         flex-direction: column !important;
-        /* Animasi masuk */
-        animation: cardFadeUp 0.55s cubic-bezier(0.23,1,0.32,1) both;
+        
+        /* Setup Animasi Baru (dikendalikan via JS Observer di bawah) */
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.55s cubic-bezier(0.23,1,0.32,1), 
+                    transform 0.55s cubic-bezier(0.23,1,0.32,1), 
+                    border-color 0.3s ease, box-shadow 0.3s ease !important;
       }
 
-      /* Shimmer line atas */
+      /* Class yang ditambahkan oleh JS saat card terlihat */
+      #all-news-container > div.is-visible {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+
       #all-news-container > div::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 8%; right: 8%;
-        height: 1px;
+        content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
         background: linear-gradient(90deg, transparent, rgba(15,188,109,0.35), transparent);
-        z-index: 2;
+        z-index: 2; pointer-events: none;
       }
 
       #all-news-container > div:hover {
         transform: translateY(-5px) !important;
         border-color: rgba(15,188,109,0.3) !important;
-        box-shadow: 0 16px 40px rgba(0,0,0,0.55),
-                    0 0 24px rgba(15,188,109,0.08) !important;
-      }
-
-      /* Stagger delay */
-      #all-news-container > div:nth-child(1) { animation-delay: 0.05s; }
-      #all-news-container > div:nth-child(2) { animation-delay: 0.12s; }
-      #all-news-container > div:nth-child(3) { animation-delay: 0.19s; }
-      #all-news-container > div:nth-child(4) { animation-delay: 0.26s; }
-      #all-news-container > div:nth-child(5) { animation-delay: 0.33s; }
-      #all-news-container > div:nth-child(6) { animation-delay: 0.40s; }
-      #all-news-container > div:nth-child(7) { animation-delay: 0.47s; }
-      #all-news-container > div:nth-child(8) { animation-delay: 0.54s; }
-
-      @keyframes cardFadeUp {
-        from { opacity: 0; transform: translateY(28px); }
-        to   { opacity: 1; transform: translateY(0); }
+        box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 20px rgba(15,188,109,0.08) !important;
       }
 
       /* ── GAMBAR CARD ── */
       #all-news-container img {
-        width: 100% !important;
-        aspect-ratio: 16 / 9 !important;
-        height: auto !important;
-        object-fit: cover !important;
+        width: 100% !important; aspect-ratio: 16 / 9 !important;
+        height: auto !important; object-fit: cover !important;
         display: block !important;
-        filter: brightness(0.85) saturate(1.05) !important;
-        transition: transform 0.5s cubic-bezier(0.23,1,0.32,1),
-                    filter 0.3s ease !important;
+        filter: brightness(0.88) saturate(1.05) !important;
+        transition: transform 0.5s ease, filter 0.3s ease !important;
       }
-
       #all-news-container > div:hover img {
-        transform: scale(1.04) !important;
-        filter: brightness(0.95) saturate(1.1) !important;
+        transform: scale(1.05) !important; filter: brightness(0.98) saturate(1.1) !important;
       }
 
       /* ── KONTEN CARD ── */
       #all-news-container .p-4 {
-        background: transparent !important;
-        padding: 14px 16px 16px !important;
-        flex: 1 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 6px !important;
+        background: transparent !important; padding: 14px 16px 18px !important;
+        flex: 1 !important; display: flex !important; flex-direction: column !important; gap: 6px !important;
       }
 
-      /* Category tag */
       #all-news-container .text-green-400 {
-        font-size: 0.6rem !important;
-        letter-spacing: 0.1em !important;
-        text-transform: uppercase !important;
-        color: #0fbc6d !important;
-        font-weight: 700 !important;
-        padding: 2px 8px !important;
-        background: rgba(15,188,109,0.1) !important;
-        border: 1px solid rgba(15,188,109,0.2) !important;
-        border-radius: 20px !important;
-        display: inline !important;          /* ← kunci: bukan block/flex */
-        width: fit-content !important;
-        white-space: nowrap !important;
+        font-size: 0.55rem !important; letter-spacing: 0.1em !important; text-transform: uppercase !important;
+        color: #0fbc6d !important; font-weight: 700 !important; padding: 3px 8px !important;
+        background: rgba(15,188,109,0.1) !important; border: 1px solid rgba(15,188,109,0.18) !important;
+        border-radius: 20px !important; display: inline-block !important; width: fit-content !important;
         margin-bottom: 4px !important;
       }
 
-      /* Wrapper p yang membungkus tag — pastikan tidak stretch */
-      #all-news-container .p-4 > p:first-child {
-        display: flex !important;
-        width: fit-content !important;
-        margin-bottom: 4px !important;
-      }
-
-      /* Judul card */
       #all-news-container h3 {
-        font-size: clamp(0.85rem, 1.1vw, 1rem) !important;
-        font-weight: 800 !important;
-        color: rgba(255,255,255,0.9) !important;
-        line-height: 1.35 !important;
-        letter-spacing: -0.01em !important;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
-        margin-bottom: 4px !important;
-        transition: color 0.2s ease !important;
+        font-size: clamp(0.85rem, 1.2vw, 0.95rem) !important; font-weight: 800 !important;
+        color: rgba(255,255,255,0.9) !important; line-height: 1.35 !important; letter-spacing: -0.01em !important;
+        display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important;
+        overflow: hidden !important; margin-bottom: 2px !important; transition: color 0.2s ease !important;
       }
-
       #all-news-container > div:hover h3 { color: #fff !important; }
 
-      /* Preview text */
       #all-news-container .text-gray-400 {
-        font-size: clamp(0.75rem, 0.85vw, 0.82rem) !important;
-        color: rgba(156,163,175,0.55) !important;
-        line-height: 1.6 !important;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 3 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
+        font-size: 0.72rem !important; color: rgba(156,163,175,0.55) !important; line-height: 1.6 !important;
+        display: -webkit-box !important; -webkit-line-clamp: 3 !important; -webkit-box-orient: vertical !important;
+        overflow: hidden !important; margin: 0 !important;
       }
 
-      /* Tanggal */
       #all-news-container .text-xs.text-gray-400 {
-        font-size: 0.65rem !important;
-        color: rgba(156,163,175,0.4) !important;
-        margin-top: auto !important;
-        padding-top: 6px !important;
-        border-top: 1px solid rgba(255,255,255,0.05) !important;
-        -webkit-line-clamp: unset !important;
-        display: block !important;
+        font-size: 0.65rem !important; color: rgba(156,163,175,0.45) !important;
+        margin-top: auto !important; padding-top: 10px !important;
+        border-top: 1px solid rgba(255,255,255,0.06) !important; display: block !important; -webkit-line-clamp: unset !important;
       }
 
-      /* ── PAGINATION ── */
+      /* ══════════════════════════════════════════════════
+         6. PAGINATION
+      ══════════════════════════════════════════════════ */
       #news-pagination-container {
-        gap: 8px !important;
-        flex-wrap: wrap !important;
+        display: flex; justify-content: center; gap: 8px !important; flex-wrap: wrap !important; margin-top: 24px;
       }
-
       #news-pagination-container button {
-        min-width: 36px !important;
-        height: 36px !important;
-        padding: 0 12px !important;
-        border-radius: 8px !important;
-        font-size: 0.82rem !important;
-        font-weight: 600 !important;
+        min-width: 38px !important; height: 38px !important;
+        padding: 0 12px !important; border-radius: 10px !important;
+        font-size: 0.85rem !important; font-weight: 700 !important;
         border: 1px solid rgba(255,255,255,0.08) !important;
-        background: rgba(255,255,255,0.04) !important;
-        color: rgba(255,255,255,0.6) !important;
+        background: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.6) !important;
         transition: all 0.2s ease !important;
       }
-
       #news-pagination-container button:hover:not(:disabled) {
-        background: rgba(15,188,109,0.12) !important;
-        border-color: rgba(15,188,109,0.35) !important;
-        color: #0fbc6d !important;
+        background: rgba(15,188,109,0.12) !important; border-color: rgba(15,188,109,0.3) !important; color: #0fbc6d !important;
       }
-
-      /* Active page */
       #news-pagination-container button.bg-green-500 {
-        background: #0fbc6d !important;
-        border-color: #0fbc6d !important;
-        color: #fff !important;
-        box-shadow: 0 0 16px rgba(15,188,109,0.3) !important;
+        background: #0fbc6d !important; border-color: #0fbc6d !important; color: #fff !important;
+        box-shadow: 0 0 20px rgba(15,188,109,0.25) !important;
       }
+      #news-pagination-container button:disabled { opacity: 0.3 !important; cursor: not-allowed !important; }
 
-      #news-pagination-container button:disabled {
-        opacity: 0.3 !important;
-        cursor: not-allowed !important;
+      /* ══════════════════════════════════════════════════
+         7. RESPONSIVE MEDIA QUERIES
+      ══════════════════════════════════════════════════ */
+      @media screen and (max-width: 1024px) {
+        #all-news-container { grid-template-columns: repeat(3, 1fr) !important; }
       }
-
-      /* ══════════════════════════════
-         MOBILE OVERRIDE (≤ 768px)
-      ══════════════════════════════ */
       @media screen and (max-width: 768px) {
-        .gradient-text {
-          font-size: clamp(1.8rem, 8vw, 2.6rem) !important;
-        }
-
-        /* PERBAIKAN DI SINI: Padding atas diperbesar agar lepas dari navbar */
-        section.py-16 {
-          padding-top: 110px !important;
-          padding-bottom: 40px !important;
-        }
-
-        section .px-6 {
-          padding-left: 16px !important;
-          padding-right: 16px !important;
-        }
-
-        /* 1 kolom di HP */
-        #all-news-container {
-          grid-template-columns: 1fr !important;
-          gap: 14px !important;
-        }
-
-        #all-news-container img {
-          aspect-ratio: 16 / 9 !important;
-        }
-
-        #all-news-container h3 {
-          font-size: 0.95rem !important;
-        }
-
-        /* Pagination lebih kecil */
-        #news-pagination-container {
-          gap: 6px !important;
-        }
-
-        #news-pagination-container button {
-          min-width: 32px !important;
-          height: 32px !important;
-          padding: 0 8px !important;
-          font-size: 0.75rem !important;
-        }
+        .news-wrap { padding-top: 100px; padding-bottom: 60px; }
+        #all-news-container { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
       }
-
-      /* Tablet: 2 kolom */
-      @media screen and (min-width: 480px) and (max-width: 768px) {
-        #all-news-container {
-          grid-template-columns: 1fr 1fr !important;
-        }
+      @media screen and (max-width: 480px) {
+        #all-news-container { grid-template-columns: 1fr !important; gap: 14px !important; }
+        #news-pagination-container button { min-width: 34px !important; height: 34px !important; font-size: 0.78rem !important; }
       }
     </style>
   </head>
 
-  <body>
+  <body class="page-fade">
     <div id="header-placeholder"></div>
 
-    <main>
-      <section class="py-16 fade-in">
-        <div class="mx-auto px-6 max-w-7xl">
-          <h1 class="text-5xl md:text-6xl font-bold gradient-text text-center mb-4">Berita</h1>
-          <p class="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto text-center mb-10">Informasi, liputan event, dan pengumuman resmi HMTE.</p>
-
-          <div id="all-news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"></div>
-
-          <div id="news-pagination-container" class="mt-10 flex justify-center space-x-2"></div>
+    <main class="news-wrap">
+      <div class="news-inner">
+        
+        <div class="news-title-block">
+          <div class="news-eyebrow">Kabar Terbaru</div>
+          
+          <h1 class="solid-title">Portal <em>Berita</em></h1>
+          
+          <p class="news-subtitle">Informasi terbaru, liputan kegiatan, dan pengumuman resmi HMTE Unsoed.</p>
         </div>
-      </section>
+
+        <div id="all-news-container">
+          </div>
+
+        <div id="news-pagination-container"></div>
+
+      </div>
     </main>
 
     <div id="footer-placeholder"></div>
@@ -305,5 +272,53 @@
     <script src="../../js/data/news.js"></script>
     <script src="../../js/data/calendar.js"></script>
     <script src="../../js/data/news-generator.js"></script>
+
+    <script>
+    (function () {
+      function initNewsAnimations() {
+        var container = document.getElementById('all-news-container');
+        if (!container) return;
+
+        // Atur observer untuk trigger animasi saat card masuk layar
+        var cardObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) { 
+              e.target.classList.add('is-visible'); 
+              cardObs.unobserve(e.target); 
+            }
+          });
+        }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+
+        // Fungsi apply untuk menargetkan card baru yang masuk ke container
+        function applyAnimations() {
+          // Cari div anak langsung yang belum diobserve
+          var cards = container.querySelectorAll(':scope > div:not([data-obs])');
+          cards.forEach(function(card, index) {
+            card.setAttribute('data-obs', '1');
+            
+            // Berikan stagger delay via JS agar muncul berurutan (0.05s per card)
+            setTimeout(function() {
+              cardObs.observe(card);
+            }, index * 50);
+          });
+        }
+
+        // Tangkap momen ketika news-generator.js menyuntikkan (inject) card berita
+        new MutationObserver(applyAnimations).observe(container, { childList: true, subtree: false });
+
+        // Jalankan sekali sebagai fallback jika JS load lebih lambat
+        var fallbackTries = 0;
+        var poll = setInterval(function() {
+          fallbackTries++;
+          if (container.children.length > 0 || fallbackTries > 50) {
+            clearInterval(poll);
+            applyAnimations();
+          }
+        }, 200);
+      }
+
+      document.addEventListener('DOMContentLoaded', initNewsAnimations);
+    })();
+    </script>
   </body>
 </html>
