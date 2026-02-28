@@ -39,7 +39,7 @@
       "title": "Musyawarah Anggota coba",
       "isFeatured": true,
       "content": "<h3>Detail Musyang</h3><p></p>",
-      "id": 3,
+      "id": 4,
       "description": "Kegiatan Musyawarah Anggota HMTE 2025"
     },
     {
@@ -55,6 +55,20 @@
       "content": "cacaca",
       "id": 3,
       "description": "da"
+    },
+    {
+      "imgSrc": "/img/uploads/robloxscreenshot20260102_153650163.png",
+      "color": "green",
+      "time": "dada",
+      "date": "2026-03-03",
+      "locationLink": "vava",
+      "registrationLink": "vava",
+      "location": "vava",
+      "title": "dada",
+      "isFeatured": true,
+      "content": "vavava",
+      "id": 5,
+      "description": "ava"
     }
   ]
 }
