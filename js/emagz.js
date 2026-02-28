@@ -23,7 +23,7 @@ async function getEmagzData() {
 }
 
 // =============================================================================
-//  CARD RENDERING HOMEPAGE — Dipertahankan agar Beranda tidak rusak
+//  CARD RENDERING HOMEPAGE (Tidak Diubah)
 // =============================================================================
 
 function createEmagzCardHTML(edition) {
@@ -62,7 +62,7 @@ function createEmagzCardHTML(edition) {
 }
 
 // =============================================================================
-//  HOMEPAGE SECTION
+//  HOMEPAGE SECTION (Tidak Diubah)
 // =============================================================================
 
 async function renderEmagzSection() {
@@ -112,20 +112,19 @@ async function loadEmagzArchivePage() {
     return;
   }
 
-  // DIHAPUS: container.className = "grid grid-cols-1..." (Agar tidak merusak CSS kita)
-
-  // Mencetak format HTML bersih tanpa kelas bentrok Tailwind
+  // DIUBAH: Menambahkan variabel 'index' agar kita bisa membuat delay yang berurutan
   container.innerHTML = emagzData
     .slice()
     .sort((a, b) => b.id - a.id)
-    .map((edition) => {
+    .map((edition, index) => {
       const readerLink = `/page/emagz/emagz-reader.html?id=${edition.id}`;
       const imagePath  = edition.coverSrc
         ? (edition.coverSrc.startsWith("http") ? edition.coverSrc : `/${edition.coverSrc.replace(/^\//, "")}`)
         : "/img/logohmte.png";
 
+      // DIUBAH: Menyisipkan class="emagz-card-visible" dan style="animation-delay..." secara langsung!
       return `
-        <a href="${readerLink}">
+        <a href="${readerLink}" class="emagz-card-visible" style="animation-delay: ${index * 0.15 + 0.1}s;">
           <div style="position:relative; width:100%; aspect-ratio:3/4; overflow:hidden;">
             <img src="${imagePath}" alt="${edition.title}" onerror="this.onerror=null;this.src='/img/logohmte.png';" />
             <div style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.6); color:#4ade80; font-size:10px; font-weight:bold; padding:4px 10px; border-radius:20px; border:1px solid rgba(74,222,128,0.3); backdrop-filter:blur(4px);">
@@ -144,11 +143,11 @@ async function loadEmagzArchivePage() {
     })
     .join("");
 
-  console.log("✅ Arsip E-Magz berhasil di-render dengan format HTML bersih!");
+  console.log("✅ Arsip E-Magz berhasil di-render dengan Animasi Mulus!");
 }
 
 // =============================================================================
-//  READER (EMBED PDF)
+//  READER (EMBED PDF) (Tidak Diubah)
 // =============================================================================
 
 async function loadEmagzReader() {
