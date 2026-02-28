@@ -67,14 +67,12 @@
     box-shadow: 0 4px 24px rgba(0,0,0,0.45);
     text-decoration: none; display: flex; flex-direction: column;
     flex: 1 1 200px; max-width: 220px; min-width: 170px;
-    /* Animasi awal: tersembunyi */
     opacity: 0; transform: translateY(36px);
     transition:
       opacity 0.55s cubic-bezier(0.23,1,0.32,1),
       transform 0.55s cubic-bezier(0.23,1,0.32,1),
       border-color 0.3s ease, box-shadow 0.3s ease;
   }
-  /* is-visible diberikan oleh IntersectionObserver di emagz.js */
   .emagz-card.is-visible { opacity: 1; transform: translateY(0); }
 
   .emagz-card::before {
@@ -117,7 +115,7 @@
   /* Card body */
   .emagz-card-body {
     padding: 12px 14px 16px;
-    display: flex; flex-direction: column; gap: 5px;
+    display: flex; flex-direction: column; gap: 5px; flex: 1;
   }
   .emagz-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .emagz-card-date { font-size: 0.63rem; color: rgba(156,163,175,0.5); }
@@ -140,7 +138,7 @@
     margin: 0;
   }
   .emagz-card-read {
-    display: inline-flex; align-items: center; gap: 5px; margin-top: 6px;
+    display: inline-flex; align-items: center; gap: 5px; margin-top: auto; padding-top: 6px;
     font-size: 0.7rem; color: rgba(15,188,109,0.6); font-weight: 600;
     transition: color 0.2s ease, gap 0.2s ease;
   }
@@ -168,12 +166,146 @@
   }
   @keyframes emagzSkel { 0%,100%{opacity:.3} 50%{opacity:.6} }
 
-  /* Mobile */
-  @media (max-width: 479px) {
-    .emagz-card { flex: 1 1 calc(50% - 12px); max-width: calc(50% - 6px); min-width: 0; }
-  }
+  /* ══ TABLET 480–768px: Layout Kartu Lebar Tapi Tetap Grid ══ */
   @media (min-width: 480px) and (max-width: 768px) {
     .emagz-card { flex: 1 1 calc(33% - 14px); max-width: calc(33% - 10px); min-width: 130px; }
+  }
+
+  /* ══ MOBILE ≤ 479px: Layout Horizontal Sepenuhnya (Fix & Rapih) ══ */
+  @media (max-width: 479px) {
+    .emagz-grid {
+      display: flex;
+      flex-direction: column; /* Baris ke bawah */
+      gap: 12px;
+    }
+    
+    .emagz-card {
+      flex: none; /* Mematikan sifat melar bawaan desktop */
+      width: 100%; /* Lebar penuh layar */
+      max-width: 100%;
+      min-width: 0; /* Mereset batas minimal desktop */
+      height: auto; 
+      min-height: 0; /* Mereset batas tinggi */
+      flex-direction: row; /* Gambar di kiri, teks di kanan */
+      align-items: center; /* Konten sejajar di tengah secara vertikal */
+      justify-content: flex-start;
+      padding: 12px; 
+      gap: 14px; /* Jarak antara cover dan teks */
+    }
+    
+    /* ── Kover Majalah (Thumbnail) ── */
+    .emagz-card-cover {
+      width: 72px; /* Lebar dikunci pasti */
+      height: 105px; /* Tinggi dikunci pasti, bentuknya portrait */
+      aspect-ratio: auto; /* Mematikan aspect-ratio agar tidak error di Android */
+      flex-shrink: 0;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+    }
+    .emagz-card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .emagz-card-cover::after {
+      display: none; /* Menghilangkan efek gelap/gradient di gambar versi mobile */
+    }
+    .emagz-card-edition-badge {
+      top: 4px; left: 4px; right: auto;
+      font-size: 0.45rem; padding: 2px 6px;
+    }
+
+    /* ── Area Teks ── */
+    .emagz-card-body {
+      padding: 0; /* Padding di-nol-kan karena sudah pakai 'gap' di .emagz-card */
+      flex: 1; /* Teks mengisi sisa ruang di kanan */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start; 
+      text-align: left;
+    }
+    .emagz-card-meta {
+      margin-bottom: 4px;
+      justify-content: flex-start;
+    }
+    .emagz-card-title {
+      font-size: 0.95rem;
+      -webkit-line-clamp: 2;
+      margin-bottom: 0;
+      line-height: 1.3;
+    }
+    
+    /* Sembunyikan elemen yang bikin penuh */
+    .emagz-card-desc,
+    .emagz-skel-desc {
+      display: none !important;
+    }
+    .emagz-card-read {
+      display: inline-flex !important;
+      margin-top: 6px;
+      padding-top: 0;
+      font-size: 0.7rem;
+    }
+
+    .emagz-card-cover .emagz-skel {
+      border-radius: 6px !important;
+    }
+    
+    /* ── Kover Majalah (Thumbnail) ── */
+    .emagz-card-cover {
+      width: 75px; /* Lebar kover fix */
+      height: 105px; /* Menjaga rasio portrait majalah */
+      flex-shrink: 0;
+      border-radius: 8px; /* Sudut membulat kecil pada kover */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Memberi bayangan agar kover menonjol */
+      aspect-ratio: auto;
+    }
+    .emagz-card-cover img {
+      border-radius: 8px; /* Mengikuti container-nya */
+    }
+    .emagz-card-cover::after {
+      display: none; /* Menghilangkan efek gelap (gradient) di bawah gambar pada versi mobile */
+    }
+    .emagz-card-edition-badge {
+      top: 4px; left: 4px; right: auto;
+      font-size: 0.45rem; padding: 2px 6px;
+    }
+
+    /* ── Area Teks ── */
+    .emagz-card-body {
+      padding: 0 0 0 16px; /* Memberi jarak antara kover dan teks */
+      flex: 1; /* Mengisi sisa ruang di sebelah kanan */
+      justify-content: center;
+      align-items: flex-start; /* Memastikan teks rata kiri */
+      text-align: left;
+    }
+    .emagz-card-meta {
+      margin-bottom: 4px;
+    }
+    .emagz-card-title {
+      font-size: 0.95rem;
+      -webkit-line-clamp: 2;
+      margin-bottom: 2px;
+    }
+    
+    /* Sembunyikan deskripsi panjang agar rapi, tapi biarkan link 'Baca' muncul */
+    .emagz-card-desc,
+    .emagz-skel-desc {
+      display: none !important;
+    }
+    .emagz-card-read {
+      display: inline-flex !important;
+      margin-top: 6px;
+      padding-top: 0;
+      font-size: 0.65rem;
+    }
+
+    /* Memperbaiki bentuk skeleton agar sesuai dengan thumbnail baru */
+    .emagz-card-cover .emagz-skel {
+      border-radius: 8px !important;
+    }
   }
 </style>
 
@@ -186,22 +318,33 @@
     </div>
 
     <div id="emagz-cards-container" class="emagz-grid">
-      <!-- Skeleton saat loading -->
       <div class="emagz-card is-visible">
-        <div class="emagz-card-cover" style="aspect-ratio:2/3;"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
-        <div class="emagz-card-body" style="gap:8px;"><div class="emagz-skel" style="height:8px;width:40%;"></div><div class="emagz-skel" style="height:12px;width:85%;"></div></div>
+        <div class="emagz-card-cover"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
+        <div class="emagz-card-body">
+          <div class="emagz-skel" style="height:10px;width:35%; margin-bottom: 6px;"></div>
+          <div class="emagz-skel" style="height:14px;width:90%; margin-bottom: 6px;"></div>
+          <div class="emagz-skel emagz-skel-desc" style="height:10px;width:70%;"></div>
+        </div>
       </div>
       <div class="emagz-card is-visible">
-        <div class="emagz-card-cover" style="aspect-ratio:2/3;"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
-        <div class="emagz-card-body" style="gap:8px;"><div class="emagz-skel" style="height:8px;width:40%;"></div><div class="emagz-skel" style="height:12px;width:80%;"></div></div>
+        <div class="emagz-card-cover"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
+        <div class="emagz-card-body">
+          <div class="emagz-skel" style="height:10px;width:40%; margin-bottom: 6px;"></div>
+          <div class="emagz-skel" style="height:14px;width:85%; margin-bottom: 6px;"></div>
+          <div class="emagz-skel emagz-skel-desc" style="height:10px;width:60%;"></div>
+        </div>
       </div>
       <div class="emagz-card is-visible">
-        <div class="emagz-card-cover" style="aspect-ratio:2/3;"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
-        <div class="emagz-card-body" style="gap:8px;"><div class="emagz-skel" style="height:8px;width:40%;"></div><div class="emagz-skel" style="height:12px;width:88%;"></div></div>
+        <div class="emagz-card-cover"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
+        <div class="emagz-card-body">
+          <div class="emagz-skel" style="height:10px;width:30%; margin-bottom: 6px;"></div>
+          <div class="emagz-skel" style="height:14px;width:95%; margin-bottom: 6px;"></div>
+          <div class="emagz-skel emagz-skel-desc" style="height:10px;width:80%;"></div>
+        </div>
       </div>
     </div>
 
-    <div id="emagz-more-link" class="emagz-footer hidden">
+    <div id="emagz-more-link" class="emagz-footer is-visible">
       <a href="/page/emagz/emagz.html" class="emagz-cta">
         Baca Lainnya <i class="fas fa-arrow-right"></i>
       </a>
