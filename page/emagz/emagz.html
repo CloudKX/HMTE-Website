@@ -20,10 +20,20 @@
          EMAGZ PAGE — PREMIUM DARK OVERRIDE
       ══════════════════════════════════════════ */
 
-      /* KUNCI BACKGROUND TETAP HITAM GELAP */
       body {
         background-color: #0a0e14 !important;
         color: #ffffff !important;
+      }
+
+      /* ── ANIMASI HEADER ── */
+      .anim-header {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+      .anim-header.is-visible {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       /* ── PAGE HEADER ── */
@@ -70,11 +80,23 @@
         border: 1px solid rgba(15,188,109,0.12) !important;
         box-shadow: 0 4px 24px rgba(0,0,0,0.4) !important;
         transition: transform 0.3s cubic-bezier(0.23,1,0.32,1), border-color 0.3s ease, box-shadow 0.3s ease !important;
-        animation: cardFadeUp 0.55s cubic-bezier(0.23,1,0.32,1) both !important;
         display: flex !important;
         flex-direction: column !important;
         position: relative !important;
         margin: 0 !important;
+        
+        /* State awal sebelum dipicu JS */
+        opacity: 0;
+      }
+
+      /* Kelas yang akan ditambahkan oleh JS saat di-scroll */
+      .emagz-card-visible {
+        animation: emagzFadeUp 0.6s cubic-bezier(0.23,1,0.32,1) forwards !important;
+      }
+
+      @keyframes emagzFadeUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to   { opacity: 1; transform: translateY(0); }
       }
 
       /* Shimmer line atas */
@@ -95,12 +117,6 @@
         box-shadow: 0 16px 40px rgba(0,0,0,0.55),
                     0 0 24px rgba(15,188,109,0.08) !important;
       }
-
-      /* Stagger Delay */
-      #emagz-archive-container > div:nth-child(1) { animation-delay: 0.05s !important; }
-      #emagz-archive-container > div:nth-child(2) { animation-delay: 0.15s !important; }
-      #emagz-archive-container > div:nth-child(3) { animation-delay: 0.25s !important; }
-      #emagz-archive-container > div:nth-child(4) { animation-delay: 0.35s !important; }
 
       /* ── COVER MAJALAH ── */
       #emagz-archive-container img {
@@ -129,7 +145,6 @@
         gap: 8px !important;
       }
 
-      /* Judul Majalah */
       #emagz-archive-container h3 {
         font-size: clamp(1.05rem, 1.5vw, 1.2rem) !important;
         font-weight: 800 !important;
@@ -138,7 +153,6 @@
         margin: 0 0 4px 0 !important;
       }
 
-      /* Teks Deskripsi (jika ada) */
       #emagz-archive-container p.text-gray-300,
       #emagz-archive-container p.text-gray-400 {
         color: rgba(156,163,175,0.7) !important;
@@ -182,11 +196,6 @@
         transform: translateY(-2px) !important;
       }
 
-      @keyframes cardFadeUp {
-        from { opacity: 0; transform: translateY(28px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
-
       /* ════════════════════════════════════
          MOBILE OVERRIDE (≤ 768px)
       ════════════════════════════════════ */
@@ -200,7 +209,6 @@
           font-size: clamp(2rem, 8vw, 2.6rem) !important;
         }
         
-        /* Ubah jadi 1 Kolom */
         #emagz-archive-container {
           grid-template-columns: 1fr !important; 
           gap: 20px !important;
@@ -212,17 +220,8 @@
           margin: 0 auto !important;   
           width: 100% !important;
         }
-        
-        #emagz-archive-container img {
-          aspect-ratio: 3 / 4 !important;
-        }
-
-        #emagz-archive-container h3 {
-          font-size: 1.1rem !important;
-        }
       }
       
-      /* TABLET OVERRIDE */
       @media screen and (min-width: 480px) and (max-width: 768px) {
         #emagz-archive-container {
           grid-template-columns: repeat(2, 1fr) !important;
@@ -238,11 +237,11 @@
   <body class="min-h-screen">
     <div id="header-placeholder"></div>
 
-    <main class="py-16 md:py-24 text-white fade-in">
+    <main class="py-16 md:py-24 text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <h1 class="gradient-text font-bold text-center mb-4">E-Magazine</h1>
-        <p class="page-subtitle text-center mb-12 max-w-2xl mx-auto">Kumpulan karya, buletin, dan majalah elektronik resmi HMTE Unsoed.</p>
+        <h1 class="gradient-text font-bold text-center mb-4 anim-header">E-Magazine</h1>
+        <p class="page-subtitle text-center mb-12 max-w-2xl mx-auto anim-header" style="transition-delay: 0.15s;">Kumpulan karya, buletin, dan majalah elektronik resmi HMTE Unsoed.</p>
 
         <div id="emagz-archive-container" class="mt-10">
           <p class="text-center text-gray-400">Memuat arsip E-Magz...</p>
@@ -251,5 +250,62 @@
     </main>
 
     <div id="footer-placeholder"></div>
+
+    <script>
+      (function() {
+        function initEmagzAnimations() {
+          // 1. Animasi Teks Header (Muncul seketika setelah halaman dimuat)
+          setTimeout(() => {
+            document.querySelectorAll('.anim-header').forEach(el => el.classList.add('is-visible'));
+          }, 100);
+
+          const container = document.getElementById('emagz-archive-container');
+          if (!container) return;
+
+          // 2. Setup IntersectionObserver untuk kartu majalah
+          const cardObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+              if (e.isIntersecting) {
+                // Menambahkan kelas animasi saat disentuh scroll
+                e.target.classList.add('emagz-card-visible');
+                cardObs.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+          // 3. Fungsi untuk mencari kartu baru dan memasang "delay"
+          function observeNewCards() {
+            // Mengambil semua card yang diinject oleh emagz.js
+            const cards = container.querySelectorAll('div, a');
+            // Hanya kartu asli (bukan teks 'Memuat...') yang belum dipasang observer
+            const validCards = Array.from(cards).filter(c => !c.classList.contains('text-center') && !c.dataset.observed);
+            
+            validCards.forEach((card, index) => {
+              card.dataset.observed = 'true';
+              // Menambahkan delay dinamis agar munculnya berurutan
+              card.style.animationDelay = `${index * 0.15}s`;
+              cardObs.observe(card);
+            });
+          }
+
+          // Cek kartu saat pertama dimuat
+          observeNewCards();
+
+          // 4. MENGGUNAKAN KAMERA PENGAWAS (MutationObserver)
+          // Jika emagz.js mencetak kartu beberapa detik kemudian, sistem ini akan langsung menyadarinya!
+          const mutObs = new MutationObserver(() => {
+            observeNewCards();
+          });
+          mutObs.observe(container, { childList: true });
+        }
+
+        // Pastikan DOM sudah siap sebelum menjalankan script
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initEmagzAnimations);
+        } else {
+          initEmagzAnimations();
+        }
+      })();
+    </script>
   </body>
 </html>
