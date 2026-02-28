@@ -1,180 +1,229 @@
 <style>
-  /* ══════════════════════════════════════════════════
-     EMAGZ SECTION — GAME LOADING + DYNAMIC TIPS
-  ══════════════════════════════════════════════════ */
-
-  @keyframes barGlow {
-    0%, 100% { opacity: 0.4; box-shadow: 0 0 5px #0fbc6d; }
-    50% { opacity: 1; box-shadow: 0 0 20px #0fbc6d; }
-  }
-  @keyframes tipFade {
-    0%, 100% { opacity: 0; transform: translateY(5px); }
-    10%, 90% { opacity: 1; transform: translateY(0); }
-  }
-
+  /* ── SECTION WRAPPER ── */
   .emagz-section {
     position: relative;
-    padding: clamp(50px, 9vh, 100px) 0;
+    padding: clamp(36px, 7vh, 80px) 0;
     overflow: hidden;
-    background: radial-gradient(circle at center, rgba(15,188,109,0.02) 0%, transparent 70%);
   }
-
-  /* ── SEKAT DIAMOND ── */
-  .emagz-sekat {
-    position: absolute; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(15,188,109,0.4) 50%, transparent 100%);
-    z-index: 5; opacity: 0.8;
-  }
-  .emagz-sekat-top { top: 0; }
-  .emagz-sekat-bottom { bottom: 0; }
-  .emagz-sekat::after {
-    content: ''; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(45deg);
-    width: 10px; height: 10px; background: #0fbc6d;
-    box-shadow: 0 0 15px #0fbc6d; border-radius: 2px;
+  .emagz-section::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: min(600px, 100%); height: 280px;
+    background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+    pointer-events: none;
   }
 
   .emagz-inner {
-    max-width: 1150px; margin: 0 auto;
+    max-width: 1100px; margin: 0 auto;
     padding: 0 clamp(16px, 5vw, 48px);
     display: flex; flex-direction: column; align-items: center;
   }
 
-  /* ── GRID (PC) ── */
-  .emagz-grid {
-    width: 100%; display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 24px; padding: 10px 0;
+  /* ── HEADER ── */
+  .emagz-header {
+    text-align: center;
+    margin-bottom: clamp(24px, 4vh, 44px);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .emagz-header.is-visible { opacity: 1; transform: translateY(0); }
+
+  .emagz-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.68rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: #0fbc6d; font-weight: 700;
+  }
+  .emagz-eyebrow::before, .emagz-eyebrow::after {
+    content: ''; display: block; width: 20px; height: 1px;
+    background: #0fbc6d; opacity: 0.6;
+  }
+  .emagz-title {
+    font-size: clamp(1.75rem, 5vw, 3.2rem); font-weight: 900;
+    color: #fff; letter-spacing: -0.04em; line-height: 1; margin: 0;
+  }
+  .emagz-title em { font-style: normal; color: #0fbc6d; }
+  .emagz-subtitle {
+    font-size: clamp(0.8rem, 2vw, 0.92rem);
+    color: rgba(156,163,175,0.6); margin: 0; line-height: 1.6;
+    max-width: 480px; text-align: center;
   }
 
-  /* ── CARD STYLE ── */
-  .emagz-card {
-    position: relative; border-radius: 18px; overflow: hidden;
-    background: linear-gradient(145deg, rgba(15,188,109,0.08) 0%, rgba(13,17,23,0.98) 45%);
-    border: 1px solid rgba(15,188,109,0.15);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    text-decoration: none; display: flex; flex-direction: column;
-    flex: 0 1 220px; max-width: 240px; min-width: 180px;
-    opacity: 0; transform: translateY(32px);
-    transition: all 0.55s cubic-bezier(0.23,1,0.32,1);
+  /* ── GRID ── */
+  .emagz-grid {
+    width: 100%;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: clamp(14px, 2.5vw, 24px);
   }
+
+  /* ── CARD — portrait book style ── */
+  .emagz-card {
+    position: relative; border-radius: 16px; overflow: hidden;
+    background: linear-gradient(145deg,
+      rgba(15,188,109,0.07) 0%, rgba(13,17,23,0.98) 35%,
+      rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.04) 100%
+    );
+    border: 1px solid rgba(15,188,109,0.1);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.45);
+    text-decoration: none; display: flex; flex-direction: column;
+    flex: 1 1 200px; max-width: 220px; min-width: 170px;
+    /* Animasi awal: tersembunyi */
+    opacity: 0; transform: translateY(36px);
+    transition:
+      opacity 0.55s cubic-bezier(0.23,1,0.32,1),
+      transform 0.55s cubic-bezier(0.23,1,0.32,1),
+      border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  /* is-visible diberikan oleh IntersectionObserver di emagz.js */
   .emagz-card.is-visible { opacity: 1; transform: translateY(0); }
 
-  /* ── LOADING AREA & TIPS ── */
-  .emagz-loading-area {
-    width: 100%; max-width: 500px; margin-top: 32px; 
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  .emagz-card::before {
+    content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(15,188,109,0.35), transparent);
+    z-index: 2;
   }
-  .emagz-progress-bg {
-    width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;
+  .emagz-card:hover {
+    transform: translateY(-5px) !important;
+    border-color: rgba(15,188,109,0.28);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 24px rgba(15,188,109,0.07);
   }
-  .emagz-progress-fill {
-    height: 100%; width: 75%; background: #0fbc6d; animation: barGlow 2s infinite;
+  .emagz-card:active { transform: scale(0.97) !important; }
+
+  /* Cover — portrait ratio 2:3 */
+  .emagz-card-cover {
+    position: relative; width: 100%; aspect-ratio: 2/3; overflow: hidden; flex-shrink: 0;
+  }
+  .emagz-card-cover img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(0.88) saturate(1.05);
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), filter 0.3s ease;
+  }
+  .emagz-card:hover .emagz-card-cover img { transform: scale(1.04); filter: brightness(0.98); }
+  .emagz-card-cover::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+    background: linear-gradient(to top, rgba(13,17,23,0.82), transparent);
+    pointer-events: none;
   }
 
-  /* Teks Tips Bergaya Game */
-  .emagz-tips-box {
-    text-align: center; min-height: 40px;
+  /* Badge edisi */
+  .emagz-card-edition-badge {
+    position: absolute; top: 10px; right: 10px; z-index: 3;
+    padding: 3px 8px; border-radius: 20px;
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    background: rgba(15,188,109,0.18); border: 1px solid rgba(15,188,109,0.35);
+    color: #0fbc6d; backdrop-filter: blur(8px);
   }
-  .emagz-tip-text {
-    font-size: 0.75rem; color: rgba(255,255,255,0.7);
-    letter-spacing: 0.05em; line-height: 1.4;
-    animation: tipFade 4s infinite; /* Efek ganti teks */
+
+  /* Card body */
+  .emagz-card-body {
+    padding: 12px 14px 16px;
+    display: flex; flex-direction: column; gap: 5px;
   }
-  .emagz-tip-text strong { color: #0fbc6d; text-transform: uppercase; margin-right: 5px; }
+  .emagz-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .emagz-card-date { font-size: 0.63rem; color: rgba(156,163,175,0.5); }
+  .emagz-card-dot  { width: 2px; height: 2px; background: rgba(156,163,175,0.35); border-radius: 50%; }
+  .emagz-card-tag  {
+    font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #0fbc6d; font-weight: 700; padding: 2px 6px;
+    background: rgba(15,188,109,0.1); border-radius: 20px; border: 1px solid rgba(15,188,109,0.18);
+  }
+  .emagz-card-title {
+    font-size: clamp(0.84rem, 2vw, 0.94rem); font-weight: 800;
+    color: rgba(255,255,255,0.9); line-height: 1.3; margin: 0;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    transition: color 0.2s ease;
+  }
+  .emagz-card:hover .emagz-card-title { color: #fff; }
+  .emagz-card-desc {
+    font-size: 0.72rem; color: rgba(156,163,175,0.55); line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    margin: 0;
+  }
+  .emagz-card-read {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 6px;
+    font-size: 0.7rem; color: rgba(15,188,109,0.6); font-weight: 600;
+    transition: color 0.2s ease, gap 0.2s ease;
+  }
+  .emagz-card:hover .emagz-card-read { color: #0fbc6d; gap: 8px; }
 
-  /* ══════════════════════════════════════════════════════
-     ANDROID / MOBILE UI — GAME MENU SWIPE
-  ══════════════════════════════════════════════════════ */
-  @media (max-width: 768px) {
-    .emagz-inner { padding: 0; }
-    .emagz-header, .emagz-loading-area { padding: 0 24px; }
+  /* Footer CTA */
+  .emagz-footer {
+    margin-top: clamp(20px, 3vh, 36px); display: flex; justify-content: center;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+  }
+  .emagz-footer.is-visible { opacity: 1; transform: translateY(0); }
+  .emagz-cta {
+    display: inline-flex; align-items: center; gap: 10px; padding: 11px 28px;
+    border: 1px solid rgba(255,255,255,0.13); border-radius: 50px;
+    color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; letter-spacing: 0.02em; transition: all 0.25s ease;
+  }
+  .emagz-cta:hover { border-color: rgba(15,188,109,0.4); color: #0fbc6d; background: rgba(15,188,109,0.05); }
 
-    .emagz-grid {
-      flex-wrap: nowrap !important;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding: 15px 24px 35px !important;
-      scrollbar-width: none; 
-      -webkit-overflow-scrolling: touch;
-    }
-    .emagz-grid::-webkit-scrollbar { display: none; }
+  /* Skeleton loader */
+  .emagz-skel {
+    background: rgba(255,255,255,0.04); border-radius: 6px;
+    animation: emagzSkel 1.6s ease-in-out infinite;
+  }
+  @keyframes emagzSkel { 0%,100%{opacity:.3} 50%{opacity:.6} }
 
-    .emagz-card {
-      flex: 0 0 calc(75vw - 20px) !important;
-      max-width: 260px !important;
-      scroll-snap-align: center;
-    }
-    
-    .emagz-tip-text { font-size: 0.7rem !important; }
+  /* Mobile */
+  @media (max-width: 479px) {
+    .emagz-card { flex: 1 1 calc(50% - 12px); max-width: calc(50% - 6px); min-width: 0; }
+  }
+  @media (min-width: 480px) and (max-width: 768px) {
+    .emagz-card { flex: 1 1 calc(33% - 14px); max-width: calc(33% - 10px); min-width: 130px; }
   }
 </style>
 
 <section class="emagz-section">
-  <div class="emagz-sekat emagz-sekat-top"></div>
-
   <div class="emagz-inner">
     <div class="emagz-header">
       <span class="emagz-eyebrow">Publikasi HMTE</span>
       <h2 class="emagz-title">Elektro <em>Magazine</em></h2>
+      <p class="emagz-subtitle">Arus informasi himpunan dan kreativitas mahasiswa.</p>
     </div>
 
     <div id="emagz-cards-container" class="emagz-grid">
+      <!-- Skeleton saat loading -->
+      <div class="emagz-card is-visible">
+        <div class="emagz-card-cover" style="aspect-ratio:2/3;"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
+        <div class="emagz-card-body" style="gap:8px;"><div class="emagz-skel" style="height:8px;width:40%;"></div><div class="emagz-skel" style="height:12px;width:85%;"></div></div>
       </div>
-
-    <div class="emagz-loading-area">
-      <div class="emagz-progress-bg">
-        <div class="emagz-progress-fill"></div>
+      <div class="emagz-card is-visible">
+        <div class="emagz-card-cover" style="aspect-ratio:2/3;"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
+        <div class="emagz-card-body" style="gap:8px;"><div class="emagz-skel" style="height:8px;width:40%;"></div><div class="emagz-skel" style="height:12px;width:80%;"></div></div>
       </div>
-      
-      <div class="emagz-tips-box">
-        <p id="game-tip-display" class="emagz-tip-text">
-          <strong>TIP:</strong> Geser ke samping untuk melihat koleksi edisi lainnya.
-        </p>
+      <div class="emagz-card is-visible">
+        <div class="emagz-card-cover" style="aspect-ratio:2/3;"><div class="emagz-skel" style="width:100%;height:100%;"></div></div>
+        <div class="emagz-card-body" style="gap:8px;"><div class="emagz-skel" style="height:8px;width:40%;"></div><div class="emagz-skel" style="height:12px;width:88%;"></div></div>
       </div>
     </div>
-  </div>
 
-  <div class="emagz-sekat emagz-sekat-bottom"></div>
+    <div id="emagz-more-link" class="emagz-footer hidden">
+      <a href="/page/emagz/emagz.html" class="emagz-cta">
+        Baca Lainnya <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
 </section>
 
 <script>
 (function () {
-  const tips = [
-    "Geser ke samping untuk melihat koleksi edisi lainnya.",
-    "Gunakan koneksi stabil untuk pengalaman membaca PDF yang lancar.",
-    "E-Magz berisi ragam informasi teknologi dan kreativitas mahasiswa.",
-    "Klik pada cover majalah untuk masuk ke mode pembaca digital.",
-    "Semua edisi E-Magz dapat diakses secara gratis di perpustakaan kami.",
-    "Membaca E-Magz menambah wawasan seputar dunia Teknik Elektro."
-  ];
-
-  let currentTipIndex = 0;
-  const tipElement = document.getElementById('game-tip-display');
-
-  function rotateTips() {
-    if (!tipElement) return;
-    
-    // Ganti teks saat animasi fade sedang di posisi tidak terlihat (sekitar detik ke 4)
-    setTimeout(() => {
-      currentTipIndex = (currentTipIndex + 1) % tips.length;
-      tipElement.innerHTML = `<strong>TIP:</strong> ${tips[currentTipIndex]}`;
-      rotateTips();
-    }, 4000); 
-  }
-
   function initEmagzAnim() {
-    var targets = document.querySelectorAll('.emagz-header, .emagz-loading-area');
+    var targets = document.querySelectorAll('.emagz-header, .emagz-footer');
+    if (!targets.length) return;
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
         if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
       });
-    }, { threshold: 0.1 });
-    targets.forEach(function(el) { obs.observe(el); });
-
-    rotateTips(); // Jalankan rotasi tips
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach(function(el) { el.classList.remove('is-visible'); obs.observe(el); });
   }
 
-  if (document.readyState !== 'loading') initEmagzAnim();
-  else document.addEventListener('DOMContentLoaded', initEmagzAnim);
+  window.__components = window.__components || {};
+  window.__components['emagz'] = { init: initEmagzAnim };
+  window.initEmagzAnimations = initEmagzAnim;
 })();
 </script>
