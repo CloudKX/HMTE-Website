@@ -1,8 +1,10 @@
 // js/pages/event.js
 // ── Registry: simpan data event agar bisa dipanggil modal via onclick ─
+// Pakai counter angka — dijamin unik, tidak ada collision, aman di HTML attr.
 window._evRegistry = {};
+var _evRegCounter = 0;
 function _evRegister(ev) {
-  var key = 'ev_' + (ev.id || ev.date + '_' + (ev.title||'').replace(/\s+/g,'_').substring(0,20));
+  var key = 'k' + (++_evRegCounter);
   window._evRegistry[key] = ev;
   return key;
 }
