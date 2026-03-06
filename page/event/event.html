@@ -3,380 +3,783 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agenda HMTE - HMTE Unsoed</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/satoshi.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <title>Event Modal — HMTE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <style>
-    /* ══════════════════════════════════════════════════
-       1. BASE & BACKGROUND — GRID SEPERTI NEWS
-    ══════════════════════════════════════════════════ */
-    html { overflow-x: hidden !important; }
+    :root {
+      --bg:         #161616;
+      --surface:    #1e1e1e;
+      --surface-2:  #252525;
+      --border:     rgba(255,255,255,0.07);
+      --green:      #0fbc6d;
+      --green-dim:  rgba(15,188,109,0.12);
+      --green-glow: rgba(15,188,109,0.28);
+      --text:       #f0f0f0;
+      --muted:      #888;
+      --font-mono:  'Space Mono', monospace;
+      --font-body:  'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      overflow-x: hidden !important;
-      max-width: 100vw !important;
-      color: #ffffff !important;
-      margin: 0; min-height: 100vh;
-      
-      /* Background kotak-kotak bawaan style.css (News) */
-      background-color: #161616 !important;
-      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
-                        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
-      background-size: 55px 55px !important;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* ── PAGE FADE IN ── */
-    .page-fade { animation: pageFadeIn 0.65s ease both; }
-    @keyframes pageFadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* ══════════════════════════════════════
+       OVERLAY
+    ══════════════════════════════════════ */
+    #ev-overlay {
+      position: fixed; inset: 0; z-index: 800;
+      background: rgba(8,8,8,0.78);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.32s cubic-bezier(.4,0,.2,1);
+    }
+    #ev-overlay.open { opacity: 1; pointer-events: all; }
+
+    /* ══════════════════════════════════════
+       MODAL BASE
+    ══════════════════════════════════════ */
+    #ev-modal {
+      position: fixed;
+      z-index: 900;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    /* ══════════════════════════════════════════════════
-       2. PAGE WRAPPER & AMBIENT GLOW
-    ══════════════════════════════════════════════════ */
-    .ev-wrap {
-      padding-top: 120px;
-      padding-bottom: 80px;
+    /* ══════════════════════════════════════
+       DESKTOP
+    ══════════════════════════════════════ */
+    @media (min-width: 640px) {
+      #ev-modal {
+        top: 50%; left: 50%;
+        transform: translate(-50%, calc(-50% + 28px));
+        border-radius: 20px;
+        background: rgba(24,24,24,0.90);
+        backdrop-filter: blur(28px) saturate(1.5);
+        -webkit-backdrop-filter: blur(28px) saturate(1.5);
+        opacity: 0; pointer-events: none;
+        transition:
+          opacity 0.34s cubic-bezier(.4,0,.2,1),
+          transform 0.34s cubic-bezier(.34,1.38,.64,1),
+          width 0.3s ease,
+          flex-direction 0s;
+        width: min(560px, 92vw);
+        max-height: 90vh;
+      }
+      #ev-modal.open {
+        opacity: 1; pointer-events: all;
+        transform: translate(-50%, -50%);
+      }
+
+      /* PORTRAIT — side by side */
+      #ev-modal.layout-portrait {
+        width: min(840px, 94vw);
+        flex-direction: row;
+        align-items: stretch;
+      }
+      /* SQUARE */
+      #ev-modal.layout-square {
+        width: min(600px, 92vw);
+        flex-direction: column;
+      }
+      /* LANDSCAPE */
+      #ev-modal.layout-landscape {
+        width: min(560px, 92vw);
+        flex-direction: column;
+      }
+    }
+
+    /* ══════════════════════════════════════
+       MOBILE — bottom sheet
+    ══════════════════════════════════════ */
+    @media (max-width: 639px) {
+      #ev-modal {
+        bottom: 0; left: 0; right: 0;
+        width: 100%;
+        max-height: 93dvh;
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 -6px 40px rgba(0,0,0,0.65), 0 0 40px var(--green-glow);
+        transform: translateY(100%); pointer-events: none;
+        transition: transform 0.42s cubic-bezier(.34,1.15,.64,1);
+        flex-direction: column;
+      }
+      #ev-modal.open { transform: translateY(0); pointer-events: all; }
+      #ev-modal::before {
+        content: '';
+        display: block;
+        width: 38px; height: 4px; border-radius: 99px;
+        background: rgba(255,255,255,0.14);
+        margin: 11px auto 0;
+        flex-shrink: 0;
+      }
+    }
+
+    /* ══════════════════════════════════════
+       POSTER COLUMN
+    ══════════════════════════════════════ */
+    #ev-poster-col {
       position: relative;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: #111;
     }
-    /* Glow hijau di atas halaman */
-    .ev-wrap::before {
+
+    /* Default — full-width strip */
+    #ev-poster-col { width: 100%; }
+
+    /* Landscape: shorter strip */
+    .layout-landscape #ev-poster-col { aspect-ratio: 16/7; }
+
+    /* Square: 4:3 strip */
+    .layout-square #ev-poster-col { aspect-ratio: 4/3; }
+
+    /* Portrait mobile: tall strip */
+    @media (max-width: 639px) {
+      .layout-portrait #ev-poster-col { aspect-ratio: 9/14; max-height: 55dvh; }
+    }
+
+    /* Portrait desktop: left sidebar, fixed width */
+    @media (min-width: 640px) {
+      .layout-portrait #ev-poster-col {
+        width: 290px;
+        aspect-ratio: auto;
+        align-self: stretch;
+      }
+    }
+
+    /* Poster image */
+    #ev-poster {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: transform 7s ease, opacity 0.5s ease;
+    }
+    #ev-poster.loaded { opacity: 1; }
+    #ev-modal.open #ev-poster { transform: scale(1.05); }
+
+    /* Gradient overlay on poster */
+    #ev-poster-col::after {
       content: '';
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: min(700px, 100%); height: 300px;
-      background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
+      position: absolute; inset: 0;
       pointer-events: none;
     }
-    .ev-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 clamp(16px, 5vw, 48px);
+    .layout-landscape #ev-poster-col::after,
+    .layout-square    #ev-poster-col::after {
+      background: linear-gradient(to top, rgba(24,24,24,0.97) 0%, rgba(24,24,24,0.1) 60%, transparent 100%);
+    }
+    @media (min-width: 640px) {
+      .layout-portrait #ev-poster-col::after {
+        background: linear-gradient(to right, transparent 65%, rgba(24,24,24,0.8) 100%);
+      }
+    }
+    @media (max-width: 639px) {
+      .layout-portrait #ev-poster-col::after {
+        background: linear-gradient(to top, rgba(24,24,24,0.97) 0%, transparent 60%);
+      }
     }
 
-    /* ══════════════════════════════════════════════════
-       3. PAGE TITLE & TYPOGRAPHY
-    ══════════════════════════════════════════════════ */
-    .ev-title-block {
-      text-align: center;
-      margin-bottom: clamp(32px, 5vh, 56px);
-      position: relative;
+    /* Skeleton shimmer */
+    #ev-poster-skeleton {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, #1e1e1e 25%, #2a2a2a 50%, #1e1e1e 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      z-index: 1;
     }
-    .ev-eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-size: 0.68rem; letter-spacing: 0.22em;
-      text-transform: uppercase; color: #0fbc6d; font-weight: 700;
-      margin-bottom: 12px;
+    #ev-poster.loaded ~ #ev-poster-skeleton { display: none; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* No-image fallback */
+    #ev-poster-fallback {
+      position: absolute; inset: 0; z-index: 2;
+      display: none;
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 8px;
+      background: linear-gradient(135deg, #1a2e22 0%, #141414 100%);
     }
-    .ev-eyebrow::before, .ev-eyebrow::after {
-      content: ''; display: block; width: 24px; height: 1px;
-      background: #0fbc6d; opacity: 0.6;
+    #ev-poster-fallback i    { font-size: 2.8rem; color: rgba(15,188,109,0.18); }
+    #ev-poster-fallback span { font-size: 0.7rem; color: #3a3a3a; font-family: var(--font-mono); }
+    #ev-modal.no-image #ev-poster-fallback { display: flex; }
+    #ev-modal.no-image #ev-poster-skeleton  { display: none; }
+
+    /* Badge */
+    #ev-badge {
+      position: absolute; top: 12px; left: 12px; z-index: 10;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 99px;
+      background: rgba(10,10,10,0.68);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-family: var(--font-mono); font-size: 0.67rem;
+      letter-spacing: 0.06em; text-transform: uppercase;
     }
-    .ev-title {
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      font-weight: 900; color: #fff;
-      letter-spacing: -0.04em; line-height: 1.1;
-      margin: 0 0 12px;
+    #ev-badge-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      animation: pulseDot 2s infinite;
     }
-    .ev-title em { font-style: normal; color: #0fbc6d; }
-    .ev-page-sub {
-      font-size: clamp(0.85rem, 2vw, 1rem);
-      color: rgba(156,163,175,0.6);
-      max-width: 480px; margin: 0 auto; line-height: 1.65;
+    @keyframes pulseDot {
+      0%,100%{ transform:scale(1); opacity:1; }
+      50%    { transform:scale(1.6); opacity:0.5; }
     }
 
-    /* ══════════════════════════════════════════════════
-       4. SECTION LABEL
-    ══════════════════════════════════════════════════ */
-    .ev-section-label {
-      text-align: center;
-      margin-bottom: 28px;
+    /* Close btn */
+    #ev-close-btn {
+      position: absolute; top: 12px; right: 12px; z-index: 20;
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(8,8,8,0.68);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 13px;
+      transition: background 0.2s, transform 0.22s, border-color 0.2s;
     }
-    .ev-section-title {
-      font-size: clamp(1.4rem, 3.5vw, 2rem);
-      font-weight: 900; color: #fff;
-      letter-spacing: -0.03em; margin: 0;
+    #ev-close-btn:hover {
+      background: rgba(220,38,38,0.38);
+      border-color: rgba(220,38,38,0.55);
+      transform: scale(1.1) rotate(90deg);
     }
 
-    /* ══════════════════════════════════════════════════
-       5. GARIS PEMISAH SEKSI
-    ══════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════
+       BODY COLUMN
+    ══════════════════════════════════════ */
+    #ev-body {
+      flex: 1;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 0 22px 26px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+      min-width: 0;
+    }
+    #ev-body::-webkit-scrollbar       { width: 4px; }
+    #ev-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* Title area */
+    #ev-title-area { position: relative; z-index: 5; }
+
+    /* Title overlaps poster bottom for column layouts */
+    .layout-landscape #ev-title-area,
+    .layout-square    #ev-title-area { margin-top: -38px; }
+
+    /* Portrait desktop: no overlap needed */
+    @media (min-width: 640px) {
+      .layout-portrait #ev-title-area { margin-top: 22px; }
+    }
+    /* Portrait mobile: overlap */
+    @media (max-width: 639px) {
+      .layout-portrait #ev-title-area { margin-top: -38px; }
+    }
+
+    #ev-category-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: var(--font-mono); font-size: 0.68rem;
+      color: var(--green); text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 5px;
+    }
+    #ev-title {
+      font-weight: 700;
+      font-size: clamp(1.05rem, 3.2vw, 1.38rem);
+      line-height: 1.25; color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    /* Meta chips */
+    #ev-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .ev-meta-chip {
+      display: inline-flex; align-items: flex-start; gap: 7px;
+      padding: 7px 12px; border-radius: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      font-size: 0.78rem; color: #ccc;
+    }
+    .ev-meta-chip i { color: var(--green); font-size: 0.72rem; margin-top: 2px; flex-shrink: 0; }
+
+    #ev-maps-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.7rem; color: var(--green);
+      text-decoration: none; margin-top: 3px; opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    #ev-maps-link:hover { opacity: 1; }
+
     .ev-divider {
-      border: 0; height: 1px; margin: clamp(28px, 4vh, 44px) 0;
-      background: linear-gradient(to right, transparent, rgba(15,188,109,0.3) 30%, rgba(15,188,109,0.3) 70%, transparent);
+      height: 1px;
+      background: linear-gradient(90deg, var(--green-dim), transparent);
+      margin-bottom: 16px;
     }
 
-    /* ══════════════════════════════════════════════════
-       6. CARD EVENT UTAMA & UPCOMING (TEMA EMAGZ)
-    ══════════════════════════════════════════════════ */
-    #current-event-register {
-      display: flex; justify-content: center; margin-bottom: 16px;
+    /* Description */
+    #ev-description {
+      font-size: 0.87rem; line-height: 1.76; color: #aaa;
+      margin-bottom: 22px;
     }
-    
-    .ev-main-card, .ev-card {
-      position: relative; overflow: hidden;
-      background: linear-gradient(145deg,
-        rgba(15,188,109,0.07) 0%, rgba(13,17,23,0.98) 35%,
-        rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.04) 100%
-      );
-      border: 1px solid rgba(15,188,109,0.1);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      display: flex; flex-direction: column;
-      transition: transform 0.55s cubic-bezier(0.23,1,0.32,1), border-color 0.3s ease, box-shadow 0.3s ease;
+    #ev-description p       { margin-bottom: 9px; }
+    #ev-description strong  { color: var(--text); }
+    #ev-description a       { color: var(--green); text-decoration: underline; }
+    #ev-description ul,
+    #ev-description ol      { margin: 8px 0 8px 18px; }
+    #ev-description li      { margin-bottom: 4px; }
+
+    /* CTA */
+    #ev-cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .ev-btn-primary {
+      flex: 1; min-width: 130px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 18px; border-radius: 12px;
+      background: var(--green); color: #000;
+      font-family: var(--font-body); font-weight: 700; font-size: 0.87rem;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 4px 20px var(--green-glow);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
     }
-    
-    /* Shimmer line ala emagz card */
-    .ev-main-card::before, .ev-card::before {
-      content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(15,188,109,0.35), transparent);
-      z-index: 2; pointer-events: none;
+    .ev-btn-primary:hover {
+      background: #12d87c; transform: translateY(-2px);
+      box-shadow: 0 8px 28px var(--green-glow);
     }
-    
-    .ev-main-card:hover, .ev-card:hover {
+    .ev-btn-primary:active { transform: translateY(0); }
+
+    .ev-btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 16px; border-radius: 12px;
+      background: transparent; color: var(--muted);
+      font-family: var(--font-body); font-weight: 600; font-size: 0.87rem;
+      border: 1px solid var(--border); cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .ev-btn-secondary:hover {
+      background: rgba(255,255,255,0.05); color: var(--text);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    /* ══════════════════════════════════════
+       DEMO PAGE
+    ══════════════════════════════════════ */
+    .demo-wrap { max-width: 960px; margin: 56px auto; padding: 0 20px; }
+    .demo-label   { font-family: var(--font-mono); color: var(--green); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; }
+    .demo-heading { font-size: clamp(1.4rem, 4vw, 2.1rem); font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .demo-sub     { font-size: 0.84rem; color: var(--muted); margin-bottom: 32px; }
+    .demo-sub b   { color: var(--green); }
+    .demo-grid    { display: grid; grid-template-columns: repeat(auto-fill, minmax(228px, 1fr)); gap: 16px; }
+
+    .demo-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; cursor: pointer;
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+    }
+    .demo-card:hover {
       transform: translateY(-5px);
-      border-color: rgba(15,188,109,0.3);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 20px rgba(15,188,109,0.08);
+      box-shadow: 0 14px 44px rgba(0,0,0,0.5), 0 0 28px var(--green-glow);
+      border-color: rgba(15,188,109,0.22);
     }
-
-    /* Main Card Specific */
-    .ev-main-card {
-      width: 100%; max-width: 300px;
-      border-radius: 14px;
-      animation: evUp 0.6s cubic-bezier(0.23,1,0.32,1) both;
+    .demo-card-thumb {
+      width: 100%; aspect-ratio: 16/9;
+      object-fit: cover; display: block; background: #1a1a1a;
     }
-    
-    /* Cover — Vertikal 9:12 */
-    .ev-main-cover, .ev-card-cover {
-      position: relative; width: 100%;
-      aspect-ratio: 9 / 12 !important; 
-      overflow: hidden; flex-shrink: 0; background: #000;
-    }
-    .ev-main-cover img, .ev-card-cover img {
-      width: 100% !important; height: 100% !important;
-      object-fit: cover !important; object-position: center top;
-      filter: brightness(0.88) saturate(1.05);
-      transition: transform 0.5s ease, filter 0.3s ease;
-    }
-    .ev-main-card:hover .ev-main-cover img, .ev-card:hover .ev-card-cover img {
-      transform: scale(1.05); filter: brightness(0.98);
-    }
-    .ev-main-cover::after, .ev-card-cover::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
-      background: linear-gradient(to top, rgba(13,17,23,0.8), transparent);
-      pointer-events: none;
-    }
-
-    .ev-main-badge {
-      position: absolute; top: 0; left: 0; z-index: 3;
-      background: rgba(15,188,109,0.9); color: #fff;
-      font-size: 0.6rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 5px 14px; border-radius: 0 0 12px 0;
-    }
-
-    .ev-main-body {
-      padding: 14px 16px 18px;
-      display: flex; flex-direction: column; gap: 8px; flex: 1;
-    }
-    .ev-main-title {
-      font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.3; margin: 0;
-    }
-    .ev-main-desc {
-      font-size: 0.8rem; color: rgba(156,163,175,0.6); line-height: 1.55; margin: 0;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .ev-main-info {
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 10px; display: flex; flex-direction: column; gap: 5px;
-    }
-    .ev-main-info p {
-      margin: 0; font-size: 0.78rem; color: rgba(209,213,219,0.75);
-      display: flex; align-items: flex-start; gap: 7px;
-    }
-    .ev-main-info i { color: #0fbc6d; margin-top: 2px; flex-shrink: 0; }
-    .ev-main-info a { color: inherit; text-decoration: none; }
-    .ev-main-info a:hover { color: #0fbc6d; }
-    
-    .ev-main-btn {
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      padding: 10px 16px; margin-top: 8px;
-      background: rgba(15,188,109,0.9); color: #fff; font-size: 0.85rem; font-weight: 700;
-      border-radius: 10px; text-decoration: none;
-      transition: background 0.2s ease;
-    }
-    .ev-main-btn:hover { background: #0fbc6d; }
-    .ev-main-btn-soon {
-      display: block; text-align: center; padding: 8px;
-      color: rgba(107,114,128,0.7); font-size: 0.78rem; font-style: italic; margin-top: 4px;
-    }
-
-    /* ══════════════════════════════════════════════════
-       7. SECONDARY CARDS (UPCOMING & ARCHIVE)
-    ══════════════════════════════════════════════════ */
-    .ev-card {
-      border-radius: 14px;
-      opacity: 0; transform: translateY(30px);
-    }
-    .ev-card.is-visible { opacity: 1; transform: translateY(0); }
-    
-    .ev-card-archive { opacity: 0; border-color: rgba(255,255,255,0.07) !important; }
-    .ev-card-archive.is-visible { opacity: 0.82; }
-    .ev-card-archive:hover { opacity: 1 !important; }
-
-    .ev-card-archive .ev-card-cover img { filter: grayscale(0.5) brightness(0.72); }
-    .ev-card-archive:hover .ev-card-cover img { filter: grayscale(0) brightness(0.9); }
-
-    .ev-card-badge {
-      position: absolute; top: 10px; left: 10px; z-index: 3;
-      padding: 3px 9px; border-radius: 20px;
-      font-size: 0.55rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      backdrop-filter: blur(8px);
-    }
-    .ev-badge-upcoming {
-      background: rgba(15,188,109,0.18); border: 1px solid rgba(15,188,109,0.35); color: #0fbc6d;
-    }
-    .ev-badge-archive {
-      background: rgba(90,90,90,0.22); border: 1px solid rgba(255,255,255,0.1); color: rgba(200,200,200,0.6);
-    }
-
-    .ev-card-body {
-      padding: 10px 12px 14px;
-      display: flex; flex-direction: column; gap: 4px; flex: 1;
-    }
-    .ev-card-date {
-      font-size: 0.6rem; color: rgba(156,163,175,0.5);
-      display: flex; align-items: center; gap: 4px;
-    }
-    .ev-card-date i { color: rgba(15,188,109,0.55); font-size: 0.6rem; }
-    .ev-card-title {
-      font-size: clamp(0.78rem, 1.8vw, 0.88rem); font-weight: 800;
-      color: rgba(255,255,255,0.9); line-height: 1.3; margin: 0;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-      transition: color 0.2s;
-    }
-    .ev-card:hover .ev-card-title { color: #fff; }
-    .ev-card-desc {
-      font-size: 0.68rem; color: rgba(156,163,175,0.5); line-height: 1.5; margin: 0;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .ev-card-info {
-      display: flex; flex-direction: column; gap: 3px;
-      font-size: 0.65rem; color: rgba(156,163,175,0.45);
-      border-top: 1px solid rgba(255,255,255,0.05); padding-top: 7px; margin-top: 3px;
-    }
-    .ev-card-info span { display: flex; align-items: flex-start; gap: 5px; }
-    .ev-card-info i { color: rgba(15,188,109,0.4); flex-shrink: 0; margin-top: 2px; }
-    .ev-card-loc {
-      font-size: 0.65rem; color: rgba(156,163,175,0.45);
-      display: flex; align-items: center; gap: 5px; margin: 0;
-    }
-    .ev-card-loc i { color: rgba(15,188,109,0.4); }
-    
-    .ev-card-btn {
-      display: flex; align-items: center; justify-content: center; gap: 4px;
-      padding: 8px 12px; margin-top: auto;
-      font-size: 0.72rem; font-weight: 700; border-radius: 9px;
-      text-decoration: none; transition: all 0.2s ease;
-    }
-    .ev-btn-reg  { background: rgba(15,188,109,0.2); color: #0fbc6d; border: 1px solid rgba(15,188,109,0.3); }
-    .ev-btn-reg:hover { background: rgba(15,188,109,0.3); color: #fff; }
-    .ev-btn-doc  { background: rgba(255,255,255,0.05); color: rgba(156,163,175,0.75); border: 1px solid rgba(255,255,255,0.1); }
-    .ev-btn-doc:hover { background: rgba(255,255,255,0.09); color: #fff; }
-    .ev-btn-soon { color: rgba(107,114,128,0.6); font-size: 0.7rem; font-style: italic; text-align: center; padding: 6px 0; display: block; margin-top: auto; }
-
-    /* ══════════════════════════════════════════════════
-       8. GRID LAYOUTS
-    ══════════════════════════════════════════════════ */
-    #upcoming-list {
-      display: flex; flex-wrap: wrap; justify-content: center;
-      gap: clamp(12px, 2vw, 20px); margin-bottom: 8px;
-    }
-    #upcoming-list .ev-card {
-      flex: 1 1 190px; max-width: 230px; min-width: 160px;
-    }
-
-    .ev-archive-header { text-align: center; margin-bottom: 28px; }
-    .ev-archive-title {
-      font-size: clamp(1.3rem, 3vw, 1.9rem); font-weight: 900;
-      color: #fff; letter-spacing: -0.03em; margin: 0;
-    }
-    .ev-archive-sub { font-size: 0.8rem; color: rgba(156,163,175,0.5); margin: 4px 0 0; }
-
-    .ev-archive-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: clamp(12px, 2vw, 20px);
-      max-width: 1100px; margin: 0 auto;
-    }
-    @media (min-width: 900px) { .ev-archive-grid { grid-template-columns: repeat(4, 1fr); } }
-
-    /* ══════════════════════════════════════════════════
-       9. ANIMATIONS & RESPONSIVE
-    ══════════════════════════════════════════════════ */
-    @keyframes evUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 767px) {
-      .ev-wrap { padding-top: 100px; }
-      #upcoming-list .ev-card { flex: 1 1 calc(50% - 10px); max-width: calc(50% - 6px); min-width: 0; }
-      .ev-archive-grid { grid-template-columns: repeat(3, 1fr) !important; }
-    }
-    @media (max-width: 479px) {
-      #upcoming-list .ev-card { flex: 1 1 calc(50% - 6px); min-width: 0; }
-      .ev-archive-grid { grid-template-columns: repeat(2, 1fr) !important; }
-      .ev-divider { margin: 32px 0 28px; }
+    .demo-card-body  { padding: 13px 15px; }
+    .demo-card-date  { font-size: 0.7rem; font-family: var(--font-mono); margin-bottom: 5px; }
+    .demo-card-title { font-weight: 700; font-size: 0.9rem; color: var(--text); line-height: 1.3; }
+    .demo-card-loc   { font-size: 0.74rem; color: var(--muted); margin-top: 5px; }
+    .demo-ratio-tag  {
+      display: inline-block; margin-top: 7px;
+      padding: 2px 8px; border-radius: 5px;
+      font-size: 0.62rem; font-family: var(--font-mono);
+      border: 1px solid var(--border); color: #555;
     }
   </style>
 </head>
-<body class="min-h-screen page-fade">
+<body>
 
-  <div id="header-placeholder"></div>
+<!-- ══════════════════════════════════════
+     DEMO PAGE
+══════════════════════════════════════ -->
+<div class="demo-wrap">
+  <p class="demo-label">// HMTE UNSOED — Event Modal v2</p>
+  <h1 class="demo-heading">Kalender Kegiatan</h1>
+  <p class="demo-sub">
+    Klik kartu untuk membuka modal. Poster <b>otomatis mendeteksi rasio gambar</b> — flyer portrait
+    9:16, banner landscape 16:9, atau square — dan menyesuaikan layout tanpa konfigurasi manual.
+  </p>
+  <div class="demo-grid" id="demo-cards"></div>
+</div>
 
-  <main class="ev-wrap">
-    <div class="ev-inner">
+<!-- ══════════════════════════════════════
+     OVERLAY
+══════════════════════════════════════ -->
+<div id="ev-overlay" aria-hidden="true"></div>
 
-      <div class="ev-title-block">
-        <div class="ev-eyebrow">Kalender Kegiatan</div>
-        <h1 class="ev-title">Agenda <em>HMTE</em></h1>
-        <p class="ev-page-sub">Jadwal event, workshop, dan seminar HMTE Unsoed.</p>
+<!-- ══════════════════════════════════════
+     MODAL / BOTTOM SHEET
+══════════════════════════════════════ -->
+<div id="ev-modal" role="dialog" aria-modal="true" aria-labelledby="ev-title">
+
+  <!-- Poster column -->
+  <div id="ev-poster-col">
+    <div id="ev-poster-skeleton"></div>
+    <div id="ev-poster-fallback">
+      <i class="far fa-calendar-alt"></i>
+      <span>no poster</span>
+    </div>
+    <img id="ev-poster" src="" alt="Poster Event" />
+    <span id="ev-badge">
+      <span id="ev-badge-dot"></span>
+      <span id="ev-badge-text">Mendatang</span>
+    </span>
+    <button id="ev-close-btn" aria-label="Tutup"><i class="fas fa-times"></i></button>
+  </div>
+
+  <!-- Body / content column -->
+  <div id="ev-body">
+    <div id="ev-title-area">
+      <div id="ev-category-tag">
+        <i class="fas fa-bolt"></i>
+        <span id="ev-category">Kegiatan</span>
       </div>
+      <h2 id="ev-title">—</h2>
+    </div>
 
-      <div class="ev-section-label">
-        <div class="ev-eyebrow">Event Terdekat</div>
-        <h2 class="ev-section-title">Event Mendatang</h2>
+    <div id="ev-meta">
+      <div class="ev-meta-chip">
+        <i class="far fa-calendar-alt"></i>
+        <span id="ev-date">—</span>
       </div>
-
-      <div id="current-event-register">
-        <div style="color:rgba(156,163,175,0.4);padding:48px 0;text-align:center;font-style:italic;">
-          <i class="fas fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:12px;display:block;color:#0fbc6d;"></i>
-          Memuat event...
+      <div class="ev-meta-chip">
+        <i class="far fa-clock"></i>
+        <span id="ev-time">—</span>
+      </div>
+      <div class="ev-meta-chip">
+        <i class="fas fa-map-marker-alt"></i>
+        <div>
+          <div id="ev-location">—</div>
+          <a id="ev-maps-link" href="#" target="_blank" rel="noopener">
+            <i class="fas fa-external-link-alt"></i> Buka Maps
+          </a>
         </div>
       </div>
-
-      <hr class="ev-divider" />
-
-      <div class="ev-section-label" id="upcoming-heading" style="display:none;">
-        <div class="ev-eyebrow">Jadwal Berikutnya</div>
-        <h2 class="ev-section-title">Akan Datang</h2>
-      </div>
-
-      <div id="upcoming-list"></div>
-
-      <hr class="ev-divider" id="archive-divider" style="display:none;" />
-
-      <div id="div-tiga-events"></div>
-
     </div>
-  </main>
 
-  <div id="footer-placeholder"></div>
+    <div class="ev-divider"></div>
+    <div id="ev-description"></div>
 
-  <script src="/js/loader.js"></script>
-  <script src="/js/data/calendar.js"></script>
-  <script src="/js/pages/event.js"></script>
+    <div id="ev-cta-row">
+      <a id="ev-btn-reg" href="#" target="_blank" rel="noopener" class="ev-btn-primary">
+        <i class="fas fa-ticket-alt"></i> Daftar Sekarang
+      </a>
+      <button class="ev-btn-secondary" onclick="closeEventModal()">
+        <i class="fas fa-times"></i> Tutup
+      </button>
+    </div>
+  </div>
+
+</div><!-- /#ev-modal -->
+
+
+<script>
+/* ════════════════════════════════════════════════════════
+   EVENT MODAL ENGINE — AUTO ADAPTIVE POSTER LAYOUT
+
+   PUBLIC API:
+     openEventModal(eventObj)   — buka modal dengan data event
+     closeEventModal()          — tutup modal
+
+   Layout ditentukan otomatis dari naturalWidth/naturalHeight:
+     ratio < 0.72  → "portrait"   (story/flyer 9:16 atau 3:4)
+     ratio > 1.40  → "landscape"  (banner 16:9, 2:1)
+     else          → "square"     (~1:1 atau 4:3)
+
+   eventObj fields (sesuai events.json):
+     title, date, time, location, locationLink,
+     description, content, imgSrc,
+     registrationLink, driveLink, link,
+     color ("green"|"blue"|"yellow"),
+     category, isFeatured
+════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  /* ── DOM refs ── */
+  var overlay    = document.getElementById('ev-overlay');
+  var modal      = document.getElementById('ev-modal');
+  var poster     = document.getElementById('ev-poster');
+  var badgeDot   = document.getElementById('ev-badge-dot');
+  var badgeEl    = document.getElementById('ev-badge');
+  var badgeText  = document.getElementById('ev-badge-text');
+  var titleEl    = document.getElementById('ev-title');
+  var categoryEl = document.getElementById('ev-category');
+  var dateEl     = document.getElementById('ev-date');
+  var timeEl     = document.getElementById('ev-time');
+  var locationEl = document.getElementById('ev-location');
+  var mapsLink   = document.getElementById('ev-maps-link');
+  var descEl     = document.getElementById('ev-description');
+  var btnReg     = document.getElementById('ev-btn-reg');
+  var body       = document.getElementById('ev-body');
+
+  /* ── Palettes ── */
+  var C = {
+    green:  { dot:'#0fbc6d', bg:'rgba(15,188,109,0.16)',  glow:'rgba(15,188,109,0.28)',  label:'Mendatang' },
+    blue:   { dot:'#06b6d4', bg:'rgba(6,182,212,0.16)',   glow:'rgba(6,182,212,0.26)',   label:'Seminar'   },
+    yellow: { dot:'#eab308', bg:'rgba(234,179,8,0.16)',   glow:'rgba(234,179,8,0.26)',   label:'Informal'  },
+    gray:   { dot:'#6b7280', bg:'rgba(107,114,128,0.16)', glow:'rgba(107,114,128,0.2)',  label:'Kegiatan'  },
+  };
+
+  var LAYOUTS = ['layout-landscape','layout-portrait','layout-square'];
+  function setLayout(name) {
+    LAYOUTS.forEach(function(c){ modal.classList.remove(c); });
+    modal.classList.add('layout-' + name);
+  }
+
+  /* ── Detect layout from image natural dimensions ── */
+  function detectLayout(img) {
+    var w = img.naturalWidth, h = img.naturalHeight;
+    if (!w || !h) return 'landscape';
+    var r = w / h;
+    if (r < 0.72) return 'portrait';  // tall: 9:16, 2:3, 3:4
+    if (r > 1.40) return 'landscape'; // wide: 16:9, 2:1, 3:1
+    return 'square';                   // ~1:1, 4:3, 3:2
+  }
+
+  /* ── Helpers ── */
+  function fmtDate(ds) {
+    if (!ds) return '—';
+    return new Date(ds.replace(/-/g,'/')).toLocaleDateString('id-ID',
+      { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  }
+  function isPast(ds) {
+    if (!ds) return false;
+    var d=new Date(ds); d.setHours(0,0,0,0);
+    var n=new Date();   n.setHours(0,0,0,0);
+    return d < n;
+  }
+  function toHTML(str) {
+    if (!str) return '<p style="color:#555;font-style:italic;">Tidak ada deskripsi.</p>';
+    if (/<[a-z][\s\S]*>/i.test(str)) return str;
+    return str.split(/\n\s*\n/).map(function(p){
+      return '<p>'+p.trim().replace(/\n/g,'<br>')+'</p>';
+    }).join('');
+  }
+
+  /* ── Scroll lock ── */
+  var _sy = 0;
+  function lockScroll()   { _sy=window.scrollY; document.body.style.cssText='overflow:hidden;position:fixed;top:-'+_sy+'px;left:0;right:0;'; }
+  function unlockScroll() { document.body.style.cssText=''; window.scrollTo(0,_sy); }
+
+  /* ════════════════════
+     OPEN
+  ════════════════════ */
+  window.openEventModal = function (ev) {
+    if (!ev) return;
+    var col  = C[ev.color] || C.gray;
+    var past = isPast(ev.date);
+
+    /* ── Poster ── */
+    poster.classList.remove('loaded');
+    modal.classList.remove('no-image');
+    setLayout('landscape'); // default while loading
+
+    if (ev.imgSrc) {
+      var src = ev.imgSrc;
+      if (!src.startsWith('http') && !src.startsWith('/')) src = '/' + src;
+      poster.style.display = 'block';
+
+      poster.onload = function () {
+        poster.classList.add('loaded');
+        setLayout(detectLayout(poster));
+        body.scrollTop = 0; // reset scroll after layout shift
+      };
+      poster.onerror = function () {
+        modal.classList.add('no-image');
+        poster.style.display = 'none';
+      };
+      poster.src = src;
+    } else {
+      poster.style.display = 'none';
+      modal.classList.add('no-image');
+    }
+
+    /* ── Badge & glow ── */
+    badgeDot.style.background = col.dot;
+    badgeEl.style.background  = col.bg;
+    badgeText.textContent     = past ? 'Selesai' : col.label;
+    modal.style.boxShadow     =
+      '0 0 0 1px rgba(255,255,255,0.07),0 36px 90px rgba(0,0,0,0.7),0 0 60px ' + col.glow;
+
+    /* ── Content ── */
+    titleEl.textContent    = ev.title    || 'Tanpa Judul';
+    categoryEl.textContent = ev.category || (past ? 'Kegiatan Selesai' : col.label);
+    dateEl.textContent     = fmtDate(ev.date);
+    timeEl.textContent     = ev.time     || 'Waktu menyusul';
+    locationEl.textContent = ev.location || 'Lokasi menyusul';
+
+    if (ev.locationLink) {
+      mapsLink.href = ev.locationLink;
+      mapsLink.style.display = 'inline-flex';
+    } else {
+      mapsLink.style.display = 'none';
+    }
+    descEl.innerHTML = toHTML(ev.content || ev.description || '');
+
+    /* ── CTA ── */
+    if (past) {
+      var doc = ev.driveLink || ev.link || null;
+      if (doc) {
+        btnReg.href      = doc;
+        btnReg.innerHTML = '<i class="fas fa-folder-open"></i> Lihat Dokumentasi';
+        btnReg.style.display = 'inline-flex';
+      } else { btnReg.style.display = 'none'; }
+    } else if (ev.registrationLink) {
+      btnReg.href      = ev.registrationLink;
+      btnReg.innerHTML = '<i class="fas fa-ticket-alt"></i> Daftar Sekarang';
+      btnReg.style.display = 'inline-flex';
+    } else { btnReg.style.display = 'none'; }
+
+    /* ── Show ── */
+    lockScroll();
+    overlay.classList.add('open');
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ modal.classList.add('open'); });
+    });
+    body.scrollTop = 0;
+  };
+
+  /* ════════════════════
+     CLOSE
+  ════════════════════ */
+  window.closeEventModal = function () {
+    modal.classList.remove('open');
+    overlay.classList.remove('open');
+    unlockScroll();
+    setTimeout(function(){
+      poster.src = ''; poster.classList.remove('loaded');
+      descEl.innerHTML = '';
+      LAYOUTS.forEach(function(c){ modal.classList.remove(c); });
+    }, 450);
+  };
+
+  /* ── Dismiss triggers ── */
+  overlay.addEventListener('click', window.closeEventModal);
+  document.getElementById('ev-close-btn').addEventListener('click', window.closeEventModal);
+  document.addEventListener('keydown', function(e){
+    if (e.key==='Escape' && modal.classList.contains('open')) window.closeEventModal();
+  });
+
+  /* ── Mobile swipe-to-dismiss ── */
+  var _ts=0, _drag=false;
+  modal.addEventListener('touchstart', function(e){ _ts=e.touches[0].clientY; _drag=true; },{passive:true});
+  modal.addEventListener('touchmove',  function(e){
+    if(!_drag) return;
+    var d=e.touches[0].clientY-_ts;
+    if(d>0) modal.style.transform='translateY('+d+'px)';
+  },{passive:true});
+  modal.addEventListener('touchend', function(e){
+    if(!_drag) return; _drag=false;
+    var d=e.changedTouches[0].clientY-_ts;
+    if(d>110){
+      modal.style.transition='transform 0.28s ease';
+      modal.style.transform='translateY(100%)';
+      overlay.classList.remove('open'); unlockScroll();
+      setTimeout(function(){ modal.classList.remove('open'); modal.style.transform=''; modal.style.transition=''; },300);
+    } else {
+      modal.style.transition='transform 0.3s cubic-bezier(.34,1.4,.64,1)';
+      modal.style.transform='translateY(0)';
+      setTimeout(function(){ modal.style.transform=''; modal.style.transition=''; },320);
+    }
+  },{passive:true});
+
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   DEMO — kartu event contoh, mencakup 3 tipe rasio poster
+════════════════════════════════════════════════════════ */
+var DEMO = [
+  {
+    title: "Open Donation EFS Iftar",
+    date:  "2026-03-13",
+    time:  "Donasi s/d 11 Maret 2026",
+    location: "Sekitar FT Unsoed",
+    locationLink: "https://maps.google.com",
+    category: "Sosial",
+    content: "<p>HMTE UNSOED mengadakan <strong>Open Donation EFS Iftar</strong> sebagai wujud kepedulian sosial di bulan Ramadhan.</p><p>Donasi dapat disalurkan melalui:</p><ul><li><strong>Dana</strong> a.n Febriyan Adhi Nugroho — 085742983125</li><li><strong>SeaBank</strong> a.n Farrel Ardan Turino — 901469491000</li></ul><p>Contact: 081289979465 (Farrel) · 085869401848 (Farrekha)</p><p><em>\"Mari jadikan Ramadhan ini momentum untuk berbagi kebahagiaan dengan sesama, sekecil apapun itu.\"</em></p>",
+    imgSrc: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=450&q=80",
+    color: "green",
+    _hint: "📐 Portrait 9:16 — Flyer/Story"
+  },
+  {
+    title: "Seminar Nasional Kecerdasan Buatan 2025",
+    date:  "2025-11-15",
+    time:  "08.00 – 16.00 WIB",
+    location: "Auditorium Graha Widyatama",
+    locationLink: "https://maps.google.com",
+    category: "Seminar",
+    content: "<p>HMTE UNSOED menghadirkan <strong>Seminar Nasional AI 2025</strong> bersama narasumber dari industri teknologi dan akademisi terkemuka.</p><p>Topik: Generative AI · Implementasi industri · Etika AI · Peluang karier ML/AI</p><p>Terbuka untuk seluruh mahasiswa. Sertifikat diberikan.</p>",
+    imgSrc: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900&q=80",
+    color: "blue",
+    registrationLink: "https://forms.google.com",
+    _hint: "📐 Landscape 16:9 — Banner"
+  },
+  {
+    title: "Workshop IoT & Embedded Systems",
+    date:  "2025-10-05",
+    time:  "09.00 – 14.00 WIB",
+    location: "Lab Komputer Teknik Elektro",
+    category: "Workshop",
+    content: "<p>Hands-on workshop pemrograman <strong>ESP32</strong> dan integrasi sensor IoT untuk proyek smart home. Kapasitas 30 peserta.</p>",
+    imgSrc: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=700&q=80",
+    color: "green",
+    registrationLink: "https://bit.ly/workshop-iot",
+    _hint: "📐 Square ~1:1"
+  },
+  {
+    title: "Malam Keakraban HMTE 2024",
+    date:  "2024-09-20",
+    time:  "18.30 WIB",
+    location: "Lapangan Parkir GKB UNSOED",
+    category: "Internal",
+    content: "<p>Acara keakraban tahunan HMTE — pertunjukan seni, band, games berhadiah, dan makan bersama.</p>",
+    imgSrc: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+    color: "yellow",
+    driveLink: "https://drive.google.com/example",
+    _hint: "📐 Landscape 16:9"
+  }
+];
+
+var grid = document.getElementById('demo-cards');
+DEMO.forEach(function(ev){
+  var past = new Date(ev.date) < new Date();
+  var dc   = { green:'#0fbc6d', blue:'#06b6d4', yellow:'#eab308' }[ev.color]||'#6b7280';
+  var c    = document.createElement('div');
+  c.className='demo-card'; c.tabIndex=0;
+  c.innerHTML =
+    '<img class="demo-card-thumb" src="'+(ev.imgSrc||'')+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"/>' +
+    '<div class="demo-card-body">'+
+      '<div class="demo-card-date" style="color:'+dc+';">'+
+        '<i class="far fa-calendar-alt" style="margin-right:4px;"></i>'+
+        new Date(ev.date.replace(/-/g,'/')).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})+
+        (past?' <span style="font-size:0.6rem;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;color:#555;">Selesai</span>':'')+
+      '</div>'+
+      '<div class="demo-card-title">'+ev.title+'</div>'+
+      '<div class="demo-card-loc"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>'+ev.location+'</div>'+
+      '<span class="demo-ratio-tag">'+ev._hint+'</span>'+
+    '</div>';
+  c.addEventListener('click',function(){ openEventModal(ev); });
+  c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' ') openEventModal(ev); });
+  grid.appendChild(c);
+});
+</script>
 </body>
 </html>
