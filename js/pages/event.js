@@ -1,4 +1,12 @@
 // js/pages/event.js
+// ── Registry: simpan data event agar bisa dipanggil modal via onclick ─
+window._evRegistry = {};
+function _evRegister(ev) {
+  var key = 'ev_' + (ev.id || ev.date + '_' + (ev.title||'').replace(/\s+/g,'_').substring(0,20));
+  window._evRegistry[key] = ev;
+  return key;
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────
 
 function _evFormatDate(str) {
@@ -37,13 +45,15 @@ function _evMainCard(ev) {
     ? '<a href="' + ev.locationLink + '" target="_blank">' + (ev.location||'') + '</a>'
     : (ev.location || '-');
 
+  var key = _evRegister(ev);
+
   var btn = ev.registrationLink
-    ? '<a href="' + ev.registrationLink + '" target="_blank" class="ev-main-btn">' +
+    ? '<a href="' + ev.registrationLink + '" target="_blank" class="ev-main-btn" onclick="event.stopPropagation()">' +
         '<i class="fas fa-ticket-alt"></i> Daftar Sekarang</a>'
     : '<span class="ev-main-btn-soon">Pendaftaran segera dibuka</span>';
 
   return (
-    '<div class="ev-main-card">' +
+    '<div class="ev-main-card" style="cursor:pointer;" onclick="openEventModal(window._evRegistry[\'' + key + '\'])">' +
       '<div class="ev-main-cover">' +
         '<span class="ev-main-badge">⭐ EVENT TERDEKAT</span>' +
         '<img src="' + img + '" alt="' + ev.title + '"' +
@@ -74,6 +84,7 @@ function createEventCardHTML(ev, index, variant) {
   var date    = _evFormatDate(ev.date);
   var delay   = (index * 110 + 60) + 'ms';
   var archive = (variant === 'archive');
+  var key     = _evRegister(ev);
 
   /* border warna berdasar color field */
   var borderColor = archive ? 'rgba(255,255,255,0.07)'
@@ -90,12 +101,12 @@ function createEventCardHTML(ev, index, variant) {
   if (archive) {
     var docUrl = ev.driveLink || ev.link || null;
     actionBtn = docUrl
-      ? '<a href="' + docUrl + '" target="_blank" class="ev-card-btn ev-btn-doc">' +
+      ? '<a href="' + docUrl + '" target="_blank" class="ev-card-btn ev-btn-doc" onclick="event.stopPropagation()">' +
           '<i class="fas fa-folder-open"></i> Lihat Dokumentasi</a>'
       : '<span class="ev-btn-soon">Belum ada dokumentasi</span>';
   } else {
     actionBtn = ev.registrationLink
-      ? '<a href="' + ev.registrationLink + '" target="_blank" class="ev-card-btn ev-btn-reg">' +
+      ? '<a href="' + ev.registrationLink + '" target="_blank" class="ev-card-btn ev-btn-reg" onclick="event.stopPropagation()">' +
           '<i class="fas fa-ticket-alt"></i> Daftar Sekarang</a>'
       : '<span class="ev-btn-soon">Pendaftaran segera dibuka</span>';
   }
@@ -110,7 +121,8 @@ function createEventCardHTML(ev, index, variant) {
 
   return (
     '<div class="ev-card' + (archive ? ' ev-card-archive' : '') + '"' +
-         ' style="transition-delay:' + delay + ';border-color:' + borderColor + ';">' +
+         ' style="transition-delay:' + delay + ';border-color:' + borderColor + ';cursor:pointer;"' +
+         ' onclick="openEventModal(window._evRegistry[\'' + key + '\'])">' +
 
       '<div class="ev-card-cover">' +
         '<span class="ev-card-badge ' + badgeClass + '">' + badgeText + '</span>' +
