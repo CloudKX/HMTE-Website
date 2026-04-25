@@ -1,0 +1,98 @@
+<!-- sections/birthday.html -->
+<style>
+  .birthday-strip {
+    width: 100%;
+    padding: 10px clamp(16px, 5vw, 48px);
+    background: linear-gradient(90deg,
+      rgba(15,188,109,0.08) 0%,
+      rgba(13,17,23,0.6) 50%,
+      rgba(15,188,109,0.08) 100%
+    );
+    border-top: 1px solid rgba(15,188,109,0.12);
+    border-bottom: 1px solid rgba(15,188,109,0.12);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-height: 44px;
+  }
+  .birthday-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #0fbc6d;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .birthday-label::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 16px;
+    background: rgba(15,188,109,0.35);
+  }
+  .birthday-names {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .birthday-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .birthday-name::after {
+    content: '·';
+    color: rgba(15,188,109,0.4);
+    font-size: 1rem;
+  }
+  .birthday-name:last-child::after { display: none; }
+  .birthday-empty {
+    font-size: 0.78rem;
+    color: rgba(156,163,175,0.4);
+    font-style: italic;
+  }
+</style>
+
+<div class="birthday-strip" id="birthday-strip" style="display:none;">
+  <div class="birthday-label">🎂 Ulang Tahun</div>
+  <div class="birthday-names" id="birthday-names-list"></div>
+</div>
+
+<script>
+(function () {
+  function render() {
+    if (!window._membersData) { setTimeout(render, 80); return; }
+
+    var today = new Date();
+    var key   = String(today.getMonth() + 1).padStart(2,'0') + '-' +
+                String(today.getDate()).padStart(2,'0');
+
+    var celebrants = window._membersData.filter(function(m){ return m.birthday === key; });
+    var strip = document.getElementById('birthday-strip');
+    var list  = document.getElementById('birthday-names-list');
+    if (!strip || !list) return;
+
+    if (!celebrants.length) return; // tidak tampil sama sekali kalau tidak ada
+
+    list.innerHTML = celebrants.map(function(m){
+      return '<span class="birthday-name">' + m.name + '</span>';
+    }).join('');
+
+    strip.style.display = 'flex';
+  }
+
+  window.__components = window.__components || {};
+  window.__components['birthday'] = { init: render };
+  window.initBirthdaySection = render;
+})();
+</script>

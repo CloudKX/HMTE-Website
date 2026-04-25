@@ -137,6 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
       loads.push(loadComponent(`${name}-placeholder`, `../sections/${name}.html`));
     });
 
+    // Load members.js untuk fitur ulang tahun
+    loads.push(new Promise(function(resolve) {
+      if (window._membersData) { resolve(); return; }
+      var ms = document.createElement('script');
+      ms.src = '../js/data/members.js';
+      ms.onload = resolve; ms.onerror = resolve;
+      document.head.appendChild(ms);
+    }));
+
     // Load project.js agar createProkerCardHTML & getHomeProjects tersedia
     loads.push(new Promise((resolve) => {
       if (typeof window.createProkerCardHTML === 'function') { resolve(); return; }
