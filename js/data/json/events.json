@@ -160,9 +160,9 @@
       "id": "famgath-apr-2026",
       "imgSrc": "/img/Event/famgath.jpg",
       "color": "green",
-      "time": "15:00 - 17:00",
-      "date": "2026-04-11",
-      "location": "Lapangan Basket FT",
+      "time": "15:00",
+      "date": "2026-04-04",
+      "location": "Lapangan FT",
       "title": "Family Gathering HMTE",
       "isFeatured": true,
       "description": "Family Gathering bersama seluruh anggota HMTE Unsoed di Lapangan Basket Fakultas Teknik."
@@ -221,6 +221,72 @@
       "title": "DTE & Semnas — First Meet",
       "isFeatured": true,
       "description": "Pertemuan pertama panitia Dies Natalis Teknik Elektro dan Seminar Nasional oleh Divisi Event."
+    },
+    {
+      "id": "elco-mei1-2026",
+      "imgSrc": "/img/Event/elco.jpg",
+      "color": "green",
+      "time": "TBA",
+      "date": "2026-05-02",
+      "location": "TBA",
+      "title": "ELCO — Pertemuan Mei",
+      "isFeatured": true,
+      "description": "Kegiatan ELCO (Electrical Community) oleh Divisi MIKAT HMTE Unsoed."
+    },
+    {
+      "id": "kuhima-mei-2026",
+      "imgSrc": "/img/Event/kuhima.jpg",
+      "color": "blue",
+      "time": "TBA",
+      "date": "2026-05-03",
+      "location": "TBA",
+      "title": "KUHIMA",
+      "isFeatured": true,
+      "description": "Kunjungan Himpunan Mahasiswa (KUHIMA) oleh Divisi Humas HMTE Unsoed."
+    },
+    {
+      "id": "famgath-mei-2026",
+      "imgSrc": "/img/Event/famgath.jpg",
+      "color": "green",
+      "time": "TBA",
+      "date": "2026-05-09",
+      "location": "TBA",
+      "title": "Family Gathering HMTE",
+      "isFeatured": true,
+      "description": "Family Gathering bersama seluruh anggota HMTE Unsoed oleh Divisi Internal."
+    },
+    {
+      "id": "pelatihan-automasi-mei-2026",
+      "imgSrc": "/img/Event/pelatihan-automasi.jpg",
+      "color": "yellow",
+      "time": "TBA",
+      "date": "2026-05-13",
+      "location": "TBA",
+      "title": "Pelatihan Automasi",
+      "isFeatured": true,
+      "description": "Pelatihan Automasi untuk anggota HMTE Unsoed oleh Divisi PSDM."
+    },
+    {
+      "id": "adviscal-mei-2026",
+      "imgSrc": "/img/Event/adviscal.jpg",
+      "color": "blue",
+      "time": "TBA",
+      "date": "2026-05-16",
+      "location": "TBA",
+      "title": "ADVISCAL",
+      "isFeatured": true,
+      "description": "Program Adviscal (Advising Calendar) oleh Divisi Personalia HMTE Unsoed."
+    },
+    {
+      "id": "elco-mei2-2026",
+      "imgSrc": "/img/Event/elco.jpg",
+      "color": "green",
+      "time": "TBA",
+      "date": "2026-05-30",
+      "location": "TBA",
+      "title": "ELCO — Lanjutan Mei",
+      "isFeatured": false,
+      "description": "Kegiatan lanjutan ELCO oleh Divisi MIKAT HMTE Unsoed."
     }
   ]
 }
