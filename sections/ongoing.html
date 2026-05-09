@@ -1,1043 +1,426 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agenda HMTE - HMTE Unsoed</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/satoshi.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-  <script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* ══════════════════════════════════════════════════
+     ONGOING SECTION — PREMIUM DYNAMIC UI (ENHANCED)
+  ══════════════════════════════════════════════════ */
+
+  @keyframes liveBlink {
+    0%,100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px #0fbc6d; }
+    50%     { opacity: 0.4; transform: scale(0.8); box-shadow: 0 0 2px rgba(15,188,109,0.5); }
+  }
+  @keyframes skelPulse {
+    0%,100% { opacity: 0.3; }
+    50%     { opacity: 0.6; }
+  }
+  /* Animasi Radar Pulse Background */
+  @keyframes radarPulse {
+    0% { transform: scale(0.8) translate(-50%, -50%); opacity: 0.8; }
+    100% { transform: scale(2) translate(-25%, -25%); opacity: 0; }
+  }
+  /* Animasi Floating Elements */
+  @keyframes floatSlow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+  }
   
-  <style>
-    /* ══════════════════════════════════════════════════
-       1. BASE & BACKGROUND — GRID SEPERTI NEWS
-    ══════════════════════════════════════════════════ */
-    html { overflow-x: hidden !important; }
-    body {
-      overflow-x: hidden !important;
-      max-width: 100vw !important;
-      color: #ffffff !important;
-      margin: 0; min-height: 100vh;
-      background-color: #161616 !important;
-      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
-                        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
-      background-size: 55px 55px !important;
-    }
+  /* ── SECTION WRAPPER ── */
+  .ongoing-section {
+    position: relative;
+    padding: clamp(36px, 6vh, 64px) 0;
+    overflow: hidden;
+    background: radial-gradient(circle at center, rgba(15,188,109,0.04) 0%, rgba(10,12,16,1) 70%);
+  }
 
-    /* ── PAGE FADE IN ──
-       PENTING: jangan gunakan transform di animasi body.
-       transform pada body membuat position:fixed anak-anaknya
-       relatif terhadap body (bukan viewport) → modal kepotong. */
-    .page-fade { animation: pageFadeIn 0.55s ease both; }
-    @keyframes pageFadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
+  /* ── BACKGROUND ANIMATIONS & DECORATIONS ── */
+  /* Efek Radar */
+  .ongoing-section::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform-origin: 0 0; /* Penting untuk radar effect yang di tengah */
+    width: 300px; height: 300px; border-radius: 50%;
+    border: 1px solid rgba(15,188,109,0.2);
+    animation: radarPulse 4s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
+    pointer-events: none; z-index: 1;
+  }
+  /* Glow ambient utama */
+  .ongoing-section::after {
+    content: ''; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+    width: min(800px, 100%); height: 400px;
+    background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 60%);
+    pointer-events: none; z-index: 1;
+  }
 
-    /* ══════════════════════════════════════════════════
-       2. PAGE WRAPPER & AMBIENT GLOW
-    ══════════════════════════════════════════════════ */
-    .ev-wrap {
-      padding-top: 120px;
-      padding-bottom: 80px;
-      position: relative;
-    }
-    .ev-wrap::before {
-      content: '';
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: min(700px, 100%); height: 300px;
-      background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .ev-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 clamp(16px, 5vw, 48px);
-    }
+  /* Floating Geometric Shapes */
+  .ongoing-shape {
+    position: absolute; border: 1px solid rgba(15,188,109,0.15);
+    z-index: 2; pointer-events: none;
+  }
+  .ongoing-shape-1 {
+    width: 60px; height: 60px; border-radius: 12px;
+    top: 15%; left: 10%; animation: floatSlow 6s ease-in-out infinite;
+    transform: rotate(15deg);
+  }
+  .ongoing-shape-2 {
+    width: 40px; height: 40px; border-radius: 50%;
+    bottom: 20%; right: 12%; animation: floatSlow 8s ease-in-out infinite reverse;
+  }
 
-    /* ══════════════════════════════════════════════════
-       3. PAGE TITLE & TYPOGRAPHY
-    ══════════════════════════════════════════════════ */
-    .ev-title-block {
-      text-align: center;
-      margin-bottom: clamp(32px, 5vh, 56px);
-      position: relative;
-    }
-    .ev-eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-size: 0.68rem; letter-spacing: 0.22em;
-      text-transform: uppercase; color: #0fbc6d; font-weight: 700;
-      margin-bottom: 12px;
-    }
-    .ev-eyebrow::before, .ev-eyebrow::after {
-      content: ''; display: block; width: 24px; height: 1px;
-      background: #0fbc6d; opacity: 0.6;
-    }
-    .ev-title {
-      font-size: clamp(2rem, 6vw, 3.5rem);
-      font-weight: 900; color: #fff;
-      letter-spacing: -0.04em; line-height: 1.1;
-      margin: 0 0 12px;
-    }
-    .ev-title em { font-style: normal; color: #0fbc6d; }
-    .ev-page-sub {
-      font-size: clamp(0.85rem, 2vw, 1rem);
-      color: rgba(156,163,175,0.6);
-      max-width: 480px; margin: 0 auto; line-height: 1.65;
-    }
+  /* ── SEKAT (DIVIDER) ATAS & BAWAH ── */
+  .ongoing-sekat {
+    position: absolute; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(15,188,109,0.6) 50%, transparent 100%);
+    z-index: 5; opacity: 0.8;
+  }
+  .ongoing-sekat-top { top: 0; }
+  .ongoing-sekat-bottom { bottom: 0; }
+  .ongoing-sekat::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 10px; height: 10px; background: #0fbc6d;
+    box-shadow: 0 0 20px rgba(15,188,109,1);
+  }
 
-    /* ══════════════════════════════════════════════════
-       4. SECTION LABEL
-    ══════════════════════════════════════════════════ */
-    .ev-section-label {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-    .ev-section-title {
-      font-size: clamp(1.4rem, 3.5vw, 2rem);
-      font-weight: 900; color: #fff;
-      letter-spacing: -0.03em; margin: 0;
-    }
+  .ongoing-inner {
+    position: relative; z-index: 10;
+    max-width: 1150px; margin: 0 auto;
+    padding: 0 clamp(16px, 5vw, 48px);
+    display: flex; flex-direction: column; align-items: center;
+  }
 
-    /* ══════════════════════════════════════════════════
-       5. GARIS PEMISAH SEKSI
-    ══════════════════════════════════════════════════ */
-    .ev-divider {
-      border: 0; height: 1px; margin: clamp(28px, 4vh, 44px) 0;
-      background: linear-gradient(to right, transparent, rgba(15,188,109,0.3) 30%, rgba(15,188,109,0.3) 70%, transparent);
-    }
+  /* ── HEADER ── */
+  .ongoing-header {
+    text-align: center;
+    margin-bottom: clamp(24px, 4vh, 36px);
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.23,1,0.32,1), transform 0.8s cubic-bezier(0.23,1,0.32,1);
+  }
+  .ongoing-header.is-visible { opacity: 1; transform: translateY(0); }
 
-    /* ══════════════════════════════════════════════════
-       6. CARD EVENT UTAMA & UPCOMING (TEMA EMAGZ)
-    ══════════════════════════════════════════════════ */
-    #current-event-register {
-      display: flex; justify-content: center; margin-bottom: 16px;
-    }
+  .ongoing-eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 0.75rem; letter-spacing: 0.28em;
+    text-transform: uppercase; color: #0fbc6d; font-weight: 800;
+  }
+  .ongoing-eyebrow::before, .ongoing-eyebrow::after {
+    content: ''; display: block; width: 30px; height: 2px;
+    background: linear-gradient(90deg, transparent, #0fbc6d, transparent);
+    border-radius: 2px;
+  }
+  .ongoing-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900; color: #fff;
+    letter-spacing: -0.04em; line-height: 1.1; margin: 0;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .ongoing-title em { font-style: normal; color: #0fbc6d; position: relative; }
+  /* Garis tipis di bawah teks "On-going" */
+  .ongoing-title em::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 3px;
+    background: #0fbc6d; border-radius: 2px; opacity: 0.5;
+  }
+  
+  .ongoing-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    color: rgba(156,163,175,0.8); margin: 0; line-height: 1.7;
+    max-width: 550px; text-align: center;
+  }
+
+  /* ── GRID — PC Layout ── */
+  .ongoing-grid {
+    width: 100%; display: flex; flex-wrap: wrap; justify-content: center;
+    gap: clamp(20px, 3vw, 32px);
+    padding: 10px 0 20px 0; /* Ruang untuk efek hover shadow */
+  }
+
+  /* ── CARD ── */
+  .ongoing-card {
+    position: relative; border-radius: 20px; overflow: hidden;
+    background: rgba(13,17,23,0.8);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(15,188,109,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+    text-decoration: none; display: flex; flex-direction: column;
+    flex: 1 1 220px; max-width: 280px; min-width: 200px;
     
-    .ev-main-card, .ev-card {
-      position: relative; overflow: hidden;
-      background: linear-gradient(145deg,
-        rgba(15,188,109,0.07) 0%, rgba(13,17,23,0.98) 35%,
-        rgba(13,17,23,0.98) 65%, rgba(15,188,109,0.04) 100%
-      );
-      border: 1px solid rgba(15,188,109,0.1);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      display: flex; flex-direction: column;
-      transition: transform 0.55s cubic-bezier(0.23,1,0.32,1), border-color 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.6s cubic-bezier(0.23,1,0.32,1),
+                transform 0.6s cubic-bezier(0.23,1,0.32,1),
+                border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .ongoing-card.is-visible { opacity: 1; transform: translateY(0); }
+
+  /* Efek Gradient Garis Atas Kartu */
+  .ongoing-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, #0fbc6d, transparent);
+    z-index: 2; opacity: 0; transition: opacity 0.4s ease;
+  }
+  
+  /* Interaksi Card PC */
+  @media (hover: hover) {
+    .ongoing-card:hover {
+      transform: translateY(-10px) !important;
+      border-color: rgba(15,188,109,0.5) !important;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(15,188,109,0.15) !important;
     }
+    .ongoing-card:hover::before { opacity: 1; }
+    .ongoing-card:hover .ongoing-card-cover img {
+      transform: scale(1.1); filter: brightness(1.05) contrast(1.1);
+    }
+    .ongoing-card:hover .ongoing-card-title { color: #0fbc6d; }
+    .ongoing-card:hover .ongoing-card-cta { color: #0fbc6d; gap: 12px; }
+    .ongoing-card:hover .ongoing-card-cta i { transform: translateX(4px); }
+  }
+
+  /* ── COVER ── */
+  .ongoing-card-cover {
+    position: relative; width: 100%; aspect-ratio: 16 / 9;
+    overflow: hidden; flex-shrink: 0; background: #0a0c10;
+  }
+  .ongoing-card-cover img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+    filter: brightness(0.8) saturate(1.1);
+    transition: transform 0.7s cubic-bezier(0.23,1,0.32,1), filter 0.4s ease;
+  }
+  .ongoing-card-cover::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
+    background: linear-gradient(to top, rgba(13,17,23,1) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  /* Badge Live/Terdekat */
+  .ongoing-badge {
+    position: absolute; top: 16px; left: 16px; z-index: 3; /* Dipindah ke kiri agar lebih natural */
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    background: rgba(15,188,109,0.15); border: 1px solid rgba(15,188,109,0.5);
+    border-radius: 30px; font-size: 0.65rem; font-weight: 800;
+    letter-spacing: 0.15em; text-transform: uppercase; color: #fff;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  }
+  .ongoing-badge-dot {
+    width: 6px; height: 6px; background: #0fbc6d; border-radius: 50%;
+    animation: liveBlink 1.5s ease-in-out infinite;
+  }
+
+  /* ── BODY ── */
+  .ongoing-card-body {
+    padding: 0 clamp(16px, 2.5vw, 24px) clamp(20px, 3vw, 24px);
+    display: flex; flex-direction: column; gap: 12px; flex: 1;
+    position: relative; z-index: 2; margin-top: -15px; /* Mengangkat teks sedikit ke area gambar */
+  }
+  .ongoing-card-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .ongoing-card-date {
+    font-size: 0.7rem; color: rgba(156,163,175,0.7);
+    display: flex; align-items: center; gap: 6px; font-weight: 600;
+  }
+  .ongoing-card-date i { color: #0fbc6d; }
+  
+  .ongoing-card-title {
+    font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+    font-weight: 800; color: #fff; line-height: 1.4; margin: 0;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    transition: color 0.3s ease;
+  }
+
+  .ongoing-card-desc {
+    font-size: clamp(0.8rem, 1.6vw, 0.88rem);
+    color: rgba(156,163,175,0.6); line-height: 1.6; margin: 0;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  .ongoing-card-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: auto; padding-top: 16px;
+    font-size: 0.8rem; color: #fff; font-weight: 700;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    transition: color 0.3s ease, gap 0.3s ease;
+  }
+  .ongoing-card-cta i { transition: transform 0.3s ease; font-size: 0.85rem; color: #0fbc6d;}
+
+  /* ── FOOTER CTA ── */
+  .ongoing-footer {
+    margin-top: clamp(36px, 5vh, 56px);
+    display: flex; justify-content: center;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s;
+  }
+  .ongoing-footer.is-visible { opacity: 1; transform: translateY(0); }
+  
+  .ongoing-cta {
+    position: relative; overflow: hidden;
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 14px 36px; border: 1px solid rgba(15,188,109,0.3);
+    border-radius: 50px; color: #fff;
+    font-size: 0.9rem; font-weight: 700; text-decoration: none;
+    letter-spacing: 0.05em; transition: all 0.3s ease;
+    background: rgba(15,188,109,0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  .ongoing-cta::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  .ongoing-cta:hover {
+    border-color: #0fbc6d; background: rgba(15,188,109,0.2);
+    box-shadow: 0 8px 25px rgba(15,188,109,0.25); transform: translateY(-3px);
+  }
+  .ongoing-cta:hover::before { left: 150%; }
+
+  /* ── SKELETON ── */
+  .ongoing-skel {
+    background: rgba(255,255,255,0.06); border-radius: 8px;
+    animation: skelPulse 1.8s ease-in-out infinite;
+  }
+  .ongoing-card-skel { opacity: 1 !important; transform: none !important; pointer-events: none; }
+
+  /* ══════════════════════════════════════════════════════
+     MOBILE OPTIMIZATION -> ENHANCED SWIPE CAROUSEL
+  ══════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .ongoing-inner { padding: 0; }
+    .ongoing-header { padding: 0 24px; margin-bottom: 32px;}
+    .ongoing-footer { padding: 0 24px; }
+    .ongoing-section::before { width: 200px; height: 200px; } /* Kecilkan radar di mobile */
+    .ongoing-shape { display: none; } /* Sembunyikan shape di mobile agar tidak penuh */
+
+    /* Horizontal Scroll yang Halus */
+    .ongoing-grid {
+      flex-wrap: nowrap !important;
+      justify-content: flex-start !important;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: 24px; /* Menyesuaikan dengan padding card pertama */
+      padding: 10px 24px 40px 24px !important; 
+      gap: 16px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; 
+    }
+    .ongoing-grid::-webkit-scrollbar { display: none; }
+
+    .ongoing-card {
+      /* Lebar kartu diatur agar terlihat ada kartu selanjutnya di sebelah kanan */
+      flex: 0 0 68vw !important;
+      max-width: 250px !important;
+      scroll-snap-align: start; /* Snap di awal kartu */
+    }
+
+    .ongoing-card:active { transform: scale(0.96) !important; transition: transform 0.15s ease-out; }
     
-    .ev-main-card::before, .ev-card::before {
-      content: ''; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(15,188,109,0.35), transparent);
-      z-index: 2; pointer-events: none;
+    .ongoing-card-body {
+       margin-top: -10px; /* Sesuaikan jarak overlay teks di mobile */
     }
-    
-    .ev-main-card:hover, .ev-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(15,188,109,0.3);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 0 20px rgba(15,188,109,0.08);
-    }
+  }
+</style>
 
-    .ev-main-card {
-      width: 100%; max-width: 200px;
-      border-radius: 14px;
-      animation: evUp 0.6s cubic-bezier(0.23,1,0.32,1) both;
-    }
-    
-    .ev-main-cover, .ev-card-cover {
-      position: relative; width: 100%;
-      aspect-ratio: 3 / 4 !important; 
-      overflow: hidden; flex-shrink: 0; background: #000;
-    }
-    .ev-main-cover img, .ev-card-cover img {
-      width: 100% !important; height: 100% !important;
-      object-fit: cover !important; object-position: center top;
-      filter: brightness(0.88) saturate(1.05);
-      transition: transform 0.5s ease, filter 0.3s ease;
-    }
-    .ev-main-card:hover .ev-main-cover img, .ev-card:hover .ev-card-cover img {
-      transform: scale(1.05); filter: brightness(0.98);
-    }
-    .ev-main-cover::after, .ev-card-cover::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
-      background: linear-gradient(to top, rgba(13,17,23,0.8), transparent);
-      pointer-events: none;
-    }
+<section class="ongoing-section">
+  <div class="ongoing-shape ongoing-shape-1"></div>
+  <div class="ongoing-shape ongoing-shape-2"></div>
+  <div class="ongoing-sekat ongoing-sekat-top"></div>
 
-    .ev-main-badge {
-      position: absolute; top: 0; left: 0; z-index: 3;
-      background: rgba(15,188,109,0.9); color: #fff;
-      font-size: 0.6rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 5px 14px; border-radius: 0 0 12px 0;
-    }
-
-    .ev-main-body {
-      padding: 14px 16px 18px;
-      display: flex; flex-direction: column; gap: 8px; flex: 1;
-    }
-    .ev-main-title {
-      font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.3; margin: 0;
-    }
-    .ev-main-desc {
-      font-size: 0.8rem; color: rgba(156,163,175,0.6); line-height: 1.55; margin: 0;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .ev-main-info {
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 10px; display: flex; flex-direction: column; gap: 5px;
-    }
-    .ev-main-info p {
-      margin: 0; font-size: 0.78rem; color: rgba(209,213,219,0.75);
-      display: flex; align-items: flex-start; gap: 7px;
-    }
-    .ev-main-info i { color: #0fbc6d; margin-top: 2px; flex-shrink: 0; }
-    .ev-main-info a { color: inherit; text-decoration: none; }
-    .ev-main-info a:hover { color: #0fbc6d; }
-    
-    .ev-main-btn {
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      padding: 10px 16px; margin-top: 8px;
-      background: rgba(15,188,109,0.9); color: #fff; font-size: 0.85rem; font-weight: 700;
-      border-radius: 10px; text-decoration: none;
-      transition: background 0.2s ease;
-    }
-    .ev-main-btn:hover { background: #0fbc6d; }
-    .ev-main-btn-soon {
-      display: block; text-align: center; padding: 8px;
-      color: rgba(107,114,128,0.7); font-size: 0.78rem; font-style: italic; margin-top: 4px;
-    }
-
-    /* ══════════════════════════════════════════════════
-       7. SECONDARY CARDS (UPCOMING & ARCHIVE)
-    ══════════════════════════════════════════════════ */
-    .ev-card {
-      border-radius: 14px;
-      opacity: 0; transform: translateY(30px);
-    }
-    .ev-card.is-visible { opacity: 1; transform: translateY(0); }
-    
-    .ev-card-archive { opacity: 0; border-color: rgba(255,255,255,0.07) !important; }
-    .ev-card-archive.is-visible { opacity: 0.82; }
-    .ev-card-archive:hover { opacity: 1 !important; }
-
-    .ev-card-archive .ev-card-cover img { filter: grayscale(0.5) brightness(0.72); }
-    .ev-card-archive:hover .ev-card-cover img { filter: grayscale(0) brightness(0.9); }
-
-    .ev-card-badge {
-      position: absolute; top: 10px; left: 10px; z-index: 3;
-      padding: 3px 9px; border-radius: 20px;
-      font-size: 0.55rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      backdrop-filter: blur(8px);
-    }
-    .ev-badge-upcoming {
-      background: rgba(15,188,109,0.18); border: 1px solid rgba(15,188,109,0.35); color: #0fbc6d;
-    }
-    .ev-badge-archive {
-      background: rgba(90,90,90,0.22); border: 1px solid rgba(255,255,255,0.1); color: rgba(200,200,200,0.6);
-    }
-
-    .ev-card-body {
-      padding: 10px 12px 14px;
-      display: flex; flex-direction: column; gap: 4px; flex: 1;
-    }
-    .ev-card-date {
-      font-size: 0.6rem; color: rgba(156,163,175,0.5);
-      display: flex; align-items: center; gap: 4px;
-    }
-    .ev-card-date i { color: rgba(15,188,109,0.55); font-size: 0.6rem; }
-    .ev-card-title {
-      font-size: clamp(0.78rem, 1.8vw, 0.88rem); font-weight: 800;
-      color: rgba(255,255,255,0.9); line-height: 1.3; margin: 0;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-      transition: color 0.2s;
-    }
-    .ev-card:hover .ev-card-title { color: #fff; }
-    .ev-card-desc {
-      font-size: 0.68rem; color: rgba(156,163,175,0.5); line-height: 1.5; margin: 0;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .ev-card-info {
-      display: flex; flex-direction: column; gap: 3px;
-      font-size: 0.65rem; color: rgba(156,163,175,0.45);
-      border-top: 1px solid rgba(255,255,255,0.05); padding-top: 7px; margin-top: 3px;
-    }
-    .ev-card-info span { display: flex; align-items: flex-start; gap: 5px; }
-    .ev-card-info i { color: rgba(15,188,109,0.4); flex-shrink: 0; margin-top: 2px; }
-    .ev-card-loc {
-      font-size: 0.65rem; color: rgba(156,163,175,0.45);
-      display: flex; align-items: center; gap: 5px; margin: 0;
-    }
-    .ev-card-loc i { color: rgba(15,188,109,0.4); }
-    
-    .ev-card-btn {
-      display: flex; align-items: center; justify-content: center; gap: 4px;
-      padding: 8px 12px; margin-top: auto;
-      font-size: 0.72rem; font-weight: 700; border-radius: 9px;
-      text-decoration: none; transition: all 0.2s ease;
-    }
-    .ev-btn-reg  { background: rgba(15,188,109,0.2); color: #0fbc6d; border: 1px solid rgba(15,188,109,0.3); }
-    .ev-btn-reg:hover { background: rgba(15,188,109,0.3); color: #fff; }
-    .ev-btn-doc  { background: rgba(255,255,255,0.05); color: rgba(156,163,175,0.75); border: 1px solid rgba(255,255,255,0.1); }
-    .ev-btn-doc:hover { background: rgba(255,255,255,0.09); color: #fff; }
-    .ev-btn-soon { color: rgba(107,114,128,0.6); font-size: 0.7rem; font-style: italic; text-align: center; padding: 6px 0; display: block; margin-top: auto; }
-
-    /* ══════════════════════════════════════════════════
-       8. GRID LAYOUTS
-    ══════════════════════════════════════════════════ */
-    #upcoming-list {
-      display: flex; flex-wrap: wrap; justify-content: center;
-      gap: clamp(10px, 1.5vw, 14px); margin-bottom: 8px;
-    }
-    #upcoming-list .ev-card {
-      flex: 1 1 140px; max-width: 170px; min-width: 120px;
-    }
-
-    .ev-archive-header { text-align: center; margin-bottom: 28px; }
-    .ev-archive-title {
-      font-size: clamp(1.3rem, 3vw, 1.9rem); font-weight: 900;
-      color: #fff; letter-spacing: -0.03em; margin: 0;
-    }
-    .ev-archive-sub { font-size: 0.8rem; color: rgba(156,163,175,0.5); margin: 4px 0 0; }
-
-    .ev-archive-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: clamp(12px, 2vw, 20px);
-      max-width: 1100px; margin: 0 auto;
-    }
-    @media (min-width: 900px) { .ev-archive-grid { grid-template-columns: repeat(4, 1fr); } }
-
-    /* ══════════════════════════════════════════════════
-       9. ANIMATIONS & RESPONSIVE
-    ══════════════════════════════════════════════════ */
-    @keyframes evUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 767px) {
-      .ev-wrap { padding-top: 100px; }
-      #upcoming-list .ev-card { flex: 1 1 calc(50% - 10px); max-width: calc(50% - 6px); min-width: 0; }
-      .ev-archive-grid { grid-template-columns: repeat(3, 1fr) !important; }
-    }
-    @media (max-width: 479px) {
-      #upcoming-list .ev-card { flex: 1 1 calc(50% - 6px); min-width: 0; }
-      .ev-archive-grid { grid-template-columns: repeat(2, 1fr) !important; }
-      .ev-divider { margin: 32px 0 28px; }
-    }
-
-    /* ══════════════════════════════════════════════════
-       10. EVENT DETAIL MODAL
-           → Overlay + Pop-up (desktop) / Bottom Sheet (mobile)
-    ══════════════════════════════════════════════════ */
-
-    /* Overlay */
-    #evm-overlay {
-      position: fixed; inset: 0; z-index: 9998; /* Ubah z-index dari 800 ke 9998 */
-      background: rgba(8,8,8,0.80);
-      backdrop-filter: blur(7px);
-      -webkit-backdrop-filter: blur(7px);
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.3s cubic-bezier(.4,0,.2,1);
-    }
-    #evm-overlay.open { opacity: 1; pointer-events: all; }
-
-    /* Modal shell */
-    #evm-modal {
-      position: fixed;
-      z-index: 9999;
-      background: #1c1c1c;
-      border: 1px solid rgba(255,255,255,0.07);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* ── DESKTOP: centered pop-up ── */
-    @media (min-width: 640px) {
-      #evm-modal {
-        top: 50%; left: 50%;
-        transform: translate(-50%, calc(-50% + 26px));
-        width: min(560px, 92vw);
-        /* Gunakan svh agar tidak terpotong chrome mobile address bar */
-        max-height: min(88vh, 88svh);
-        border-radius: 20px;
-        background: rgba(22,22,22,0.93);
-        backdrop-filter: blur(26px) saturate(1.4);
-        -webkit-backdrop-filter: blur(26px) saturate(1.4);
-        box-shadow: 0 0 0 1px rgba(255,255,255,0.07), 0 32px 80px rgba(0,0,0,0.7), 0 0 55px rgba(15,188,109,0.22);
-        opacity: 0; pointer-events: none;
-        transition:
-          opacity 0.33s cubic-bezier(.4,0,.2,1),
-          transform 0.33s cubic-bezier(.34,1.38,.64,1),
-          width 0.25s ease;
-      }
-      #evm-modal.open {
-        opacity: 1; pointer-events: all;
-        transform: translate(-50%, -50%);
-      }
-      #evm-modal.evm-portrait  { width: min(820px, 94vw); flex-direction: row; align-items: stretch; }
-      #evm-modal.evm-square    { width: min(560px, 92vw); flex-direction: column; }
-      #evm-modal.evm-landscape { width: min(560px, 92vw); flex-direction: column; }
-    }
-
-    /* ── MOBILE: bottom sheet ── */
-    @media (max-width: 639px) {
-      #evm-modal {
-        bottom: 0; left: 0; right: 0; width: 100%;
-        max-height: min(92dvh, 92svh);
-        border-radius: 22px 22px 0 0;
-        box-shadow: 0 -6px 40px rgba(0,0,0,0.6), 0 0 35px rgba(15,188,109,0.18);
-        transform: translateY(100%); pointer-events: none;
-        transition: transform 0.4s cubic-bezier(.34,1.15,.64,1);
-        flex-direction: column;
-      }
-      #evm-modal.open { transform: translateY(0); pointer-events: all; }
-      #evm-modal::before {
-        content: ''; display: block; width: 36px; height: 4px;
-        border-radius: 99px; background: rgba(255,255,255,0.13);
-        margin: 10px auto 0; flex-shrink: 0;
-      }
-    }
-
-    /* ══════════════════════════════════════════════════════
-       POSTER COLUMN — EXPLICIT HEIGHT (bukan padding-bottom)
-
-       Root cause poster terpotong:
-       padding-bottom % relatif LEBAR, tidak patuh max-height
-       parent flex. Solusi: height eksplisit pakai svh.
-       Poster img pakai position:absolute+object-fit:cover
-       sehingga tetap proporsi apapun ukuran container.
-    ══════════════════════════════════════════════════════ */
-    #evm-poster-col {
-      position: relative;
-      overflow: hidden;
-      background: #111;
-      flex-shrink: 0;
-      width: 100%;
-      /* Tinggi default sebelum layout class aktif */
-      height: 180px;
-    }
-
-    /* Landscape: strip pendek */
-    #evm-modal.evm-landscape #evm-poster-col {
-      height: clamp(130px, 30svh, 220px);
-    }
-    /* Square: strip medium */
-    #evm-modal.evm-square #evm-poster-col {
-      height: clamp(150px, 36svh, 260px);
-    }
-    /* Portrait mobile: agak tinggi tapi ketat */
-    @media (max-width: 639px) {
-      #evm-modal.evm-portrait #evm-poster-col {
-        height: clamp(160px, 40svh, 300px);
-      }
-    }
-    /* Portrait desktop: sidebar kiri — ikuti tinggi body (stretch) */
-    @media (min-width: 640px) {
-      #evm-modal.evm-portrait #evm-poster-col {
-        width: 320px;
-        min-width: 300px;
-        height: auto;
-        min-height: 200px;
-        align-self: stretch;
-        flex-shrink: 0;
-      }
-    }
-
-    /* ── Override rasio manual via data-ratio ── */
-    @media (min-width: 640px) {
-      /* Column layouts */
-      #evm-modal.evm-landscape[data-ratio="16:9"] #evm-poster-col,
-      #evm-modal.evm-square[data-ratio="16:9"]    #evm-poster-col { height: clamp(110px,26svh,195px); }
-      #evm-modal.evm-landscape[data-ratio="4:3"]  #evm-poster-col,
-      #evm-modal.evm-square[data-ratio="4:3"]     #evm-poster-col { height: clamp(130px,30svh,225px); }
-      #evm-modal.evm-landscape[data-ratio="1:1"]  #evm-poster-col,
-      #evm-modal.evm-square[data-ratio="1:1"]     #evm-poster-col { height: clamp(150px,35svh,260px); }
-      #evm-modal.evm-landscape[data-ratio="3:4"]  #evm-poster-col,
-      #evm-modal.evm-square[data-ratio="3:4"]     #evm-poster-col { height: clamp(160px,38svh,280px); }
-      #evm-modal.evm-landscape[data-ratio="9:16"] #evm-poster-col,
-      #evm-modal.evm-square[data-ratio="9:16"]    #evm-poster-col { height: clamp(170px,40svh,300px); }
-      /* Portrait sidebar: tetap stretch, data-ratio tidak berpengaruh */
-      #evm-modal.evm-portrait[data-ratio] #evm-poster-col {
-        height: auto !important; min-height: 200px;
-      }
-    }
-    @media (max-width: 639px) {
-      /* Mobile: semua rasio max 40svh */
-      #evm-modal[data-ratio] #evm-poster-col {
-        height: clamp(150px, 40svh, 300px);
-      }
-    }
-
-    /* ── Tombol pilih rasio (pojok kanan bawah poster, desktop only) ── */
-    #evm-ratio-picker {
-      position: absolute; bottom: 9px; right: 9px; z-index: 20;
-      display: flex; gap: 3px; flex-wrap: wrap;
-      max-width: 210px; justify-content: flex-end;
-    }
-    .evm-ratio-btn {
-      padding: 3px 7px; border-radius: 5px; font-size: 0.58rem;
-      background: rgba(6,6,6,0.72); backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.45);
-      cursor: pointer; font-family: monospace; letter-spacing: 0.02em;
-      transition: all 0.15s;
-    }
-    .evm-ratio-btn:hover  { background: rgba(15,188,109,0.22); color:#fff; border-color:rgba(15,188,109,0.45); }
-    .evm-ratio-btn.active { background: rgba(15,188,109,0.28); color:#0fbc6d; border-color:rgba(15,188,109,0.55); }
-    @media (max-width: 639px) { #evm-ratio-picker { display: none; } }
-
-    /* Poster img */
-    #evm-poster {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: contain; display: block;
-      opacity: 0; transition: opacity 0.45s ease, transform 7s ease;
-    }
-    #evm-poster.evm-loaded { opacity: 1; }
-    #evm-modal.open #evm-poster { transform: scale(1); }
-
-    /* Skeleton shimmer — disembunyikan via JS saat gambar loaded */
-    #evm-skeleton {
-      position: absolute; inset: 0; z-index: 1;
-      background: linear-gradient(90deg,#1e1e1e 25%,#282828 50%,#1e1e1e 75%);
-      background-size: 200% 100%;
-      animation: evmShimmer 1.5s infinite;
-    }
-    /* CATATAN: skeleton dikendalikan JS, bukan CSS ~ selector */
-    @keyframes evmShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-    /* Fallback (no image) */
-    #evm-fallback {
-      position: absolute; inset: 0; z-index: 2;
-      display: none; align-items: center; justify-content: center;
-      flex-direction: column; gap: 8px;
-      background: linear-gradient(135deg,#192a20 0%,#141414 100%);
-    }
-    #evm-fallback i    { font-size: 2.5rem; color: rgba(15,188,109,0.15); }
-    #evm-fallback span { font-size: 0.68rem; color: #333; }
-    #evm-modal.evm-noimg #evm-fallback  { display: flex; }
-    #evm-modal.evm-noimg #evm-skeleton  { display: none; }
-
-    /* Poster gradient overlay */
-    #evm-poster-col::after {
-      content: ''; position: absolute; inset: 0; pointer-events: none;
-    }
-    #evm-modal.evm-landscape #evm-poster-col::after,
-    #evm-modal.evm-square    #evm-poster-col::after {
-      background: linear-gradient(to top, rgba(22,22,22,0.97) 0%, rgba(22,22,22,0.05) 60%, transparent 100%);
-    }
-    @media (min-width: 640px) {
-      #evm-modal.evm-portrait #evm-poster-col::after {
-        background: linear-gradient(to right, transparent 60%, rgba(22,22,22,0.7) 100%);
-      }
-    }
-    @media (max-width: 639px) {
-      #evm-modal.evm-portrait #evm-poster-col::after {
-        background: linear-gradient(to top, rgba(22,22,22,0.97) 0%, transparent 60%);
-      }
-    }
-
-    /* Badge top-left on poster */
-    #evm-badge {
-      position: absolute; top: 12px; left: 12px; z-index: 10;
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 10px; border-radius: 99px;
-      background: rgba(8,8,8,0.68); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1);
-      font-size: 0.66rem; letter-spacing: 0.07em; text-transform: uppercase;
-    }
-    #evm-badge-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      animation: evmPulse 2s infinite;
-    }
-    @keyframes evmPulse {
-      0%,100%{ transform:scale(1); opacity:1; }
-      50%    { transform:scale(1.55); opacity:0.5; }
-    }
-
-    /* Close button */
-    #evm-close {
-      position: absolute; top: 12px; right: 12px; z-index: 20;
-      width: 34px; height: 34px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.13);
-      background: rgba(8,8,8,0.68); backdrop-filter: blur(8px);
-      color: #f0f0f0; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 13px;
-      transition: background 0.2s, transform 0.22s, border-color 0.2s;
-    }
-    #evm-close:hover {
-      background: rgba(220,38,38,0.35); border-color: rgba(220,38,38,0.5);
-      transform: scale(1.1) rotate(90deg);
-    }
-
-    /* ── Body / content ── */
-    #evm-body {
-      flex: 1; overflow-y: auto;
-      overscroll-behavior: contain;
-      padding: 0 20px 24px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.07) transparent;
-      min-width: 0;
-    }
-    #evm-body::-webkit-scrollbar       { width: 4px; }
-    #evm-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 99px; }
-
-    /* Title area — sedikit overlap poster di desktop, TIDAK di mobile */
-    #evm-title-area { position: relative; z-index: 5; }
-
-    /* Desktop: overlap kecil di layout kolom */
-    @media (min-width: 640px) {
-      #evm-modal.evm-landscape #evm-title-area,
-      #evm-modal.evm-square    #evm-title-area { margin-top: -28px; }
-      #evm-modal.evm-portrait  #evm-title-area { margin-top: 18px; }
-    }
-    /* Mobile: TIDAK pakai negative margin — cukup padding atas */
-    @media (max-width: 639px) {
-      #evm-title-area { margin-top: 14px; }
-    }
-
-    #evm-cat {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 0.67rem; color: #0fbc6d;
-      text-transform: uppercase; letter-spacing: 0.09em;
-      margin-bottom: 5px;
-    }
-    #evm-title-text {
-      font-weight: 800; font-size: clamp(1.05rem,3vw,1.35rem);
-      line-height: 1.25; color: #fff; margin-bottom: 14px;
-    }
-
-    /* Meta chips */
-    #evm-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
-    .evm-chip {
-      display: inline-flex; align-items: flex-start; gap: 6px;
-      padding: 6px 11px; border-radius: 10px;
-      background: #252525; border: 1px solid rgba(255,255,255,0.07);
-      font-size: 0.76rem; color: #ccc;
-    }
-    .evm-chip i { color: #0fbc6d; font-size: 0.7rem; margin-top: 2px; flex-shrink: 0; }
-
-    #evm-maps-link {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 0.68rem; color: #0fbc6d; text-decoration: none;
-      margin-top: 3px; opacity: 0.8; transition: opacity 0.2s;
-    }
-    #evm-maps-link:hover { opacity: 1; }
-
-    .evm-line {
-      height: 1px; margin-bottom: 14px;
-      background: linear-gradient(90deg, rgba(15,188,109,0.15), transparent);
-    }
-
-    #evm-desc {
-      font-size: 0.86rem; line-height: 1.75; color: #aaa;
-      margin-bottom: 20px;
-    }
-    #evm-desc p       { margin-bottom: 8px; }
-    #evm-desc strong  { color: #f0f0f0; }
-    #evm-desc a       { color: #0fbc6d; text-decoration: underline; }
-    #evm-desc ul, #evm-desc ol { margin: 7px 0 7px 17px; }
-    #evm-desc li      { margin-bottom: 4px; }
-
-    /* CTA row */
-    #evm-cta { display: flex; gap: 9px; flex-wrap: wrap; }
-
-    .evm-btn-primary {
-      flex: 1; min-width: 120px;
-      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-      padding: 11px 16px; border-radius: 11px;
-      background: #0fbc6d; color: #000;
-      font-weight: 700; font-size: 0.86rem;
-      text-decoration: none; border: none; cursor: pointer;
-      box-shadow: 0 4px 18px rgba(15,188,109,0.28);
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    }
-    .evm-btn-primary:hover {
-      background: #12d87c; transform: translateY(-2px);
-      box-shadow: 0 7px 26px rgba(15,188,109,0.35);
-    }
-    .evm-btn-primary:active { transform: translateY(0); }
-
-    .evm-btn-secondary {
-      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-      padding: 11px 15px; border-radius: 11px;
-      background: transparent; color: #777;
-      font-weight: 600; font-size: 0.86rem;
-      border: 1px solid rgba(255,255,255,0.08); cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-    }
-    .evm-btn-secondary:hover {
-      background: rgba(255,255,255,0.05); color: #f0f0f0;
-      border-color: rgba(255,255,255,0.15);
-    }
-  </style>
-</head>
-<body class="min-h-screen page-fade">
-
-  <!-- Header (sama persis, tidak berubah) -->
-  <div id="header-placeholder"></div>
-
-  <main class="ev-wrap">
-    <div class="ev-inner">
-
-      <div class="ev-title-block">
-        <div class="ev-eyebrow">Kalender Kegiatan</div>
-        <h1 class="ev-title">Agenda <em>HMTE</em></h1>
-        <p class="ev-page-sub">Jadwal event, workshop, dan seminar HMTE Unsoed.</p>
-      </div>
-
-      <div class="ev-section-label">
-        <div class="ev-eyebrow">Event Terdekat</div>
-        <h2 class="ev-section-title">Event Mendatang</h2>
-      </div>
-
-      <div id="current-event-register">
-        <div style="color:rgba(156,163,175,0.4);padding:48px 0;text-align:center;font-style:italic;">
-          <i class="fas fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:12px;display:block;color:#0fbc6d;"></i>
-          Memuat event...
-        </div>
-      </div>
-
-      <hr class="ev-divider" />
-
-      <div class="ev-section-label" id="upcoming-heading" style="display:none;">
-        <div class="ev-eyebrow">Jadwal Berikutnya</div>
-        <h2 class="ev-section-title">Akan Datang</h2>
-      </div>
-
-      <div id="upcoming-list"></div>
-
-      <hr class="ev-divider" id="archive-divider" style="display:none;" />
-
-      <div id="div-tiga-events"></div>
-
-    </div>
-  </main>
-
-  <!-- Footer (sama persis, tidak berubah) -->
-  <div id="footer-placeholder"></div>
-
-  <!-- ══════════════════════════════════════════════════
-       EVENT DETAIL MODAL
-       Ditempatkan di luar <main> agar z-index tidak
-       tertahan oleh stacking context parent manapun.
-  ══════════════════════════════════════════════════ -->
-
-  <!-- Overlay gelap -->
-  <div id="evm-overlay" aria-hidden="true"></div>
-
-  <!-- Modal / Bottom Sheet -->
-  <div id="evm-modal" role="dialog" aria-modal="true" aria-labelledby="evm-title-text">
-
-    <!-- Poster -->
-    <div id="evm-poster-col">
-      <div id="evm-skeleton"></div>
-      <div id="evm-fallback">
-        <i class="far fa-calendar-alt"></i>
-        <span>no poster</span>
-      </div>
-      <img id="evm-poster" src="" alt="Poster Event" />
-      <span id="evm-badge">
-        <span id="evm-badge-dot"></span>
-        <span id="evm-badge-label">Mendatang</span>
-      </span>
-      <button id="evm-close" aria-label="Tutup modal">
-        <i class="fas fa-times"></i>
-      </button>
-      <!-- Pilihan rasio gambar — desktop only -->
-      <div id="evm-ratio-picker">
-        <button class="evm-ratio-btn" data-r="16:9">16:9</button>
-        <button class="evm-ratio-btn" data-r="4:3">4:3</button>
-        <button class="evm-ratio-btn" data-r="1:1">1:1</button>
-        <button class="evm-ratio-btn" data-r="3:4">3:4</button>
-        <button class="evm-ratio-btn" data-r="9:16">9:16</button>
-        <button class="evm-ratio-btn active" data-r="auto">auto</button>
-      </div>
+  <div class="ongoing-inner">
+    <div class="ongoing-header">
+      <span class="ongoing-eyebrow">Kegiatan HMTE</span>
+      <h2 class="ongoing-title">Acara <em>On-going</em></h2>
+      <p class="ongoing-subtitle">Event dan program kerja HMTE Unsoed yang sedang hangat berlangsung atau akan datang dalam waktu dekat.</p>
     </div>
 
-    <!-- Konten -->
-    <div id="evm-body">
-      <div id="evm-title-area">
-        <div id="evm-cat"><i class="fas fa-bolt"></i><span id="evm-cat-text">Kegiatan</span></div>
-        <h2 id="evm-title-text">—</h2>
-      </div>
-
-      <div id="evm-meta">
-        <div class="evm-chip"><i class="far fa-calendar-alt"></i><span id="evm-date">—</span></div>
-        <div class="evm-chip"><i class="far fa-clock"></i><span id="evm-time">—</span></div>
-        <div class="evm-chip">
-          <i class="fas fa-map-marker-alt"></i>
-          <div>
-            <div id="evm-loc">—</div>
-            <a id="evm-maps-link" href="#" target="_blank" rel="noopener">
-              <i class="fas fa-external-link-alt"></i> Buka Maps
-            </a>
+    <div id="home-ongoing-container" class="ongoing-grid">
+      <div class="ongoing-card ongoing-card-skel is-visible">
+        <div class="ongoing-card-cover"><div class="ongoing-skel" style="width:100%;height:100%;"></div></div>
+        <div class="ongoing-card-body">
+          <div class="ongoing-card-meta">
+            <div class="ongoing-skel" style="height:12px;width:30%;"></div>
           </div>
+          <div class="ongoing-skel" style="height:18px;width:90%;"></div>
+          <div class="ongoing-skel" style="height:12px;width:65%;"></div>
+          <div class="ongoing-skel" style="height:12px;width:40%;margin-top:20px;"></div>
         </div>
       </div>
-
-      <div class="evm-line"></div>
-      <div id="evm-desc"></div>
-
-      <div id="evm-cta">
-        <a id="evm-btn-action" href="#" target="_blank" rel="noopener" class="evm-btn-primary">
-          <i class="fas fa-ticket-alt"></i> Daftar Sekarang
-        </a>
-        <button class="evm-btn-secondary" onclick="closeEventModal()">
-          <i class="fas fa-times"></i> Tutup
-        </button>
+      <div class="ongoing-card ongoing-card-skel is-visible">
+        <div class="ongoing-card-cover"><div class="ongoing-skel" style="width:100%;height:100%;"></div></div>
+        <div class="ongoing-card-body">
+          <div class="ongoing-card-meta">
+            <div class="ongoing-skel" style="height:12px;width:35%;"></div>
+          </div>
+          <div class="ongoing-skel" style="height:18px;width:80%;"></div>
+          <div class="ongoing-skel" style="height:12px;width:55%;"></div>
+          <div class="ongoing-skel" style="height:12px;width:45%;margin-top:20px;"></div>
+        </div>
+      </div>
+      <div class="ongoing-card ongoing-card-skel is-visible" style="opacity:.6;">
+        <div class="ongoing-card-cover"><div class="ongoing-skel" style="width:100%;height:100%;"></div></div>
+        <div class="ongoing-card-body">
+          <div class="ongoing-card-meta">
+            <div class="ongoing-skel" style="height:12px;width:25%;"></div>
+          </div>
+          <div class="ongoing-skel" style="height:18px;width:75%;"></div>
+          <div class="ongoing-skel" style="height:12px;width:50%;"></div>
+        </div>
       </div>
     </div>
 
-  </div><!-- /#evm-modal -->
+    <div class="ongoing-footer">
+      <a href="/page/event/event.html" class="ongoing-cta">
+        Jelajahi Semua Event <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
 
-  <!-- ── Script utama (urutan tetap sama) ── -->
-  <script src="/js/loader.js"></script>
-  <script src="/js/data/calendar.js"></script>
-  <script src="/js/pages/event.js"></script>
+  <div class="ongoing-sekat ongoing-sekat-bottom"></div>
+</section>
 
-  <!-- ── Modal engine (setelah event.js) ── -->
-  <script>
-  /* ════════════════════════════════════════════════════════
-     EVENT DETAIL MODAL ENGINE v3
-     openEventModal(eventObject)  ← buka modal
-     closeEventModal()            ← tutup modal
-  ════════════════════════════════════════════════════════ */
-  (function () {
-    'use strict';
-
-    var overlay   = document.getElementById('evm-overlay');
-    var modal     = document.getElementById('evm-modal');
-    var poster    = document.getElementById('evm-poster');
-    var skelEl    = document.getElementById('evm-skeleton');
-    var badgeDot  = document.getElementById('evm-badge-dot');
-    var badgeEl   = document.getElementById('evm-badge');
-    var badgeLbl  = document.getElementById('evm-badge-label');
-    var titleEl   = document.getElementById('evm-title-text');
-    var catEl     = document.getElementById('evm-cat-text');
-    var dateEl    = document.getElementById('evm-date');
-    var timeEl    = document.getElementById('evm-time');
-    var locEl     = document.getElementById('evm-loc');
-    var mapsEl    = document.getElementById('evm-maps-link');
-    var descEl    = document.getElementById('evm-desc');
-    var btnAction = document.getElementById('evm-btn-action');
-    var bodyEl    = document.getElementById('evm-body');
-
-    var COLORS = {
-      green:  { dot:'#0fbc6d', bg:'rgba(15,188,109,0.16)', glow:'rgba(15,188,109,0.26)', lbl:'Mendatang' },
-      blue:   { dot:'#06b6d4', bg:'rgba(6,182,212,0.16)',  glow:'rgba(6,182,212,0.24)',  lbl:'Seminar'   },
-      yellow: { dot:'#eab308', bg:'rgba(234,179,8,0.16)',  glow:'rgba(234,179,8,0.24)',  lbl:'Informal'  },
-      gray:   { dot:'#6b7280', bg:'rgba(107,114,128,0.16)',glow:'rgba(107,114,128,0.18)',lbl:'Kegiatan'  },
-    };
-    var LAYOUTS = ['evm-landscape','evm-portrait','evm-square'];
-
-    function setLayout(name) {
-      LAYOUTS.forEach(function(c){ modal.classList.remove(c); });
-      modal.classList.add('evm-' + name);
-    }
-    function detectLayout(img) {
-      var r = img.naturalWidth / (img.naturalHeight || 1);
-      if (r < 0.72) return 'portrait';
-      if (r > 1.40) return 'landscape';
-      return 'square';
-    }
-    function fmtDate(ds) {
-      if (!ds) return '—';
-      return new Date(ds.replace(/-/g,'/')).toLocaleDateString('id-ID',
-        { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-    }
-    function isPast(ds) {
-      if (!ds) return false;
-      var d=new Date(ds); d.setHours(0,0,0,0);
-      var n=new Date();   n.setHours(0,0,0,0);
-      return d < n;
-    }
-    function toHTML(str) {
-      if (!str) return '<p style="color:#555;font-style:italic;">Tidak ada deskripsi.</p>';
-      if (/<[a-z][\s\S]*>/i.test(str)) return str;
-      return str.split(/\n\s*\n/).map(function(p){
-        return '<p>'+p.trim().replace(/\n/g,'<br>')+'</p>';
-      }).join('');
-    }
-
-    /* ── Scroll lock: hanya overflow, TIDAK position:fixed ──
-       position:fixed pada body mengubah containing block semua
-       position:fixed elemen di dalamnya → modal jadi relatif ke
-       body bukan viewport → terpotong saat scroll. */
-    function lockScroll() {
-      document.documentElement.style.overflowY = 'hidden';
-    }
-    function unlockScroll() {
-      document.documentElement.style.overflowY = '';
-    }
-
-    /* ── Ratio picker ── */
-    var _currentRatio = 'auto';
-    document.querySelectorAll('.evm-ratio-btn').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var r = this.getAttribute('data-r');
-        _currentRatio = r;
-        document.querySelectorAll('.evm-ratio-btn').forEach(function(b){ b.classList.remove('active'); });
-        this.classList.add('active');
-        if (r === 'auto') {
-          modal.removeAttribute('data-ratio');
-          /* Kembali ke layout otomatis dari gambar */
-          if (poster.naturalWidth) setLayout(detectLayout(poster));
-        } else {
-          modal.setAttribute('data-ratio', r);
-          /* 9:16 / 3:4 → portrait layout (sidebar desktop) */
-          /* 16:9 / 4:3 / 1:1 → column layout */
-          if (r === '9:16' || r === '3:4') setLayout('portrait');
-          else setLayout('landscape');
-        }
-        /* Scroll body ke atas setelah resize */
-        setTimeout(function(){ bodyEl.scrollTop = 0; }, 50);
+<script>
+(function () {
+  /* ══ OBSERVER: header, footer, kartu ══ */
+  function initOngoingAnim() {
+    var io = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
       });
+    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+
+    document.querySelectorAll('.ongoing-header, .ongoing-footer').forEach(function (el) {
+      io.observe(el);
     });
 
-    /* ── OPEN ── */
-    window.openEventModal = function (ev) {
-      if (!ev) return;
-      var col  = COLORS[ev.color] || COLORS.gray;
-      var past = isPast(ev.date);
+    /* Kartu yang sudah di-inject JS */
+    var container = document.getElementById('home-ongoing-container');
+    if (!container) return;
 
-      /* Reset state */
-      poster.classList.remove('evm-loaded');
-      modal.classList.remove('evm-noimg');
-      modal.removeAttribute('data-ratio');
-      _currentRatio = 'auto';
-      document.querySelectorAll('.evm-ratio-btn').forEach(function(b){
-        b.classList.toggle('active', b.getAttribute('data-r') === 'auto');
+    // Untuk Mobile Swipe, kita deteksi jika muncul di layar horizontal maupun vertikal
+    var cardIO = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
       });
-      if (skelEl) skelEl.style.display = '';
-      setLayout('landscape');
+    }, { threshold: 0.05, rootMargin: '0px 20px -20px 20px' });
 
-      /* Poster load */
-      if (ev.imgSrc) {
-        var src = ev.imgSrc;
-        if (!src.startsWith('http') && !src.startsWith('/')) src = '/' + src;
-        poster.style.display = 'block';
-
-        var _timer = setTimeout(function() {
-          if (!poster.classList.contains('evm-loaded')) {
-            modal.classList.add('evm-noimg');
-            poster.style.display = 'none';
-            if (skelEl) skelEl.style.display = 'none';
-          }
-        }, 8000);
-
-        poster.onload = function() {
-          clearTimeout(_timer);
-          poster.classList.add('evm-loaded');
-          if (skelEl) skelEl.style.display = 'none';
-          setLayout(detectLayout(poster));
-          bodyEl.scrollTop = 0;
-        };
-        poster.onerror = function() {
-          clearTimeout(_timer);
-          if (skelEl) skelEl.style.display = 'none';
-          modal.classList.add('evm-noimg');
-          poster.style.display = 'none';
-        };
-        poster.src = src;
-      } else {
-        poster.style.display = 'none';
-        if (skelEl) skelEl.style.display = 'none';
-        modal.classList.add('evm-noimg');
-      }
-
-      /* Badge & glow */
-      badgeDot.style.background = col.dot;
-      badgeEl.style.background  = col.bg;
-      badgeLbl.textContent      = past ? 'Selesai' : col.lbl;
-      modal.style.boxShadow = '0 0 0 1px rgba(255,255,255,0.07),0 32px 80px rgba(0,0,0,0.7),0 0 55px '+col.glow;
-
-      /* Konten */
-      titleEl.textContent = ev.title    || 'Tanpa Judul';
-      catEl.textContent   = ev.category || (past ? 'Kegiatan Selesai' : col.lbl);
-      dateEl.textContent  = fmtDate(ev.date);
-      timeEl.textContent  = ev.time     || 'Waktu menyusul';
-      locEl.textContent   = ev.location || 'Lokasi menyusul';
-      mapsEl.style.display = ev.locationLink ? 'inline-flex' : 'none';
-      if (ev.locationLink) mapsEl.href = ev.locationLink;
-      descEl.innerHTML = toHTML(ev.content || ev.description || '');
-
-      /* CTA */
-      if (past) {
-        var doc = ev.driveLink || ev.link || null;
-        if (doc) {
-          btnAction.href = doc;
-          btnAction.innerHTML = '<i class="fas fa-folder-open"></i> Lihat Dokumentasi';
-          btnAction.style.display = 'inline-flex';
-        } else { btnAction.style.display = 'none'; }
-      } else if (ev.registrationLink) {
-        btnAction.href = ev.registrationLink;
-        btnAction.innerHTML = '<i class="fas fa-ticket-alt"></i> Daftar Sekarang';
-        btnAction.style.display = 'inline-flex';
-      } else { btnAction.style.display = 'none'; }
-
-      /* Tampilkan */
-      lockScroll();
-      overlay.classList.add('open');
-      requestAnimationFrame(function(){
-        requestAnimationFrame(function(){ modal.classList.add('open'); });
+    /* MutationObserver — tangkap kartu yang diinjeksi home.js secara async */
+    new MutationObserver(function () {
+      container.querySelectorAll('.ongoing-card:not([data-obs])').forEach(function (card) {
+        card.setAttribute('data-obs', '1');
+        cardIO.observe(card);
       });
-      bodyEl.scrollTop = 0;
-    };
+    }).observe(container, { childList: true, subtree: false });
 
-    /* ── CLOSE ── */
-    window.closeEventModal = function () {
-      modal.classList.remove('open');
-      overlay.classList.remove('open');
-      unlockScroll();
-      setTimeout(function(){
-        poster.src = '';
-        poster.classList.remove('evm-loaded');
-        if (skelEl) skelEl.style.display = '';
-        descEl.innerHTML = '';
-        LAYOUTS.forEach(function(c){ modal.classList.remove(c); });
-        modal.removeAttribute('data-ratio');
-      }, 420);
-    };
-
-    overlay.addEventListener('click', window.closeEventModal);
-    document.getElementById('evm-close').addEventListener('click', window.closeEventModal);
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape' && modal.classList.contains('open')) window.closeEventModal();
+    /* Observe kartu yang sudah ada */
+    container.querySelectorAll('.ongoing-card:not([data-obs])').forEach(function (card) {
+      card.setAttribute('data-obs', '1');
+      cardIO.observe(card);
     });
+  }
 
-    /* Mobile swipe-to-close */
-    var _ts=0, _drag=false;
-    modal.addEventListener('touchstart',function(e){_ts=e.touches[0].clientY;_drag=true;},{passive:true});
-    modal.addEventListener('touchmove', function(e){
-      if(!_drag)return;
-      var d=e.touches[0].clientY-_ts;
-      if(d>0) modal.style.transform='translateY('+d+'px)';
-    },{passive:true});
-    modal.addEventListener('touchend', function(e){
-      if(!_drag)return; _drag=false;
-      var d=e.changedTouches[0].clientY-_ts;
-      if(d>110){
-        modal.style.transition='transform 0.28s ease';
-        modal.style.transform='translateY(100%)';
-        overlay.classList.remove('open'); unlockScroll();
-        setTimeout(function(){
-          modal.classList.remove('open');
-          modal.style.transform=''; modal.style.transition='';
-        },300);
-      } else {
-        modal.style.transition='transform 0.3s cubic-bezier(.34,1.4,.64,1)';
-        modal.style.transform='translateY(0)';
-        setTimeout(function(){ modal.style.transform=''; modal.style.transition=''; },320);
-      }
-    },{passive:true});
+  /* ══ REGISTER ══ */
+  window.__components = window.__components || {};
+  window.__components['ongoing'] = { init: initOngoingAnim };
+  window.initOngoingAnimations    = initOngoingAnim;
 
-  })();
-  </script>
+  document.addEventListener('component:loaded', function (e) {
+    if (e.detail && e.detail.name === 'ongoing') initOngoingAnim();
+  });
 
-</body>
-</html>
+  if (document.readyState !== 'loading') initOngoingAnim();
+  else document.addEventListener('DOMContentLoaded', initOngoingAnim);
+})();
+</script>
