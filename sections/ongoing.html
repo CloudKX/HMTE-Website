@@ -27,6 +27,7 @@
     position: relative;
     padding: clamp(36px, 6vh, 64px) 0;
     overflow: hidden;
+    -webkit-overflow-scrolling: touch;
     background: radial-gradient(circle at center, rgba(15,188,109,0.04) 0%, rgba(10,12,16,1) 70%);
   }
 
@@ -279,31 +280,36 @@
      MOBILE OPTIMIZATION -> ENHANCED SWIPE CAROUSEL
   ══════════════════════════════════════════════════════ */
   @media (max-width: 768px) {
-    .ongoing-inner { padding: 0; }
-    .ongoing-header { padding: 0 24px; margin-bottom: 32px;}
-    .ongoing-footer { padding: 0 24px; }
+    .ongoing-inner { padding: 0; width: 100%; box-sizing: border-box; }
+    .ongoing-header { padding: 0 20px; margin-bottom: 28px; }
+    .ongoing-footer { padding: 0 20px; }
     .ongoing-section::before { width: 200px; height: 200px; } /* Kecilkan radar di mobile */
     .ongoing-shape { display: none; } /* Sembunyikan shape di mobile agar tidak penuh */
 
-    /* Horizontal Scroll yang Halus */
+    /* Horizontal Scroll yang Halus — Android compatible */
     .ongoing-grid {
       flex-wrap: nowrap !important;
       justify-content: flex-start !important;
       overflow-x: auto;
+      overflow-y: visible;
       scroll-snap-type: x mandatory;
-      scroll-padding-left: 24px; /* Menyesuaikan dengan padding card pertama */
-      padding: 10px 24px 40px 24px !important; 
-      gap: 16px;
+      scroll-padding-left: 20px;
+      padding: 10px 20px 32px 20px !important;
+      gap: 14px;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none; 
+      overscroll-behavior-x: contain;
+      touch-action: pan-x;
+      scrollbar-width: none;
     }
     .ongoing-grid::-webkit-scrollbar { display: none; }
 
     .ongoing-card {
-      /* Lebar kartu diatur agar terlihat ada kartu selanjutnya di sebelah kanan */
-      flex: 0 0 68vw !important;
-      max-width: 250px !important;
-      scroll-snap-align: start; /* Snap di awal kartu */
+      flex: 0 0 min(72vw, 240px) !important;
+      max-width: 240px !important;
+      min-width: 0 !important;
+      scroll-snap-align: start;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .ongoing-card:active { transform: scale(0.96) !important; transition: transform 0.15s ease-out; }
