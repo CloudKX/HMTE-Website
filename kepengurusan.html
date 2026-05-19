@@ -21,7 +21,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <!-- Tailwind CSS CDN -->
-  <script src="js/loader.js"
+  <script src="js/loader.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
@@ -48,6 +48,95 @@
     .fade-in.visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* ===== OVERRIDE khusus kepengurusan.html — tidak menyentuh halaman lain ===== */
+    /* Hanya paksa opacity/visibility, JANGAN override transform karena Swiper butuh transform untuk geser */
+    .centered-slide-carousel {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+
+    /* swiper-wrapper TIDAK boleh di-override transform — Swiper pakai translateX untuk geser */
+    .centered-slide-carousel .swiper-wrapper {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* slide individual juga jangan di-override transform */
+    .centered-slide-carousel .swiper-slide {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Swiper slide filosofi — layout vertikal, konten tidak hilang */
+    .swiper-slide.filosofi-wrapper {
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      text-align: center !important;
+      padding: 1rem 1.5rem 2.5rem 1.5rem !important;
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: visible !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+      width: 100% !important;
+    }
+
+    .swiper-slide.filosofi-wrapper img {
+      display: block !important;
+      width: 100% !important;
+      max-width: 220px !important;
+      height: auto !important;
+      margin: 0 auto 1rem auto !important;
+      border-radius: 1rem !important;
+    }
+
+    .swiper-slide.filosofi-wrapper p {
+      width: 100% !important;
+      max-width: 600px !important;
+      margin: 0 auto !important;
+      line-height: 1.7 !important;
+      color: #d1d5db !important;
+    }
+
+    .swiper-slide.filosofi-wrapper h1 {
+      width: 100% !important;
+    }
+
+    @media screen and (max-width: 640px) {
+      .swiper-slide.filosofi-wrapper img {
+        max-width: 160px !important;
+      }
+      .swiper-slide.filosofi-wrapper p {
+        font-size: 0.875rem !important;
+      }
+    }
+
+    /* Tombol navigasi swiper filosofi */
+    .centered-slide-carousel .swiper-button-prev,
+    .centered-slide-carousel .swiper-button-next {
+      color: #6ee7b7 !important;
+      background: rgba(15,188,109,0.1) !important;
+      border: 1px solid rgba(15,188,109,0.3) !important;
+      border-radius: 50% !important;
+      width: 36px !important;
+      height: 36px !important;
+      top: 35% !important;
+    }
+
+    .centered-slide-carousel .swiper-button-prev::after,
+    .centered-slide-carousel .swiper-button-next::after {
+      font-size: 14px !important;
+      font-weight: 700 !important;
+    }
+
+    .centered-slide-carousel .swiper-button-disabled {
+      opacity: 0.2 !important;
     }
 
     /* Custom scrollbar untuk pop-up */
@@ -152,6 +241,89 @@
     opacity: 1;
   }
 }
+
+/* Filosofi swiper - cegah teks terpotong di mobile */
+.swiper.centered-slide-carousel {
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Pastikan swiper wrapper mengikuti tinggi slide aktif */
+.swiper.centered-slide-carousel .swiper-wrapper {
+  align-items: flex-start;
+}
+
+/* Slide filosofi - tampil vertikal, konten tidak terpotong */
+.swiper-slide.filosofi-wrapper {
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: center;
+  padding: 1rem 1.5rem 2.5rem 1.5rem;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  width: 100%;
+}
+
+.swiper-slide.filosofi-wrapper img {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin: 0 auto 1rem auto;
+  border-radius: 1rem;
+}
+
+.swiper-slide.filosofi-wrapper h1,
+.swiper-slide.filosofi-wrapper h3 {
+  width: 100%;
+}
+
+.swiper-slide.filosofi-wrapper p {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+@media screen and (max-width: 640px) {
+  .swiper-slide.filosofi-wrapper img {
+    max-width: 160px;
+  }
+  .swiper-slide.filosofi-wrapper p {
+    font-size: 0.875rem;
+  }
+}
+
+/* Visi misi section responsive */
+@media screen and (max-width: 1024px) {
+  .max-w-6xl.mx-auto.flex.flex-col.lg\\:flex-row {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* Team grid responsive - 1 col on very small screens */
+@media screen and (max-width: 400px) {
+  .grid.grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+/* Modal popup title responsive */
+@media screen and (max-width: 640px) {
+  #popupTitle {
+    font-size: 1.25rem;
+  }
+  #popupDescription {
+    font-size: 0.95rem;
+  }
+}
   </style>
 
   <!-- icon -->
@@ -189,10 +361,10 @@
 
   <!-- Page Wrapper with Wider Horizontal Padding -->
 
-  <div class="container mx-auto px-12">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-12">
     <!-- 1. Hero Section -->
 
-    <section class="fade-in flex flex-col lg:flex-row lg:py-4 select-none">
+    <section class="fade-in flex flex-col lg:flex-row lg:py-4 select-none py-6">
       <!-- min-h- dapat diganti aspect-video, tapi ada space di bawah gambarnya pas dihover berlaku kebalikannya -->
       <!-- dikasih lg:py-16 biar ada space antara hero sama visi misi -->
       <!-- Left: Carousel -->
@@ -226,7 +398,7 @@
 
       <div class="w-full flex flex-col items-center justify-center text-center">
         <h1
-          class="bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-600 text-[5rem] font-extrabold leading-tight">
+          class="bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-600 text-[2.5rem] sm:text-[3.5rem] lg:text-[5rem] font-extrabold leading-tight">
           Kabinet <br>Nova Imperium</h1>
 
         <p
@@ -241,64 +413,66 @@
     <section class="select-none">
       <div class="relative w-full flex justify-center items-center fade-in">
         <h2
-          class="text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-800 select-none leading-relaxed">
+          class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-800 select-none leading-relaxed">
           Filosofi Logo
         </h2>
       </div>
 
-      <div class="w-full relative fade-in h-full">
-        <div class="swiper centered-slide-carousel swiper-container relative ">
+      <div class="w-full relative h-full">
+        <div class="swiper centered-slide-carousel swiper-container relative w-full">
           <div class="swiper-wrapper filosofi-wrapper">
             <!-- Card 1 -->
-            <div class="swiper-slide items-center flex-col flex justify-center text-center filosofi-wrapper">
+            <div class="swiper-slide filosofi-wrapper">
               <img class="rounded-t-2xl max-w-xs md:max-w-sm h-auto" src="img/Asset Logo/kepala-elang.jpg" alt="Kepala Elang" loading="lazy" />
               <div class="">
                 <h1
-                  class="text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed">
+                  class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed mt-4 mb-2">
                   Kepala Elang</h1>
-                <p class="text-gray-300 object-center text-center text-lg px-24">
+                <p class="text-gray-300 text-center text-base lg:text-lg leading-relaxed max-w-prose mx-auto">
                   Kepala elang melambangkan pusat kendali dan arah kabinet. Elemen ini mencerminkan seluruh pengurus yang memiliki visi ke depan serta pemahaman yang kuat terhadap arah gerak HMTE, sehingga setiap rencana 2026 dapat dijalankan secara optimal dan terukur.
                 </p>
               </div>
             </div>
             <!-- Card 2 -->
-            <div class="swiper-slide items-center flex-col flex justify-center text-center filosofi-wrapper">
+            <div class="swiper-slide filosofi-wrapper">
               <img class="rounded-t-2xl max-w-xs md:max-w-sm h-auto" src="img/Asset Logo/bulu-tengkuk.jpg" alt="Bulu Tengkuk" loading="lazy" />
               <div class="">
                 <h1
-                  class="text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed">
+                  class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed mt-4 mb-2">
                   Bulu Tengkuk</h1>
-                <p class="text-gray-300 object-center text-center text-lg px-24">
+                <p class="text-gray-300 text-center text-base lg:text-lg leading-relaxed max-w-prose mx-auto">
                   Bulu tengkuk melambangkan 6 departemen sebagai penopang utama kabinet. Bagian ini menunjukkan bagaimana tiap departemen saling terhubung dan bergerak bersama dalam satu arah, dengan kerja sama yang kompak sehingga kabinet tetap kuat, stabil, dan mampu berjalan lancar menghadapi berbagai kondisi.
                 </p>
               </div>
             </div>
             <!-- Card 3 -->
-            <div class="swiper-slide items-center flex-col flex justify-center text-center filosofi-wrapper">
+            <div class="swiper-slide filosofi-wrapper">
               <img class="rounded-t-2xl max-w-xs md:max-w-sm h-auto" src="img/Asset Logo/paruh.jpg" alt="Paruh" loading="lazy" />
               <div class="">
                 <h1
-                  class="text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed">
+                  class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed mt-4 mb-2">
                   Paruh</h1>
-                <p class="text-gray-300 object-center text-center text-lg px-24">
+                <p class="text-gray-300 text-center text-base lg:text-lg leading-relaxed max-w-prose mx-auto">
                   Paruh melambangkan cara organisasi menyampaikan gagasan dan arah geraknya. Bagian ini menunjukkan komunikasi yang jelas dan terarah, agar ide dan hasil kerja dapat dipahami dengan baik. Paruh juga mencerminkan ketegasan dalam menyampaikan pesan, sehingga langkah organisasi tetap selaras dan berjalan konsisten.
                 </p>
               </div>
             </div>
             <!-- Card 4 -->
-            <div class="swiper-slide items-center flex-col flex justify-center text-center filosofi-wrapper">
+            <div class="swiper-slide filosofi-wrapper">
               <img class="rounded-t-2xl max-w-xs md:max-w-sm h-auto" src="img/Asset Logo/jambul.jpg" alt="Jambul" loading="lazy" />
               <div class="">
                 <h1
-                  class="text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed">
+                  class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed mt-4 mb-2">
                   Jambul</h1>
-                <p class="text-gray-300 object-center text-center text-lg px-24">
+                <p class="text-gray-300 text-center text-base lg:text-lg leading-relaxed max-w-prose mx-auto">
                   Jambul melambangkan divisi yang menghubungkan seluruh bagian organisasi. Bagian kiri menunjukkan penguatan internal, bagian tengah menggambarkan proses pengembangan, dan bagian kanan mencerminkan penyampaian hasil serta keterhubungan secara menyeluruh, sehingga semua peran berjalan seimbang dan selaras.
                 </p>
               </div>
             </div>
           </div>
           <div class="swiper-pagination filosofi-wrapper"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
         </div>
       </div>
     </section>
@@ -308,7 +482,7 @@
     <!-- 2. Vision & Mission Section -->
 
     <section class="fade-in select-none">
-      <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8 px-4 lg:py-16">
+      <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8 px-4 py-8 lg:py-16">
         <!-- dikasih lg:py-12 biar ada space buat ruang animasi -->
         <!-- Logo -->
 
@@ -352,7 +526,7 @@
 
     <section class="fade-in rounded-2xl">
       <h2
-        class="text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-800 select-none">
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-800 select-none">
         Meet the Team</h2>
 
       <div class="mx-auto w-80 h-1 rounded-full bg-gradient-to-r from-green-700 via-gray-900 to-green-800 mt-3 mb-8">
@@ -370,7 +544,7 @@
               class="w-20 h-20 mb-4 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-full flex items-center justify-center">
               <img src="img\logohmte.png" alt="Member Name" class="max-h-fit object-center">
             </div>
-            <h1 class="text-2x1 font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">BPH</h4>
+            <h3 class="text-xl font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">BPH</h3>
               <p class="text-sm text-gray-300 text-center">Badan Pengurus Harian</p>
           </div>
         </div>
@@ -383,8 +557,8 @@
               class="w-20 h-20 mb-4 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-full flex items-center justify-center">
               <img src="img\logohmte.png" alt="Member Name" class="max-h-fit object-center">
             </div>
-            <h1 class="text-2x1 font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">HUMAS
-              </h4>
+            <h3 class="text-xl font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">HUMAS
+              </h3>
               <p class="text-sm text-gray-300 text-center">Hubungan Masyarakat</p>
           </div>
         </div>
@@ -397,7 +571,7 @@
               class="w-20 h-20 mb-4 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-full flex items-center justify-center">
               <img src="img\logohmte.png" alt="Member Name" class="max-h-fit object-center">
             </div>
-            <h1 class="text-2x1 font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">KWU</h4>
+            <h3 class="text-xl font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">KWU</h3>
               <p class="text-sm text-gray-300 text-center">Kewirausahaan</p>
           </div>
         </div>
@@ -410,8 +584,8 @@
               class="w-20 h-20 mb-4 bg-gradient-to-br from-red-600 to-red-800 rounded-full flex items-center justify-center">
               <img src="img\logohmte.png" alt="Member Name" class="max-h-fit object-center">
             </div>
-            <h1 class="text-2x1 font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">RISTEK
-              </h4>
+            <h3 class="text-xl font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">RISTEK
+              </h3>
               <p class="text-sm text-gray-300 text-center">Riset & Teknologi</p>
           </div>
         </div>
@@ -424,8 +598,8 @@
               class="w-20 h-20 mb-4 bg-gradient-to-br from-orange-600 to-orange-800 rounded-full flex items-center justify-center">
               <img src="img\logohmte.png" alt="Member Name" class="max-h-fit object-center">
             </div>
-            <h1 class="text-2x1 font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">
-              MEDKOMINFO</h4>
+            <h3 class="text-xl font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">
+              MEDKOMINFO</h3>
               <p class="text-sm text-gray-300 text-center">Media & Komunikasi</p>
           </div>
         </div>
@@ -438,8 +612,8 @@
               class="w-20 h-20 mb-4 bg-gradient-to-br from-teal-600 to-teal-800 rounded-full flex items-center justify-center">
               <img src="img\logohmte.png" alt="Member Name" class="max-h-fit object-center">
             </div>
-            <h1 class="text-2x1 font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">MIKAT
-              </h4>
+            <h3 class="text-xl font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">MIKAT
+              </h3>
               <p class="text-sm text-gray-300 text-center">Minat & Bakat</p>
           </div>
         </div>
@@ -452,7 +626,7 @@
               class="w-20 h-20 mb-4 bg-gradient-to-br from-pink-600 to-pink-800 rounded-full flex items-center justify-center">
               <img src="img\logohmte.png" alt="Member Name" class="max-h-fit object-center">
             </div>
-            <h1 class="text-2x1 font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">PSDM</h4>
+            <h3 class="text-xl font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">PSDM</h3>
               <p class="text-sm text-gray-300 text-center">Pengembangan Sumber Daya Manusia</p>
           </div>
         </div>
@@ -465,8 +639,8 @@
               class="w-20 h-20 mb-4 bg-gradient-to-br from-pink-600 to-pink-800 rounded-full flex items-center justify-center">
               <img src="img\logohmte.png" alt="Member Name" class="max-h-fit object-center">
             </div>
-            <h1 class="text-2x1 font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">INTERNAL
-              </h4>
+            <h3 class="text-xl font-bold text-center text-green-300 tracking-wide uppercase select-none mb-2">INTERNAL
+              </h3>
               <p class="text-sm text-gray-300 text-center">Urusan Internal</p>
           </div>
         </div>
@@ -480,16 +654,16 @@
       <div class="modal-overlay absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeDivisiPopup()"></div>
 
       <div
-        class="modal-content relative z-10 w-[95%] max-w-6xl mx-auto mt-8 mb-8 h-[90vh] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl overflow-hidden border border-emerald-500/30">
+        class="modal-content relative z-10 w-[95%] max-w-6xl mx-auto mt-4 mb-4 sm:mt-8 sm:mb-8 h-[92vh] sm:h-[90vh] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl overflow-hidden border border-emerald-500/30">
 
         <button onclick="closeDivisiPopup()"
           class="absolute top-6 right-6 z-20 text-white hover:text-red-400 transition-colors duration-300">
           <i class="fas fa-times text-3xl"></i>
         </button>
 
-        <div class="flex flex-col lg:flex-row h-full">
+        <div class="flex flex-col lg:flex-row h-full overflow-hidden">
 
-          <div class="modal-image-container w-full lg:w-1/2">
+          <div class="modal-image-container w-full lg:w-1/2 h-[40vh] sm:h-[45vh] lg:h-full flex-shrink-0">
             <div style="position: relative; width: 100%; height: 100%;">
 
               <img id="popupImage" src="" alt="Divisi Image"
@@ -517,7 +691,7 @@
             </div>
           </div>
 
-          <div class="modal-text-content w-full lg:w-1/2 p-8 overflow-y-auto custom-scrollbar">
+          <div class="modal-text-content w-full lg:w-1/2 p-4 sm:p-6 lg:p-8 overflow-y-auto custom-scrollbar flex-1">
 
             <div class="flex items-center mb-6">
               <div id="popupIcon" class="w-16 h-16 rounded-full flex items-center justify-center mr-4">
@@ -859,7 +1033,7 @@
       <h4 class="text-xl font-semibold text-emerald-300 mb-3 flex items-center">
         <span class="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">${index + 1}</span>
         ${program.title}
-      </h4>
+      </h3>
       <p class="text-gray-300 leading-relaxed">${program.desc}</p>
     `;
       prokerContainer.appendChild(prokerElement);
@@ -960,20 +1134,29 @@
 
 <script>
   var swiper = new Swiper(".centered-slide-carousel", {
-    centeredSlides: true,
-    loop: false, // fade jarang dipakai dengan loop, rawan bug
-    speed: 500, // transisi 0.6s
-    effect: "fade",
-    fadeEffect: { crossFade: true },
-    slideToClickedSlide: true,
+    centeredSlides: false,
+    loop: false,
+    speed: 400,
+    effect: "slide",
+    slidesPerView: 1,
+    spaceBetween: 0,
+    autoHeight: true,
+    watchSlidesProgress: true,
     pagination: {
       el: ".centered-slide-carousel .swiper-pagination",
       clickable: true,
     },
-    breakpoints: {
-      1920: { slidesPerView: 1, spaceBetween: 0 },
-      1028: { slidesPerView: 1, spaceBetween: 0 },
-      990: { slidesPerView: 1, spaceBetween: 0 }
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    on: {
+      init: function () {
+        this.updateAutoHeight(0);
+      },
+      slideChangeTransitionEnd: function () {
+        this.updateAutoHeight(300);
+      }
     }
   });
 </script>
