@@ -346,8 +346,8 @@
 
 /* Team grid responsive - 1 col on very small screens */
 @media screen and (max-width: 400px) {
-  .grid.grid-cols-2 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+  #departemenContainer {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
   }
 }
 
@@ -397,7 +397,7 @@
 
   <!-- Page Wrapper with Wider Horizontal Padding -->
 
-  <div class="container mx-auto px-4 sm:px-6 lg:px-12">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-12" style="overflow:visible !important;">
     <!-- 1. Hero Section -->
 
     <section class="fade-in flex flex-col lg:flex-row lg:py-4 select-none py-6">
@@ -559,13 +559,13 @@
     </section>
 
     <!-- 3. Team Section -->
-    <section class="fade-in rounded-2xl pb-12">
+    <section class="fade-in pb-12" style="overflow:visible !important;">
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-800 select-none">
         Meet the Team</h2>
       <div class="mx-auto w-80 h-1 rounded-full bg-gradient-to-r from-green-700 via-gray-900 to-green-800 mt-3 mb-10"></div>
 
       <!-- Grid Departemen -->
-      <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-3 gap-3" id="departemenContainer">
+      <div class="w-full grid grid-cols-2 sm:grid-cols-3 gap-3" id="departemenContainer">
 
         <!-- BPH -->
         <div onclick="openDeptModal('bph')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a1200] text-white border border-yellow-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-yellow-500/20 hover:border-yellow-400/40">
