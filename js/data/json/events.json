@@ -184,6 +184,26 @@
       "content": "\n\nHalo, Voltase‼️\n\nMasih bingung mau masuk ke konsentrasi mana di Teknik Elektro? Jangan panik! Kami akan mengadakan Sosialisasi Konsentrasi yang akan membantu kalian memilih konsentrasi apa yang paling cocok untuk diri kalian masing-masing!\n\nJangan lewatkan kesempatan penting ini!\n\n❗ SAVE THE DATE ❗\n\n* 🗓️ : Minggu, 19 April 2026\n* ⏰ : 09.00 WIB - Selesai\n* 📍 : Aula Gedung F, Fakultas Teknik Universitas Jenderal Soedirman\n* 👔 : Bebas Sopan\n\nJangan sampai terlewat!See you! 👋",
       "id": 1,
       "description": "Kegiatan sosialisasi yang bertujuan untuk membantu mahasiswa Teknik Elektro dalam memahami dan memilih peminatan konsentrasi studi yang paling tepat untuk mereka."
+    },
+    {
+      "calendarOnly": true,
+      "color": "yellow",
+      "date": "2026-05-23",
+      "title": "Rapat Triwulan HMTE 1",
+      "time": "15.30 - Selesai WIB",
+      "location": "Sekre HMTE",
+      "description": "Rapat Triwulan ke-1. Seluruh pengurus wajib hadir dan diharapkan datang tepat waktu.",
+      "id": 123
+    },
+    {
+      "calendarOnly": true,
+      "color": "yellow",
+      "date": "2026-05-24",
+      "title": "Rapat Triwulan HMTE 2",
+      "time": "18.00 - Selesai WIB",
+      "location": "Aula Gedung F",
+      "description": "Rapat Triwulan ke-2. Seluruh pengurus wajib hadir dan diharapkan datang tepat waktu.",
+      "id": 124
     }
   ]
 }
