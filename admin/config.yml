@@ -6,8 +6,7 @@
 #    calendar.js→ id, date, title, description, time, location,
 #                 locationLink, imgSrc, registrationLink, color,
 #                 isFeatured, content
-#    project.js → title, description, pic, status, image, date,
-#                 link, release (bukan releaseDescription!)
+#    podcast.js → episode, title, youtubeId
 # =============================================================
 
 backend:
@@ -149,112 +148,7 @@ collections:
                 required: false
 
   # ──────────────────────────────────────────────────────────
-  #  3. PROGRAM KERJA
-  #  Dibaca oleh: js/data/project.js & js/pages/project.js
-  #  Field kritis: image (bukan img!), release (bukan releaseDescription!)
-  # ──────────────────────────────────────────────────────────
-  - name: "projects"
-    label: "⚡ Program Kerja"
-    files:
-
-      - name: "ongoing"
-        label: "Proker Berjalan"
-        file: "js/data/json/ongoing-projects.json"
-        fields:
-          - label: "Daftar Proker Berjalan"
-            name: "items"
-            widget: "list"
-            summary: "{{fields.title}}"
-            fields:
-              - { label: "Judul",            name: title,       widget: string }
-              - { label: "Deskripsi",        name: description, widget: text }
-              - { label: "PIC / Divisi",     name: pic,         widget: string, required: false }
-              - label: "Status / Progres"
-                name: status
-                widget: string
-                hint: "Contoh: 60% atau Tahap Pelaksanaan"
-              - label: "Gambar"
-                name: image
-                # ⚠️ Wajib: project.js membaca `project.image` bukan `project.img`
-                widget: image
-                required: false
-              - label: "Tanggal Mulai"
-                name: date
-                widget: datetime
-                format: "YYYY-MM-DD"
-                date_format: "DD MMMM YYYY"
-                time_format: false
-                required: false
-              - { label: "Link Dokumentasi", name: link, widget: string, required: false }
-              - label: "Tampilkan di Beranda"
-                name: showOnHome
-                widget: boolean
-                default: false
-                hint: "Aktifkan agar proker ini ditampilkan di section Proker Homepage."
-
-      - name: "upcoming"
-        label: "Proker Mendatang"
-        file: "js/data/json/upcoming-projects.json"
-        fields:
-          - label: "Daftar Proker Mendatang"
-            name: "items"
-            widget: "list"
-            summary: "{{fields.date}} — {{fields.title}}"
-            fields:
-              - { label: "Judul",     name: title,       widget: string }
-              - { label: "Deskripsi", name: description, widget: text }
-              - label: "Gambar"
-                name: image
-                widget: image
-                required: false
-              - label: "Tanggal"
-                name: date
-                widget: datetime
-                format: "YYYY-MM-DD"
-                date_format: "DD MMMM YYYY"
-                time_format: false
-                required: false
-              - { label: "Link", name: link, widget: string, required: false }
-              - label: "Tampilkan di Beranda"
-                name: showOnHome
-                widget: boolean
-                default: false
-
-      - name: "completed"
-        label: "Proker Selesai"
-        file: "js/data/json/completed-projects.json"
-        fields:
-          - label: "Daftar Proker Selesai"
-            name: "items"
-            widget: "list"
-            summary: "{{fields.date}} — {{fields.title}}"
-            fields:
-              - { label: "Judul",           name: title,       widget: string }
-              - { label: "Deskripsi",       name: description, widget: text }
-              - label: "Gambar"
-                name: image
-                widget: image
-                required: false
-              - label: "Tanggal Selesai"
-                name: date
-                widget: datetime
-                format: "YYYY-MM-DD"
-                date_format: "DD MMMM YYYY"
-                time_format: false
-              - { label: "Link Dokumentasi", name: link, widget: string, required: false }
-              - label: "Konten Press Release"
-                name: release
-                # ⚠️ Wajib: project.js membaca `project.release` BUKAN `project.releaseDescription`
-                widget: text
-                required: false
-                hint: "Ringkasan singkat hasil kegiatan. Tampil di halaman detail proker."
-              - label: "Tampilkan di Beranda"
-                name: showOnHome
-                widget: boolean
-                default: false
-
-  # ──────────────────────────────────────────────────────────
-  #  4. E-MAGZ
+  #  3. E-MAGZ
   #  Dibaca oleh: js/emagz.js
   #  Field kritis: coverSrc, pdfLink, id (number)
   # ──────────────────────────────────────────────────────────
@@ -296,7 +190,7 @@ collections:
                 time_format: false
 
   # ──────────────────────────────────────────────────────────
-  #  5. PODCAST
+  #  4. PODCAST
   #  Dibaca oleh: js/data/podcast.js (atau section podcast.html)
   # ──────────────────────────────────────────────────────────
   - name: "podcast"
