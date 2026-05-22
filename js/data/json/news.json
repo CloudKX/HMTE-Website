@@ -1,58 +1,13 @@
 {
   "items": [
     {
-      "id": "graduation-feb",
-      "date": "Feb 22, 2025",
-      "category": "Graduation",
-      "title": "Electrical Graduation",
-      "preview": "HMTE Unsoed kembali melaksanakan Electrical Graduation periode Februari 2025, mengawal 16 wisudawan dan wisudawati dari angkatan 2020 dan 2021.",
-      "imgSrc": "../img/news/NewsCover-Graduation.webp",
-      "content": "<p class=\"mb-4\">Pada hari yang cerah, 22 Februari 2025, Himpunan Mahasiswa Teknik Elektro (HMTE) dengan bangga kembali menggelar 'Electrical Graduation' untuk periode Februari.</p><p class=\"mb-4\">Acara ini berhasil mengawal 16 wisudawan dan wisudawati hebat dari angkatan 2020 dan 2021.</p><p>Selamat kepada para lulusan! Masa depan listrik ada di tangan Anda.</p>"
-    },
-    {
-      "id": "efs-mar25",
-      "date": "Mar 12, 2025",
-      "category": "Humas",
-      "title": "Electrical for Society",
-      "preview": "Himpunan Mahasiswa Teknik Elektro (HMTE) telah berhasil melaksanakan program kerja unggulannya, Electrical for Society (EFS).",
-      "imgSrc": "../img/news/NewsCover-EFS.webp",
-      "content": "<p class=\"mb-4\">Program Electrical for Society (EFS) tahun ini sukses besar! Kegiatan yang berfokus pada pengabdian masyarakat ini dilaksanakan di Desa Sukamaju.</p><p>Kegiatan ini ditutup dengan sesi diskusi interaktif.</p>"
-    },
-    {
-      "id": "sosialisasippkm-nov25",
-      "date": "Nov 11, 2025",
-      "category": "Humas",
-      "title": "Sosialisasi PPKM dan PKM",
-      "preview": "Sebagai salah satu rangkaian program kerja PKM Center sosialisasi dilakukan untuk membekali KBTE sebelum mengikuti Program Kreativitas Mahasiswa.",
-      "imgSrc": "../img/news/NewsCover-SosPKM.png",
-      "content": "<p class=\"mb-4\">Pada tanggal 11 November 2025, HMTE Unsoed mengadakan sosialisasi PKM dan PPKM di Aula Teknik Elektro.</p>"
-    },
-    {
-      "id": "Kulum-4",
-      "date": "Nov 21, 2025",
-      "category": "Ristek",
-      "title": "Kuliah Umum Seri 4",
-      "preview": "Kuliah Umum Seri 4 menghadirkan pemaparan mengenai penerapan machine learning dalam kendali prostetik.",
-      "imgSrc": "../img/news/NewsCover-Kulum4.png",
-      "content": "<p class=\"mb-4\">Pada tanggal 21 November 2025, HMTE Unsoed menyelenggarakan Kuliah Umum Seri 4 dengan topik 'Machine Learning for Prosthetic Limb Control'.</p>"
-    },
-    {
-      "id": "Kulum-3",
-      "date": "Nov 20, 2025",
-      "category": "Ristek",
-      "title": "Kuliah Umum Seri 3",
-      "preview": "Kuliah Umum Seri 3 diselenggarakan untuk memperluas wawasan akademik mahasiswa melalui pemaparan materi tematik.",
-      "imgSrc": "../img/news/NewsCover-Kulum3.jpg",
-      "content": "<p class=\"mb-4\">Pada tanggal 20 November 2025, HMTE Unsoed menyelenggarakan Kuliah Umum Seri 3 di Aula Teknik Elektro.</p>"
-    },
-    {
-      "id": "Sarasehan-25",
-      "date": "Nov 19, 2025",
-      "category": "Internal",
-      "title": "Sarasehan Internal",
-      "preview": "Sarasehan Internal HMTE 2025 menjadi forum dialog antara mahasiswa, dosen, dan alumni.",
-      "imgSrc": "../img/news/NewsCover-Sarasehan2025.jpg",
-      "content": "<p class=\"mb-4\">Pada bulan November 2025, HMTE Unsoed menyelenggarakan Sarasehan Internal dengan tema 'Empowering Voices, Enhancing Quality'.</p>"
+      "id": "kunjungan-himpunan-hmte-komahi-2026",
+      "title": "Kunjungan Himpunan (KUHIMA) HMTE x KOMAHI 2026",
+      "date": "May 03, 2026",
+      "category": "Lainnya",
+      "preview": "Silaturahmi dan pertukaran informasi antar organisasi mahasiswa melalui kegiatan Kunjungan Himpunan (KUHIMA) HMTE x KOMAHI di Aula Gedung F.",
+      "imgSrc": "/img/uploads/dsc05236.jpg",
+      "content": "\n\nPada hari Minggu, 3 Mei 2026, Himpunan Mahasiswa Teknik Elektro (HMTE) Universitas Jenderal Soedirman kembali memperluas relasinya melalui kegiatan Kunjungan Himpunan (KUHIMA). Kali ini, HMTE berkesempatan untuk berkolaborasi dan bersilaturahmi dengan Korps Mahasiswa Hubungan Internasional (KOMAHI). Bertempat di Aula Gedung F, acara ini berlangsung dengan penuh antusiasme mulai pukul 12.00 hingga 16.00 WIB.\n\nKegiatan KUHIMA ini menjadi wadah yang sangat inspiratif bagi kedua himpunan untuk saling bertukar pikiran, berbagi pengalaman seputar program kerja, serta mempelajari dinamika organisasi masing-masing. Seluruh staf HMTE yang hadir tampak kompak mengenakan Jaket Himpunan (Jahim) kebanggaan mereka, menciptakan suasana yang hangat dan penuh semangat persaudaraan antarmahasiswa.\n\nSelain berfokus pada diskusi dan pengembangan organisasi, panitia juga tidak lupa mengampanyekan kepedulian lingkungan. Hal ini terlihat dari imbauan wajib bagi seluruh peserta untuk membawa *tumbler* air minum masing-masing guna mengurangi sampah plastik selama acara berlangsung. Terima kasih kepada seluruh staf dan pihak yang telah berpartisipasi menyukseskan KUHIMA HMTE x KOMAHI. Terus bergerak dan berdampak untuk kemajuan bersama!"
     }
   ]
 }
