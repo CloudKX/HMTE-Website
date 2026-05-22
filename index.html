@@ -1,62 +1,182 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HMTE Unsoed</title>
-  <meta name="description"
-    content="Website resmi HMTE Unsoed. Temukan informasi tentang Himpunan Mahasiswa Teknik Elektro Universitas Soedirman, kegiatan, dan berita terbaru.">
-
-  <!-- Styling -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/mobile-premium.css">
-  <link rel="stylesheet" href="css/satoshi.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zremixicon@4.5.0/fonts/remixicon.css">
-  <link rel="icon" type="image/png" href="img/hmte-icon.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GWPL5RWLH5"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag("js", new Date());
-    gtag("config", "G-GWPL5RWLH5");
-  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>HMTE Admin Panel</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    /* Loading screen sementara CMS dimuat */
+    #cms-loading {
+      position: fixed; inset: 0;
+      background: #0a0e14;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; z-index: 9999;
+      font-family: system-ui, sans-serif;
+      transition: opacity 0.4s ease;
+    }
+    #cms-loading.hidden { opacity: 0; pointer-events: none; }
+    #cms-loading svg { animation: spin 1s linear infinite; }
+    #cms-loading p { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
+    #cms-loading strong { color: #0fbc6d; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
-
 <body>
-  <div id="header-placeholder"></div>
-  <div class="container mx-auto px-2 md:px-4 lg:px-6">
-    <div id="hero-placeholder"></div>
-    <div id="news-placeholder"></div>
-    <div id="ongoing-placeholder"></div>
-    <div id="timeline-placeholder"></div>
-    <div id="activity-placeholder"></div>
-    <div id="proker-placeholder"></div>
-    <div id="emagz-placeholder"></div>
-    <div id="podcast-placeholder"></div>
+
+  <!-- Loading screen -->
+  <div id="cms-loading">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0fbc6d" stroke-width="2">
+      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+    </svg>
+    <p><strong>HMTE Admin Panel</strong><br>Memuat antarmuka...</p>
   </div>
-  <div id="footer-placeholder"></div>
+
+  <!-- Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <script>
+  // ═══════════════════════════════════════════════════════════
+  //  HMTE ADMIN PANEL — SCRIPT UTAMA
+  //  1. Sembunyikan loading screen setelah CMS siap
+  //  2. Auto-slug dari field Judul → field ID/Slug
+  //  3. Preview otomatis setelah gambar diupload
+  // ═══════════════════════════════════════════════════════════
+
+  // ── 1. SEMBUNYIKAN LOADING ──────────────────────────────
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      var loader = document.getElementById('cms-loading');
+      if (loader) loader.classList.add('hidden');
+    }, 1800);
+  });
+
+  // ── 2. SLUGIFY HELPER ───────────────────────────────────
+  function slugify(text) {
+    return (text || '')
+      .toString()
+      .toLowerCase()
+      .trim()
+      // Transliterasi karakter Indonesia umum
+      .replace(/[àáâãäå]/g, 'a')
+      .replace(/[èéêë]/g, 'e')
+      .replace(/[ìíîï]/g, 'i')
+      .replace(/[òóôõö]/g, 'o')
+      .replace(/[ùúûü]/g, 'u')
+      .replace(/[ñ]/g, 'n')
+      .replace(/[ç]/g, 'c')
+      // Ganti spasi & karakter khusus
+      .replace(/[\s\-–—_]+/g, '-')   // spasi/dash → -
+      .replace(/[^\w\-]+/g, '')       // hapus non-word
+      .replace(/\-{2,}/g, '-')        // double -- → -
+      .replace(/^-+|-+$/g, '');       // trim -
+  }
+
+  // ── 3. AUTO-SLUG ENGINE ─────────────────────────────────
+  // Strategi: MutationObserver memantau DOM CMS (React SPA).
+  // Setiap kali ada input baru terdeteksi, cari pasangan
+  // field "Judul" + field "ID/Slug" lalu pasang listener.
+
+  var _slugWatcherMap = new WeakMap(); // cegah duplikasi listener
+
+  function findFieldInput(labelTexts) {
+    // Cari <label> yang teksnya cocok, lalu ambil <input> terdekat
+    var labels = document.querySelectorAll('label, [class*="ControlLabel"]');
+    for (var i = 0; i < labels.length; i++) {
+      var txt = labels[i].textContent.trim().toLowerCase();
+      for (var j = 0; j < labelTexts.length; j++) {
+        if (txt.includes(labelTexts[j])) {
+          // Cari input saudara atau di dalam wrapper parent
+          var wrap = labels[i].closest('[class*="ControlWrapper"], [class*="control"]')
+                  || labels[i].parentElement;
+          if (wrap) {
+            var inp = wrap.querySelector('input[type="text"], input:not([type])');
+            if (inp) return inp;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  function attachSlugWatcher() {
+    // Pasangan label yang dicari (case-insensitive substring)
+    var titleInput = findFieldInput(['judul', 'title', 'nama event', 'judul episode']);
+    var slugInput  = findFieldInput(['id / slug', 'slug', 'id/slug']);
+
+    if (!titleInput || !slugInput) return; // belum siap, retry via MutationObserver
+    if (_slugWatcherMap.has(titleInput)) return; // sudah terpasang
+
+    _slugWatcherMap.set(titleInput, true);
+
+    // Setter native React agar perubahan value terdeteksi CMS
+    var nativeSetter = Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype, 'value'
+    ).set;
+
+    function triggerReactChange(el, val) {
+      nativeSetter.call(el, val);
+      el.dispatchEvent(new Event('input',  { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    var lastAutoSlug = '';
+
+    titleInput.addEventListener('input', function () {
+      var currentSlug = slugInput.value.trim();
+      // Hanya auto-fill jika:
+      //   a) slug kosong, ATAU
+      //   b) slug sama dengan slug yang terakhir kita generate (belum diubah manual)
+      if (currentSlug === '' || currentSlug === lastAutoSlug) {
+        var newSlug = slugify(this.value);
+        lastAutoSlug = newSlug;
+        triggerReactChange(slugInput, newSlug);
+      }
+    });
+
+    console.log('%c[HMTE Admin] ✅ Auto-slug aktif', 'color:#0fbc6d;font-weight:bold;');
+  }
+
+  // ── 4. MUTATION OBSERVER — pantau perubahan CMS SPA ────
+  var cmsObserver = new MutationObserver(function (mutations) {
+    // Throttle: jalankan max 1x per 300ms
+    clearTimeout(cmsObserver._timer);
+    cmsObserver._timer = setTimeout(attachSlugWatcher, 300);
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    cmsObserver.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    // Coba pasang segera setelah CMS load (SPA mungkin sudah render)
+    setTimeout(attachSlugWatcher, 2000);
+    setTimeout(attachSlugWatcher, 4000); // retry sekali lagi
+  });
+
+  // ── 5. CMS EVENT HOOKS ─────────────────────────────────
+  // Jalankan setelah objek CMS tersedia
+  var _cmsReady = setInterval(function () {
+    if (!window.CMS) return;
+    clearInterval(_cmsReady);
+
+    // preSave hook dihapus — entry.get() tidak tersedia di Decap CMS v3
+    // (entry adalah plain object, bukan Immutable.js Map)
+    console.log('%c[HMTE Admin] ✅ CMS siap', 'color:#0fbc6d;font-weight:bold;');
+  }, 500);
+
+  // ── 6. NETLIFY IDENTITY REDIRECT ───────────────────────
+  if (window.netlifyIdentity) {
+    netlifyIdentity.on('init', function (user) {
+      if (!user) {
+        netlifyIdentity.on('login', function () {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
+  </script>
 </body>
-
-<!-- Scripts — urutan penting! data dulu, pages kemudian -->
-<script src="js/loader.js"></script>
-<script src="js/emagz.js"></script>
-<script src="js/data/news.js"></script>
-<script src="js/data/news-generator.js"></script>
-<script src="js/data/calendar.js"></script>
-<script src="js/data/event.js"></script>
-<script src="js/data/project.js"></script>
-<!-- FIX: js/pages/project.js wajib di-load agar window.getAllProjects tersedia untuk home.js -->
-<script src="js/pages/project.js"></script>
-<script src="js/pages/home.js"></script>
-
 </html>
