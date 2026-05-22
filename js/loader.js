@@ -133,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Halaman spesifik
   if (isIndex) {
-    ['hero','news','emagz','proker','podcast','timeline','ongoing'].forEach((name) => {
+    // DIPERBAIKI: Hapus 'proker' dari daftar sections yang di-load
+    ['hero','news','emagz','podcast','timeline','ongoing'].forEach((name) => {
       loads.push(loadComponent(`${name}-placeholder`, `../sections/${name}.html`));
     });
 
