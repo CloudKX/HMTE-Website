@@ -2,10 +2,17 @@
   "items": [
     {
       "id": 1,
-      "date": "2026-05-22",
-      "title": "POTEK SEASON 4 - EPS.6 NGOBROL KARIER TEKNIK ELEKTRO, DARI BANGKU KE DUNIA INDUSTRI",
-      "description": "dadadafa",
-      "location": "kokok"
+      "date": "2025-02-15",
+      "title": "Acara Pembukaan Tahun Kepengurusan",
+      "description": "Pembukaan resmi tahun kepengurusan HMTE 2025",
+      "location": "Gedung FSTE"
+    },
+    {
+      "id": 2,
+      "date": "2025-03-10",
+      "title": "Workshop Kepemimpinan",
+      "description": "Workshop untuk mengembangkan skill kepemimpinan anggota",
+      "location": "Aula Teknik"
     }
   ]
 }
