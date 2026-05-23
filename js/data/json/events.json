@@ -50,7 +50,7 @@
     {
       "imgSrc": "/img/uploads/whatsapp-image-2026-05-18-at-22.41.49.jpeg",
       "color": "blue",
-      "driveLink": "https://drive.google.com/drive/folders/1B0WPhpwN-5ZwlBcDguGI0yTzdyrTpuns?usp=drive_link",
+      "driveLink": "",
       "time": "19.00",
       "date": "2026-05-09",
       "registrationLink": "https://bit.ly/ThePowerofSun",
@@ -186,24 +186,26 @@
       "description": "Kegiatan sosialisasi yang bertujuan untuk membantu mahasiswa Teknik Elektro dalam memahami dan memilih peminatan konsentrasi studi yang paling tepat untuk mereka."
     },
     {
-      "calendarOnly": true,
       "color": "yellow",
-      "date": "2026-05-23",
-      "title": "Rapat Triwulan HMTE 1",
+      "calendarOnly": true,
       "time": "15.30 - Selesai WIB",
+      "date": "2026-05-23",
       "location": "Sekre HMTE",
-      "description": "Rapat Triwulan ke-1. Seluruh pengurus wajib hadir dan diharapkan datang tepat waktu.",
-      "id": 123
+      "title": "Rapat Triwulan HMTE 1",
+      "isFeatured": true,
+      "id": 123,
+      "description": "Rapat Triwulan ke-1. Seluruh pengurus wajib hadir dan diharapkan datang tepat waktu."
     },
     {
-      "calendarOnly": true,
       "color": "yellow",
-      "date": "2026-05-24",
-      "title": "Rapat Triwulan HMTE 2",
+      "calendarOnly": true,
       "time": "18.00 - Selesai WIB",
+      "date": "2026-05-24",
       "location": "Aula Gedung F",
-      "description": "Rapat Triwulan ke-2. Seluruh pengurus wajib hadir dan diharapkan datang tepat waktu.",
-      "id": 124
+      "title": "Rapat Triwulan HMTE 2",
+      "isFeatured": true,
+      "id": 124,
+      "description": "Rapat Triwulan ke-2. Seluruh pengurus wajib hadir dan diharapkan datang tepat waktu."
     }
   ]
 }
