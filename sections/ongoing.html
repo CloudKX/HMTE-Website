@@ -1,25 +1,17 @@
 <style>
   /* ══════════════════════════════════════════════════
-     ONGOING SECTION — PREMIUM DYNAMIC UI (ENHANCED)
+     ONGOING SECTION — OPTIMIZED & LIGHTWEIGHT
+     Menghapus animasi berlebihan, tetap profesional
   ══════════════════════════════════════════════════ */
 
+  /* MINIMAL ANIMATIONS — Hanya yang perlu */
   @keyframes liveBlink {
-    0%,100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px #0fbc6d; }
-    50%     { opacity: 0.4; transform: scale(0.8); box-shadow: 0 0 2px rgba(15,188,109,0.5); }
+    0%,100% { opacity: 1; box-shadow: 0 0 6px #0fbc6d; }
+    50%     { opacity: 0.6; box-shadow: 0 0 2px rgba(15,188,109,0.4); }
   }
   @keyframes skelPulse {
-    0%,100% { opacity: 0.3; }
-    50%     { opacity: 0.6; }
-  }
-  /* Animasi Radar Pulse Background */
-  @keyframes radarPulse {
-    0% { transform: scale(0.8) translate(-50%, -50%); opacity: 0.8; }
-    100% { transform: scale(2) translate(-25%, -25%); opacity: 0; }
-  }
-  /* Animasi Floating Elements */
-  @keyframes floatSlow {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(10deg); }
+    0%,100% { opacity: 0.25; }
+    50%     { opacity: 0.45; }
   }
   
   /* ── SECTION WRAPPER ── */
@@ -27,57 +19,27 @@
     position: relative;
     padding: clamp(36px, 6vh, 64px) 0;
     overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-    background: radial-gradient(circle at center, rgba(15,188,109,0.04) 0%, rgba(10,12,16,1) 70%);
+    background: rgba(10, 14, 20, 0.5);
+    border-top: 1px solid rgba(15,188,109,0.1);
+    border-bottom: 1px solid rgba(15,188,109,0.1);
   }
 
-  /* ── BACKGROUND ANIMATIONS & DECORATIONS ── */
-  /* Efek Radar */
-  .ongoing-section::before {
-    content: ''; position: absolute; top: 50%; left: 50%;
-    transform-origin: 0 0; /* Penting untuk radar effect yang di tengah */
-    width: 300px; height: 300px; border-radius: 50%;
-    border: 1px solid rgba(15,188,109,0.2);
-    animation: radarPulse 4s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
-    pointer-events: none; z-index: 1;
-  }
-  /* Glow ambient utama */
+  /* SUBTLE BACKGROUND GRADIENT — Tanpa animasi */
   .ongoing-section::after {
-    content: ''; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
-    width: min(800px, 100%); height: 400px;
-    background: radial-gradient(ellipse, rgba(15,188,109,0.06) 0%, transparent 60%);
+    content: ''; position: absolute; top: -5%; left: 50%; transform: translateX(-50%);
+    width: min(900px, 110%); height: 350px;
+    background: radial-gradient(ellipse, rgba(15,188,109,0.04) 0%, transparent 60%);
     pointer-events: none; z-index: 1;
   }
 
-  /* Floating Geometric Shapes */
-  .ongoing-shape {
-    position: absolute; border: 1px solid rgba(15,188,109,0.15);
-    z-index: 2; pointer-events: none;
-  }
-  .ongoing-shape-1 {
-    width: 60px; height: 60px; border-radius: 12px;
-    top: 15%; left: 10%; animation: floatSlow 6s ease-in-out infinite;
-    transform: rotate(15deg);
-  }
-  .ongoing-shape-2 {
-    width: 40px; height: 40px; border-radius: 50%;
-    bottom: 20%; right: 12%; animation: floatSlow 8s ease-in-out infinite reverse;
-  }
-
-  /* ── SEKAT (DIVIDER) ATAS & BAWAH ── */
+  /* ── SEKAT (DIVIDER) ── */
   .ongoing-sekat {
     position: absolute; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(15,188,109,0.6) 50%, transparent 100%);
-    z-index: 5; opacity: 0.8;
+    background: linear-gradient(90deg, transparent 0%, rgba(15,188,109,0.4) 50%, transparent 100%);
+    z-index: 5;
   }
   .ongoing-sekat-top { top: 0; }
   .ongoing-sekat-bottom { bottom: 0; }
-  .ongoing-sekat::after {
-    content: ''; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(45deg);
-    width: 10px; height: 10px; background: #0fbc6d;
-    box-shadow: 0 0 20px rgba(15,188,109,1);
-  }
 
   .ongoing-inner {
     position: relative; z-index: 10;
@@ -86,31 +48,268 @@
     display: flex; flex-direction: column; align-items: center;
   }
 
-  /* ── HEADER ── */
+  /* ── HEADER — Fade in smooth ── */
   .ongoing-header {
     text-align: center;
     margin-bottom: clamp(24px, 4vh, 36px);
-    display: flex; flex-direction: column; align-items: center; gap: 14px;
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.23,1,0.32,1), transform 0.8s cubic-bezier(0.23,1,0.32,1);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
   }
   .ongoing-header.is-visible { opacity: 1; transform: translateY(0); }
 
   .ongoing-eyebrow {
-    display: inline-flex; align-items: center; gap: 12px;
-    font-size: 0.75rem; letter-spacing: 0.28em;
-    text-transform: uppercase; color: #0fbc6d; font-weight: 800;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.68rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: #0fbc6d; font-weight: 700;
   }
   .ongoing-eyebrow::before, .ongoing-eyebrow::after {
-    content: ''; display: block; width: 30px; height: 2px;
-    background: linear-gradient(90deg, transparent, #0fbc6d, transparent);
-    border-radius: 2px;
+    content: ''; display: block; width: 18px; height: 1px;
+    background: #0fbc6d; opacity: 0.5;
   }
+
   .ongoing-title {
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
     font-weight: 900; color: #fff;
-    letter-spacing: -0.04em; line-height: 1.1; margin: 0;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    letter-spacing: -0.02em; line-height: 1.1; margin: 0;
+  }
+  .ongoing-title em { font-style: normal; color: #0fbc6d; }
+
+  .ongoing-subtitle {
+    font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+    color: rgba(156,163,175,0.6); margin: 0; line-height: 1.5;
+  }
+
+  /* ── GRID KARTU ── */
+  .ongoing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(20px, 3vw, 28px);
+    width: 100%; margin-bottom: clamp(24px, 4vh, 36px);
+  }
+
+  /* ── KARTU ── */
+  .ongoing-card {
+    position: relative; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(20,24,35,0.8), rgba(10,14,20,0.9));
+    border: 1px solid rgba(15,188,109,0.15);
+    overflow: hidden;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    cursor: pointer;
+  }
+  .ongoing-card.is-visible { opacity: 1; transform: translateY(0); }
+
+  .ongoing-card:hover {
+    border-color: rgba(15,188,109,0.4);
+    background: linear-gradient(135deg, rgba(25,30,45,0.9), rgba(15,20,30,0.95));
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  /* ── CARD COVER ── */
+  .ongoing-card-cover {
+    width: 100%; height: 200px; overflow: hidden; background: #0a0e14;
+    position: relative;
+  }
+  .ongoing-card-cover img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .ongoing-card:hover .ongoing-card-cover img {
+    transform: scale(1.05);
+  }
+
+  /* ── LIVE BADGE ── */
+  .ongoing-live-badge {
+    position: absolute; top: 12px; right: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 20px;
+    background: rgba(15,188,109,0.95);
+    color: #000; font-size: 0.7rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    z-index: 20;
+  }
+  .ongoing-live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #fff; animation: liveBlink 1s ease-in-out infinite;
+  }
+
+  /* ── CARD BODY ── */
+  .ongoing-card-body {
+    padding: clamp(14px, 3vw, 20px);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
+  .ongoing-card-meta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; color: rgba(156,163,175,0.65);
+  }
+  .ongoing-card-meta i { color: #0fbc6d; font-size: 0.7rem; }
+
+  .ongoing-card-title {
+    font-size: 1.05rem; font-weight: 700;
+    color: #fff; line-height: 1.4; margin: 0;
+  }
+
+  .ongoing-card-desc {
+    font-size: 0.8rem; color: rgba(156,163,175,0.7);
+    line-height: 1.5; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .ongoing-card-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; font-size: 0.85rem;
+    color: #0fbc6d; font-weight: 600;
+    text-decoration: none; transition: gap 0.3s ease;
+  }
+  .ongoing-card-cta:hover { gap: 10px; }
+  .ongoing-card-cta i { font-size: 0.75rem; transition: transform 0.3s ease; }
+  .ongoing-card:hover .ongoing-card-cta i { transform: translateX(3px); }
+
+  /* ── SKELETON LOADING ── */
+  .ongoing-card-skel { opacity: 0.7; }
+  .ongoing-skel {
+    display: block; background: rgba(15,188,109,0.08);
+    border-radius: 6px; animation: skelPulse 1.2s ease-in-out infinite;
+  }
+
+  /* ── FOOTER ── */
+  .ongoing-footer {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+  }
+  .ongoing-footer.is-visible { opacity: 1; transform: translateY(0); }
+
+  .ongoing-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px);
+    border: 1.5px solid #0fbc6d;
+    border-radius: 10px; color: #0fbc6d; font-weight: 700;
+    font-size: 0.95rem; text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .ongoing-cta:hover {
+    background: #0fbc6d; color: #000;
+  }
+  .ongoing-cta i { transition: transform 0.3s ease; font-size: 0.9rem; }
+  .ongoing-cta:hover i { transform: translateX(4px); }
+
+  /* ════════════════════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .ongoing-grid {
+      grid-template-columns: 1fr;
+    }
+    .ongoing-title { font-size: clamp(1.4rem, 3.5vw, 2.2rem); }
+    .ongoing-card-cover { height: 180px; }
+  }
+
+  @media (max-width: 480px) {
+    .ongoing-section { padding: clamp(24px, 4vh, 40px) 0; }
+    .ongoing-title { font-size: 1.3rem; }
+    .ongoing-card-title { font-size: 0.95rem; }
+    .ongoing-card-body { padding: 12px 14px; }
+  }
+</style>
+
+<section class="ongoing-section">
+  <div class="ongoing-sekat ongoing-sekat-top"></div>
+
+  <div class="ongoing-inner">
+    <div class="ongoing-header">
+      <span class="ongoing-eyebrow">Event Berlangsung</span>
+      <h2 class="ongoing-title">Event <em>Sekarang</em></h2>
+      <p class="ongoing-subtitle">Kegiatan yang sedang berlangsung atau akan segera dimulai.</p>
+    </div>
+
+    <div id="home-ongoing-container" class="ongoing-grid">
+      <!-- SKELETON LOADERS (Placeholder sebelum data load) -->
+      <div class="ongoing-card ongoing-card-skel is-visible">
+        <div class="ongoing-card-cover"><div class="ongoing-skel" style="width:100%;height:100%;"></div></div>
+        <div class="ongoing-card-body">
+          <div class="ongoing-skel" style="height:12px;width:40%;"></div>
+          <div class="ongoing-skel" style="height:18px;width:85%;"></div>
+          <div class="ongoing-skel" style="height:12px;width:70%;margin-top:8px;"></div>
+        </div>
+      </div>
+      <div class="ongoing-card ongoing-card-skel is-visible">
+        <div class="ongoing-card-cover"><div class="ongoing-skel" style="width:100%;height:100%;"></div></div>
+        <div class="ongoing-card-body">
+          <div class="ongoing-skel" style="height:12px;width:35%;"></div>
+          <div class="ongoing-skel" style="height:18px;width:80%;"></div>
+          <div class="ongoing-skel" style="height:12px;width:65%;margin-top:8px;"></div>
+        </div>
+      </div>
+      <div class="ongoing-card ongoing-card-skel is-visible" style="opacity:0.5;">
+        <div class="ongoing-card-cover"><div class="ongoing-skel" style="width:100%;height:100%;"></div></div>
+        <div class="ongoing-card-body">
+          <div class="ongoing-skel" style="height:12px;width:30%;"></div>
+          <div class="ongoing-skel" style="height:18px;width:75%;"></div>
+          <div class="ongoing-skel" style="height:12px;width:60%;margin-top:8px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ongoing-footer">
+      <a href="/page/event/event.html" class="ongoing-cta">
+        Jelajahi Semua Event <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="ongoing-sekat ongoing-sekat-bottom"></div>
+</section>
+
+<script>
+(function () {
+  function initOngoingAnim() {
+    var io = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.ongoing-header, .ongoing-footer').forEach(function (el) {
+      io.observe(el);
+    });
+
+    var container = document.getElementById('home-ongoing-container');
+    if (!container) return;
+
+    var cardIO = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+
+    new MutationObserver(function () {
+      container.querySelectorAll('.ongoing-card:not([data-obs])').forEach(function (card) {
+        card.setAttribute('data-obs', '1');
+        cardIO.observe(card);
+      });
+    }).observe(container, { childList: true });
+
+    container.querySelectorAll('.ongoing-card:not([data-obs])').forEach(function (card) {
+      card.setAttribute('data-obs', '1');
+      cardIO.observe(card);
+    });
+  }
+
+  window.__components = window.__components || {};
+  window.__components['ongoing'] = { init: initOngoingAnim };
+  window.initOngoingAnimations = initOngoingAnim;
+
+  document.addEventListener('component:loaded', function (e) {
+    if (e.detail && e.detail.name === 'ongoing') initOngoingAnim();
+  });
+
+  if (document.readyState !== 'loading') initOngoingAnim();
+  else document.addEventListener('DOMContentLoaded', initOngoingAnim);
+})();
+</script>    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
   }
   .ongoing-title em { font-style: normal; color: #0fbc6d; position: relative; }
   /* Garis tipis di bawah teks "On-going" */
