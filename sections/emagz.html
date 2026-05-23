@@ -1,5 +1,4 @@
 <style>
-  /* ── SECTION WRAPPER ── */
   .emagz-section {
     position: relative;
     padding: clamp(36px, 7vh, 80px) 0;
@@ -19,7 +18,6 @@
     display: flex; flex-direction: column; align-items: center;
   }
 
-  /* ── HEADER ── */
   .emagz-header {
     text-align: center;
     margin-bottom: clamp(24px, 4vh, 44px);
@@ -49,14 +47,12 @@
     max-width: 480px; text-align: center;
   }
 
-  /* ── GRID ── */
   .emagz-grid {
     width: 100%;
     display: flex; flex-wrap: wrap; justify-content: center;
     gap: clamp(14px, 2.5vw, 24px);
   }
 
-  /* ── CARD — portrait book style ── */
   .emagz-card {
     position: relative; border-radius: 16px; overflow: hidden;
     background: linear-gradient(145deg,
@@ -87,7 +83,6 @@
   }
   .emagz-card:active { transform: scale(0.97) !important; }
 
-  /* Cover — portrait ratio 2:3 */
   .emagz-card-cover {
     position: relative; width: 100%; aspect-ratio: 2/3; overflow: hidden; flex-shrink: 0;
   }
@@ -103,7 +98,6 @@
     pointer-events: none;
   }
 
-  /* Badge edisi */
   .emagz-card-edition-badge {
     position: absolute; top: 10px; right: 10px; z-index: 3;
     padding: 3px 8px; border-radius: 20px;
@@ -112,7 +106,6 @@
     color: #0fbc6d; backdrop-filter: blur(8px);
   }
 
-  /* Card body */
   .emagz-card-body {
     padding: 12px 14px 16px;
     display: flex; flex-direction: column; gap: 5px; flex: 1;
@@ -144,7 +137,6 @@
   }
   .emagz-card:hover .emagz-card-read { color: #0fbc6d; gap: 8px; }
 
-  /* Footer CTA */
   .emagz-footer {
     margin-top: clamp(20px, 3vh, 36px); display: flex; justify-content: center;
     opacity: 0; transform: translateY(16px);
@@ -159,126 +151,61 @@
   }
   .emagz-cta:hover { border-color: rgba(15,188,109,0.4); color: #0fbc6d; background: rgba(15,188,109,0.05); }
 
-  /* Skeleton loader */
   .emagz-skel {
     background: rgba(255,255,255,0.04); border-radius: 6px;
     animation: emagzSkel 1.6s ease-in-out infinite;
   }
   @keyframes emagzSkel { 0%,100%{opacity:.3} 50%{opacity:.6} }
 
-  /* ══ TABLET 480–768px: Layout Kartu Lebar Tapi Tetap Grid ══ */
   @media (min-width: 480px) and (max-width: 768px) {
     .emagz-card { flex: 1 1 calc(33% - 14px); max-width: calc(33% - 10px); min-width: 130px; }
   }
 
-  /* ══ MOBILE ≤ 479px: Layout Horizontal Sepenuhnya (Fix & Rapih) ══ */
   @media (max-width: 479px) {
     .emagz-grid {
       display: flex;
-      flex-direction: column; /* Baris ke bawah */
+      flex-direction: column;
       gap: 12px;
     }
     
     .emagz-card {
-      flex: none; /* Mematikan sifat melar bawaan desktop */
-      width: 100%; /* Lebar penuh layar */
+      flex: none;
+      width: 100%;
       max-width: 100%;
-      min-width: 0; /* Mereset batas minimal desktop */
+      min-width: 0;
       height: auto; 
-      min-height: 0; /* Mereset batas tinggi */
-      flex-direction: row; /* Gambar di kiri, teks di kanan */
-      align-items: center; /* Konten sejajar di tengah secara vertikal */
+      min-height: 0;
+      flex-direction: row;
+      align-items: center;
       justify-content: flex-start;
       padding: 12px; 
-      gap: 14px; /* Jarak antara cover dan teks */
+      gap: 14px;
     }
     
-    /* ── Kover Majalah (Thumbnail) ── */
     .emagz-card-cover {
-      width: 72px; /* Lebar dikunci pasti */
-      height: 105px; /* Tinggi dikunci pasti, bentuknya portrait */
-      aspect-ratio: auto; /* Mematikan aspect-ratio agar tidak error di Android */
-      flex-shrink: 0;
-      border-radius: 6px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
-    }
-    .emagz-card-cover img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-    .emagz-card-cover::after {
-      display: none; /* Menghilangkan efek gelap/gradient di gambar versi mobile */
-    }
-    .emagz-card-edition-badge {
-      top: 4px; left: 4px; right: auto;
-      font-size: 0.45rem; padding: 2px 6px;
-    }
-
-    /* ── Area Teks ── */
-    .emagz-card-body {
-      padding: 0; /* Padding di-nol-kan karena sudah pakai 'gap' di .emagz-card */
-      flex: 1; /* Teks mengisi sisa ruang di kanan */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start; 
-      text-align: left;
-    }
-    .emagz-card-meta {
-      margin-bottom: 4px;
-      justify-content: flex-start;
-    }
-    .emagz-card-title {
-      font-size: 0.95rem;
-      -webkit-line-clamp: 2;
-      margin-bottom: 0;
-      line-height: 1.3;
-    }
-    
-    /* Sembunyikan elemen yang bikin penuh */
-    .emagz-card-desc,
-    .emagz-skel-desc {
-      display: none !important;
-    }
-    .emagz-card-read {
-      display: inline-flex !important;
-      margin-top: 6px;
-      padding-top: 0;
-      font-size: 0.7rem;
-    }
-
-    .emagz-card-cover .emagz-skel {
-      border-radius: 6px !important;
-    }
-    
-    /* ── Kover Majalah (Thumbnail) ── */
-    .emagz-card-cover {
-      width: 75px; /* Lebar kover fix */
-      height: 105px; /* Menjaga rasio portrait majalah */
-      flex-shrink: 0;
-      border-radius: 8px; /* Sudut membulat kecil pada kover */
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Memberi bayangan agar kover menonjol */
+      width: 75px;
+      height: 105px;
       aspect-ratio: auto;
+      flex-shrink: 0;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
     .emagz-card-cover img {
-      border-radius: 8px; /* Mengikuti container-nya */
+      border-radius: 8px;
     }
     .emagz-card-cover::after {
-      display: none; /* Menghilangkan efek gelap (gradient) di bawah gambar pada versi mobile */
+      display: none;
     }
     .emagz-card-edition-badge {
       top: 4px; left: 4px; right: auto;
       font-size: 0.45rem; padding: 2px 6px;
     }
 
-    /* ── Area Teks ── */
     .emagz-card-body {
-      padding: 0 0 0 16px; /* Memberi jarak antara kover dan teks */
-      flex: 1; /* Mengisi sisa ruang di sebelah kanan */
+      padding: 0 0 0 16px;
+      flex: 1;
       justify-content: center;
-      align-items: flex-start; /* Memastikan teks rata kiri */
+      align-items: flex-start;
       text-align: left;
     }
     .emagz-card-meta {
@@ -290,7 +217,6 @@
       margin-bottom: 2px;
     }
     
-    /* Sembunyikan deskripsi panjang agar rapi, tapi biarkan link 'Baca' muncul */
     .emagz-card-desc,
     .emagz-skel-desc {
       display: none !important;
@@ -302,7 +228,6 @@
       font-size: 0.65rem;
     }
 
-    /* Memperbaiki bentuk skeleton agar sesuai dengan thumbnail baru */
     .emagz-card-cover .emagz-skel {
       border-radius: 8px !important;
     }
@@ -354,19 +279,26 @@
 
 <script>
 (function () {
+  let initialized = false;  // ✓ FLAG
+
   function initEmagzAnim() {
-    var targets = document.querySelectorAll('.emagz-header, .emagz-footer');
+    const targets = document.querySelectorAll('.emagz-header, .emagz-footer');
     if (!targets.length) return;
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-    targets.forEach(function(el) { el.classList.remove('is-visible'); obs.observe(el); });
+
+    // ✓ Gunakan SafeObserver
+    const obs = window.__SafeAnimationUtils.createSafeObserver();
+    targets.forEach(el => obs.observe(el));
+  }
+
+  function init() {
+    if (!initialized) {  // ✓ PREVENT DOUBLE INIT
+      initEmagzAnim();
+      initialized = true;
+    }
   }
 
   window.__components = window.__components || {};
-  window.__components['emagz'] = { init: initEmagzAnim };
+  window.__components['emagz'] = { init };
   window.initEmagzAnimations = initEmagzAnim;
 })();
 </script>
