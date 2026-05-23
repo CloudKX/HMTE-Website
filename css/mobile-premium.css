@@ -1,6 +1,6 @@
 /* ============================================================
-   HMTE UNSOED — MOBILE PREMIUM v2 (UPDATED)
-   Fixed: Ongoing section horizontal scroll untuk Android
+   HMTE UNSOED — MOBILE PREMIUM v2
+   Pasang di folder css/ lalu link di index.html setelah style.css
    ============================================================ */
 
 /* ========== GLOBAL (semua ukuran layar) ========== */
@@ -192,37 +192,17 @@ body::after {
     filter: brightness(0.88) saturate(1.1) !important;
   }
 
-  /* ═══ ACARA ON-GOING (UPDATED - HORIZONTAL SCROLL) ═══ */
+  /* ═══ ACARA ON-GOING ═══ */
   #home-ongoing-container {
     display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: flex-start !important;
-    gap: 12px !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    scroll-snap-type: x mandatory !important;
-    scroll-padding-left: 16px !important;
-    padding: 10px 16px 20px 16px !important;
-    overscroll-behavior-x: contain !important;
-    touch-action: pan-x !important;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-  
-  /* Hide scrollbar but keep scrollable */
-  #home-ongoing-container::-webkit-scrollbar {
-    display: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
   }
 
   #home-ongoing-container > div {
-    flex: 0 0 auto !important;
-    width: min(85vw, 260px) !important;
-    max-width: 260px !important;
-    min-width: 200px !important;
-    scroll-snap-align: start !important;
-    scroll-snap-stop: always !important;
+    width: 100% !important;
+    max-width: 100% !important;
     border-radius: 16px !important;
     border: 1px solid rgba(15,188,109,0.1) !important;
     background: linear-gradient(135deg,
@@ -234,9 +214,6 @@ body::after {
     box-shadow: 0 2px 18px rgba(0,0,0,0.45) !important;
     overflow: hidden !important;
     position: relative !important;
-    transition: transform 0.15s ease !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
   }
 
   #home-ongoing-container > div::before {
@@ -245,10 +222,6 @@ body::after {
     top: 0; left: 8%; right: 8%;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(15,188,109,0.25), transparent);
-  }
-
-  #home-ongoing-container > div:active {
-    transform: scale(0.96) !important;
   }
 
   /* ═══ TIMELINE ═══ */
