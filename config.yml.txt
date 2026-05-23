@@ -1,0 +1,216 @@
+# =============================================================
+#  DECAP CMS — KONFIGURASI UTAMA — HMTE UNSOED
+#  Field names di sini WAJIB identik dengan yang dibaca JS:
+#    emagz.js   → id, title, description, coverSrc, pdfLink
+#    news.js    → id, date, category, title, preview, content, imgSrc
+#    calendar.js→ id, date, title, description, time, location,
+#                 locationLink, imgSrc, registrationLink, color,
+#                 isFeatured, content
+#    podcast.js → episode, title, youtubeId
+# =============================================================
+
+backend:
+  name: github
+  repo: CloudKX/HMTE-Website
+  branch: main
+  base_url: https://hmte-website.vercel.app
+  auth_endpoint: api/auth
+
+media_folder: "img/uploads"
+public_folder: "/img/uploads"
+
+locale: id
+
+# Slug otomatis dari judul (didukung auto-slug di index.html)
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+
+  # ──────────────────────────────────────────────────────────
+  #  1. BERITA
+  #  Dibaca oleh: js/data/news.js & js/pages/news-generator.js
+  #  Field kritis: id (slug unik), imgSrc (bukan imgSRC)
+  # ──────────────────────────────────────────────────────────
+  - name: "news"
+    label: "📰 Berita"
+    files:
+      - name: "all_news"
+        label: "Semua Berita"
+        file: "js/data/json/news.json"
+        fields:
+          - label: "Daftar Berita"
+            name: "items"
+            widget: "list"
+            summary: "[{{fields.date}}] {{fields.title}}"
+            fields:
+              - label: "ID / Slug"
+                name: id
+                widget: string
+                hint: "🔑 Unik, tanpa spasi. Contoh: seminar-ai-2025 → dipakai di URL ?id=seminar-ai-2025. Diisi otomatis dari Judul."
+              - { label: "Judul",        name: title,    widget: string }
+              - label: "Tanggal"
+                name: date
+                widget: string
+                hint: "Format: Mon DD, YYYY — contoh: Mar 12, 2025"
+              - label: "Kategori"
+                name: category
+                widget: select
+                options: ["Graduation", "Humas", "Ristek", "Internal", "Lainnya"]
+              - label: "Preview"
+                name: preview
+                widget: text
+                hint: "Ringkasan 1–2 kalimat. Muncul di daftar berita & homepage."
+              - label: "Konten Artikel"
+                name: content
+                widget: markdown
+                hint: "Tulis teks biasa. Gunakan toolbar Bold/Italic. JANGAN paste HTML mentah."
+              - label: "Gambar Cover"
+                name: imgSrc
+                # ⚠️ Wajib: emagz.js dan news-generator.js membaca field bernama `imgSrc`
+                widget: image
+                required: false
+                hint: "Upload gambar cover berita. Disimpan ke /img/uploads/"
+
+  # ──────────────────────────────────────────────────────────
+  #  2. EVENT & KALENDER
+  #  Dibaca oleh: js/data/calendar.js & js/pages/event.js
+  #  Field kritis: isFeatured, imgSrc, registrationLink, color
+  # ──────────────────────────────────────────────────────────
+  - name: "events"
+    label: "📅 Event"
+    files:
+      - name: "all_events"
+        label: "Semua Event"
+        file: "js/data/json/events.json"
+        fields:
+          - label: "Daftar Event"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.date}} — {{fields.title}}"
+            fields:
+              - label: "ID"
+                name: id
+                widget: number
+                value_type: int
+                hint: "Angka unik. Tambah 1 dari event terakhir."
+              - { label: "Nama Event",  name: title,       widget: string }
+              - { label: "Deskripsi",   name: description, widget: text }
+              - label: "Tanggal"
+                name: date
+                widget: datetime
+                format: "YYYY-MM-DD"
+                date_format: "DD MMMM YYYY"
+                time_format: false
+                hint: "Tanggal mendatang → muncul di 'Event Terdekat'. Tanggal lampau → masuk Arsip."
+              - label: "Waktu / Jadwal"
+                name: time
+                widget: string
+                hint: "Contoh: 08.00 WIB atau Pendaftaran 13 Juli - 27 Juli"
+              - { label: "Lokasi",           name: location,     widget: string }
+              - label: "Link Google Maps"
+                name: locationLink
+                widget: string
+                required: false
+                hint: "https://maps.app.goo.gl/..."
+              - label: "Gambar / Poster"
+                name: imgSrc
+                # ⚠️ Wajib: event.js membaca `event.imgSrc`
+                widget: image
+                required: false
+              - label: "Link Pendaftaran"
+                name: registrationLink
+                widget: string
+                required: false
+                hint: "Link Google Form / Bit.ly. Kosongkan jika belum ada."
+              - label: "Link Dokumentasi (Drive)"
+                name: driveLink
+                widget: string
+                required: false
+                hint: "Isi setelah event selesai. URL folder Google Drive."
+              - label: "Warna Badge Kalender"
+                name: color
+                widget: select
+                options: ["green", "blue", "yellow"]
+                default: "green"
+                hint: "green = proker utama, blue = seminar/kelas, yellow = informal"
+              - label: "Tampil di Beranda (Ongoing Section)"
+                name: isFeatured
+                # ⚠️ Wajib: home.js membaca `event.isFeatured`
+                widget: boolean
+                default: false
+                hint: "Aktifkan agar event ini muncul di section Upcoming di Homepage."
+              - label: "Konten Detail"
+                name: content
+                widget: markdown
+                required: false
+
+  # ──────────────────────────────────────────────────────────
+  #  3. E-MAGZ
+  #  Dibaca oleh: js/emagz.js
+  #  Field kritis: coverSrc, pdfLink, id (number)
+  # ──────────────────────────────────────────────────────────
+  - name: "emagz"
+    label: "📖 E-Magz"
+    files:
+      - name: "all_emagz"
+        label: "Semua Edisi E-Magz"
+        file: "js/data/json/emagz.json"
+        fields:
+          - label: "Daftar Majalah"
+            name: "items"
+            widget: "list"
+            summary: "Vol. {{fields.id}} — {{fields.title}}"
+            fields:
+              - label: "Nomor Edisi (id)"
+                name: id
+                widget: number
+                value_type: int
+                hint: "⚠️ Angka urut. Dipakai di URL emagz-reader.html?id=X"
+              - { label: "Judul",     name: title,       widget: string }
+              - { label: "Deskripsi", name: description, widget: text }
+              - label: "Gambar Cover"
+                name: coverSrc
+                # ⚠️ Wajib: emagz.js membaca `edition.coverSrc`
+                widget: image
+                required: false
+                hint: "Upload cover majalah. Ratio ideal: 2:3 (portrait)."
+              - label: "Link PDF"
+                name: pdfLink
+                # ⚠️ Wajib: emagz.js membaca `edition.pdfLink`
+                widget: string
+                hint: "URL penuh ke file PDF atau halaman Issuu/Google Drive."
+              - label: "Tanggal Rilis"
+                name: date
+                widget: datetime
+                format: "YYYY-MM-DD"
+                date_format: "DD MMMM YYYY"
+                time_format: false
+
+  # ──────────────────────────────────────────────────────────
+  #  4. PODCAST
+  #  Dibaca oleh: js/data/podcast.js (atau section podcast.html)
+  # ──────────────────────────────────────────────────────────
+  - name: "podcast"
+    label: "🎙️ Podcast"
+    files:
+      - name: "podcast_videos"
+        label: "Daftar Episode"
+        file: "js/data/json/podcast.json"
+        fields:
+          - label: "Daftar Video"
+            name: "videos"
+            widget: "list"
+            summary: "Eps. {{fields.episode}} — {{fields.title}}"
+            fields:
+              - label: "Nomor Episode"
+                name: episode
+                widget: number
+                value_type: int
+              - { label: "Judul Episode", name: title, widget: string }
+              - label: "YouTube Video ID"
+                name: youtubeId
+                widget: string
+                hint: "Dari youtube.com/watch?v=XXXX → isi XXXX saja."
