@@ -47,14 +47,23 @@
   <div id="footer-placeholder"></div>
 </body>
 
-<!-- Scripts — urutan penting! data dulu, pages kemudian -->
+<!-- ✓ SCRIPTS — URUTAN PENTING! ✓ -->
+
+<!-- 1️⃣ FIX MOBILE LOADING — HARUS PALING AWAL -->
+<script src="js/fix-mobile-loading.js"></script>
+
+<!-- 2️⃣ LOADER & DATA — Core functionality -->
 <script src="js/loader.js"></script>
 <script src="js/emagz.js"></script>
+
+<!-- 3️⃣ DATA FILES — Semua data harus di-load sebelum pages -->
 <script src="js/data/news.js"></script>
 <script src="js/data/news-generator.js"></script>
 <script src="js/data/calendar.js"></script>
 <script src="js/data/event.js"></script>
 <script src="js/data/project.js"></script>
+
+<!-- 4️⃣ PAGES — Harus setelah semua data tersedia -->
 <!-- FIX: js/pages/project.js wajib di-load agar window.getAllProjects tersedia untuk home.js -->
 <script src="js/pages/project.js"></script>
 <script src="js/pages/home.js"></script>
