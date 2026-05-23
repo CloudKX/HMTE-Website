@@ -1,10 +1,8 @@
 <style>
   /* ══════════════════════════════════════════════════
-     ONGOING SECTION — CLEAN & ANDROID OPTIMIZED
-     No duplicates, smooth scroll, professional
+     ONGOING SECTION — ANDROID SCROLL FIX
   ══════════════════════════════════════════════════ */
 
-  /* ANIMATIONS */
   @keyframes liveBlink {
     0%,100% { opacity: 1; box-shadow: 0 0 6px #0fbc6d; }
     50%     { opacity: 0.6; box-shadow: 0 0 2px rgba(15,188,109,0.4); }
@@ -14,7 +12,6 @@
     50%     { opacity: 0.45; }
   }
 
-  /* ── SECTION WRAPPER ── */
   .ongoing-section {
     position: relative;
     padding: clamp(36px, 6vh, 64px) 0;
@@ -24,7 +21,6 @@
     border-bottom: 1px solid rgba(15,188,109,0.1);
   }
 
-  /* Subtle background glow */
   .ongoing-section::after {
     content: ''; position: absolute; top: -5%; left: 50%; transform: translateX(-50%);
     width: min(900px, 110%); height: 350px;
@@ -39,7 +35,6 @@
     display: flex; flex-direction: column; align-items: center;
   }
 
-  /* ── HEADER ── */
   .ongoing-header {
     text-align: center;
     margin-bottom: clamp(24px, 4vh, 36px);
@@ -80,7 +75,7 @@
     color: rgba(156,163,175,0.6); margin: 0; line-height: 1.5;
   }
 
-  /* ── GRID DESKTOP (flex wrap) ── */
+  /* ── GRID DESKTOP ── */
   .ongoing-grid {
     width: 100%;
     display: grid;
@@ -89,7 +84,6 @@
     margin-bottom: clamp(24px, 4vh, 36px);
   }
 
-  /* ── CARD ── */
   .ongoing-card {
     position: relative;
     border-radius: 14px;
@@ -106,7 +100,6 @@
   }
   .ongoing-card.is-visible { opacity: 1; transform: translateY(0); }
 
-  /* Garis atas card saat hover */
   .ongoing-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, transparent, #0fbc6d, transparent);
@@ -114,7 +107,6 @@
     transition: opacity 0.3s ease;
   }
 
-  /* Hover pada desktop */
   @media (hover: hover) {
     .ongoing-card:hover {
       border-color: rgba(15,188,109,0.4);
@@ -131,7 +123,6 @@
     .ongoing-card:hover .ongoing-card-cta i { transform: translateX(3px); }
   }
 
-  /* ── COVER ── */
   .ongoing-card-cover {
     position: relative; width: 100%; aspect-ratio: 16/9;
     overflow: hidden; flex-shrink: 0;
@@ -142,14 +133,12 @@
     filter: brightness(0.85) saturate(1.1);
     transition: transform 0.4s ease, filter 0.3s ease;
   }
-  /* Overlay gradient di bawah cover */
   .ongoing-card-cover::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0;
     height: 50%; background: linear-gradient(to top, rgba(13,17,23,1) 0%, transparent 100%);
     pointer-events: none;
   }
 
-  /* ── BADGE (Live/Terdekat) ── */
   .ongoing-badge {
     position: absolute; top: 12px; left: 12px; z-index: 3;
     display: inline-flex; align-items: center; gap: 6px;
@@ -168,12 +157,11 @@
     animation: liveBlink 1s ease-in-out infinite;
   }
 
-  /* ── BODY ── */
   .ongoing-card-body {
     padding: clamp(14px, 2.5vw, 20px);
     display: flex; flex-direction: column; gap: 10px;
     flex: 1; position: relative; z-index: 2;
-    margin-top: -12px; /* Sedikit overlap ke cover */
+    margin-top: -12px;
   }
 
   .ongoing-card-meta {
@@ -209,7 +197,6 @@
     transition: transform 0.3s ease;
   }
 
-  /* ── SKELETON LOADING ── */
   .ongoing-skel {
     display: block; background: rgba(15,188,109,0.08);
     border-radius: 6px;
@@ -217,7 +204,6 @@
   }
   .ongoing-card-skel { opacity: 0.7; pointer-events: none; }
 
-  /* ── FOOTER ── */
   .ongoing-footer {
     opacity: 0; transform: translateY(20px);
     transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
@@ -242,16 +228,7 @@
   .ongoing-cta:hover i { transform: translateX(4px); }
 
   /* ════════════════════════════════════════════════
-     TABLET (768px-1024px)
-  ════════════════════════════════════════════════ */
-  @media (max-width: 1024px) {
-    .ongoing-grid {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-  }
-
-  /* ════════════════════════════════════════════════
-     MOBILE (≤768px) — HORIZONTAL SCROLL FOR ANDROID
+     MOBILE (≤768px) — FIXED SCROLL
   ════════════════════════════════════════════════ */
   @media (max-width: 768px) {
     .ongoing-section { padding: clamp(24px, 4vh, 40px) 0; }
@@ -262,35 +239,38 @@
     
     .ongoing-footer { padding: 0 clamp(16px, 4vw, 20px); }
 
-    /* ── HORIZONTAL SCROLL GRID ── */
+    /* ── HORIZONTAL SCROLL CONTAINER ── */
     .ongoing-grid {
       display: flex;
       flex-wrap: nowrap;
       overflow-x: auto;
-      overflow-y: visible;
+      overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
       scroll-padding-left: 16px;
       gap: 12px;
       padding: 10px 16px 20px 16px;
       margin-bottom: 0;
-      /* Android smoothness */
+      /* CRITICAL FIXES */
       overscroll-behavior-x: contain;
-      touch-action: pan-x;
+      touch-action: pan-x;        /* ← Allow horizontal pan only */
       scrollbar-width: none;
-      /* Hide scrollbar */
       -ms-overflow-style: none;
+      grid-template-columns: unset;
+      /* Ensure no vertical scroll */
+      max-height: none;
+      height: auto;
     }
     .ongoing-grid::-webkit-scrollbar { display: none; }
 
-    /* Card sizing for mobile */
+    /* Card sizing for mobile scroll */
     .ongoing-card {
       flex: 0 0 auto;
       width: min(85vw, 260px);
       max-width: 260px;
+      min-width: 200px;
       scroll-snap-align: start;
       scroll-snap-stop: always;
-      /* Prevent text selection on long touch */
       -webkit-user-select: none;
       -webkit-touch-callout: none;
       user-select: none;
@@ -302,20 +282,14 @@
       transition: transform 0.15s ease-out;
     }
 
-    /* Adjust body overlap for mobile */
     .ongoing-card-body { margin-top: -10px; }
 
-    /* Simpler title for mobile */
     .ongoing-card-title { font-size: 0.95rem; }
     .ongoing-card-desc { font-size: 0.75rem; }
 
-    /* CTA button untuk mobile */
     .ongoing-card-cta { font-size: 0.75rem; gap: 4px; margin-top: 6px; }
   }
 
-  /* ════════════════════════════════════════════════
-     EXTRA SMALL (<480px)
-  ════════════════════════════════════════════════ */
   @media (max-width: 480px) {
     .ongoing-title { font-size: 1.3rem; }
     .ongoing-card { width: min(90vw, 240px); }
