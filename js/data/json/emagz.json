@@ -1,6 +1,14 @@
 {
   "items": [
     {
+      "title": "E-Magz Edisi 9 Vol.1",
+      "id": 1,
+      "description": "Kumpulan konten E-MAGZ EDISI 9 HMTE UNSOED 2026",
+      "coverSrc": "/img/uploads/screenshot-2026-09-01-131334.png",
+      "pdfLink": "https://drive.google.com/file/d/1IMcdXTiuP_GmjQrzuXoijYMf65dSWdse/view?usp=drive_link",
+      "date": "2026-06-02"
+    },
+    {
       "id": 4,
       "title": "E-Magz Edisi 8 Vol.4",
       "description": "E-MAGZ HMTE UNSOED Edisi 8: Rekomendasi Alat Elektronik dan Tips Hidup Hemat Anak Kost dafafa",
@@ -31,14 +39,6 @@
       "coverSrc": "/img/emagz/Vol1.jpg",
       "pdfLink": "/img/emagz/1.pdf",
       "date": "2025-01-01"
-    },
-    {
-      "title": "E-Magz Edisi 9 Vol.1",
-      "id": 1,
-      "description": "Kumpulan konten E-MAGZ EDISI 9 HMTE UNSOED 2026",
-      "coverSrc": "/img/uploads/screenshot-2026-09-01-131334.png",
-      "pdfLink": "https://drive.google.com/file/d/1IMcdXTiuP_GmjQrzuXoijYMf65dSWdse/view?usp=drive_link",
-      "date": "2026-06-02"
     }
   ]
 }
