@@ -635,7 +635,6 @@ section {
               <i class="fas fa-briefcase text-white text-lg"></i>
             </div>
             <h3 class="text-sm font-bold text-yellow-300 tracking-wide uppercase mb-1">BPH</h3>
-            <p class="text-xs text-gray-400">Badan Pengurus Harian</p>
             <p class="text-xs text-gray-400">2 Divisi →</p>
           </div>
         </div>
@@ -909,19 +908,54 @@ section {
   // Data untuk setiap divisi
   const divisiData = {
     // ── BPH (Bendahara & Sekretaris) ──
+    // ── BPH Umum (Hanya untuk deskripsi fallback jika diperlukan) ──
     'bph': {
       title: "Badan Pengurus Harian",
-      description: "Badan Pengurus Harian merupakan divisi yang memegang peranan penting dalam jalannya roda organisasi. Divisi ini bertugas mengawal fungsi kontrol, koordinasi, evaluasi, pengembangan, serta peningkatan sistem manajemen administrasi, keuangan, dan komunikasi.",
+      description: "Inti administrasi dan keuangan organisasi HMTE UNSOED.",
       icon: '<i class="fas fa-briefcase text-2xl text-yellow-400"></i>',
       iconBg: 'bg-gradient-to-br from-yellow-600 to-yellow-800',
-      images: ["img/Asset Feed/BPH/1.jpg","img/Asset Feed/BPH/2.jpg","img/Asset Feed/BPH/3.jpg","img/Asset Feed/BPH/4.jpg","img/Asset Feed/BPH/5.jpg"],
+      // Gunakan foto grup administrasi BPH di sini jika ada
+      images: ["img/Asset Feed/BPH/1.jpg"], 
       proker: [
-        { title: "Bendahara", desc: "Bendahara Umum bertanggung jawab atas pengelolaan dan administrasi keuangan organisasi, serta melakukan transparansi dana setiap bulan selama periode kepengurusan." },
-        { title: "Sekretaris", desc: "Sekretaris Umum bertugas mengkoordinasi administrasi surat-menyurat, jadwal program kerja, serta memastikan kesesuaian pelaksanaan dengan TOR." }
+        { title: "Koordinasi Administrasi & Keuangan", desc: "Menjalankan fungsi manajemen internal himpunan." }
       ]
     },
 
-    // UBAH DUA BAGIAN DI BAWAH INI:
+    // --- Pemisahan Foto Spesifik ---
+
+    // DATA SPESIFIK BENDAHARA (BENUM)
+    'bph_bendahara': { 
+      title: "Bendahara Umum (BENUM)", 
+      description: "Pengelola tunggal keuangan himpunan, bertanggung jawab atas transparansi dan efisiensi dana.", 
+      icon: '<i class="fas fa-coins text-2xl text-emerald-400"></i>', 
+      iconBg: 'bg-gradient-to-br from-emerald-600 to-emerald-800', 
+      // GANTI DENGAN FILE FOTO SPESIFIK BENDAHARA (Bisa di-slide)
+      images: [
+        "img/Asset Feed/BPH/1.jpg",
+        "img/Asset Feed/BPH/4.jpg",
+        "img/Asset Feed/BPH/5.jpg"
+      ], 
+      proker: [
+        { title: "Transparansi Dana", desc: "Melaporkan arus kas himpunan secara berkala kepada anggota." }
+      ] 
+    },
+
+    // DATA SPESIFIK SEKRETARIS (SEKUM)
+    'bph_sekretaris': { 
+      title: "Sekretaris Umum (SEKUM)", 
+      description: "Pusat administrasi dan dokumentasi himpunan, mengelola arsip dan jadwal organisasi.", 
+      icon: '<i class="fas fa-file-alt text-2xl text-blue-400"></i>', 
+      iconBg: 'bg-gradient-to-br from-blue-600 to-blue-800', 
+      // GANTI DENGAN FILE FOTO SPESIFIK SEKRETARIS (Bisa di-slide)
+      images: [
+        "img/Asset Feed/BPH/1.jpg",
+        "img/Asset Feed/BPH/2.jpg",
+        "img/Asset Feed/BPH/3.jpg"
+      ], 
+      proker: [
+        { title: "Manajemen Arsip Digital", desc: "Mendigitalisasi dan merapikan seluruh dokumen penting himpunan." }
+      ] 
+    },
 
     'bph_ketua':    { 
         title: "KAHIM", 
@@ -929,8 +963,7 @@ section {
         icon: '<i class="fas fa-star text-2xl text-yellow-400"></i>', 
         iconBg: 'bg-gradient-to-br from-yellow-500 to-yellow-700', 
         // Ganti nama file di bawah ini dengan nama file foto KAHIM Anda
-        images: ["img/Asset Feed/KAHIM/1.jpg"], 
-        proker: [] 
+        images: ["img/Asset Feed/KAHIM/1.jpg"] 
     },
     'bph_wakil':    { 
         title: "WAKAHIM", 
@@ -938,8 +971,7 @@ section {
         icon: '<i class="fas fa-star-half-alt text-2xl text-yellow-300"></i>', 
         iconBg: 'bg-gradient-to-br from-yellow-600 to-yellow-800', 
         // Ganti nama file di bawah ini dengan nama file foto WAKAHIM Anda
-        images: ["img/Asset Feed/WAKAHIM/1.jpg"], 
-        proker: [] 
+        images: ["img/Asset Feed/WAKAHIM/1.jpg"]
     },
 
     // ── BPH (Data Spesifik untuk Modal 'bph_inner') ── (Pertahankan ini)
