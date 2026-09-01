@@ -606,15 +606,37 @@ section {
       <!-- Grid Departemen -->
       <div id="departemenContainer">
 
-        <!-- BPH -->
-        <div onclick="openDeptModal('bph')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a1200] text-white border border-yellow-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-yellow-500/20 hover:border-yellow-400/40">
+        <!-- KAHIM -->
+        <div onclick="openDivisiPopup('bph_ketua')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a1200] text-white border border-yellow-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-yellow-500/20 hover:border-yellow-400/40">
           <div class="p-4 flex flex-col items-center text-center">
             <div class="w-12 h-12 mb-3 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center">
-              <i class="fas fa-crown text-white text-lg"></i>
+              <i class="fas fa-star text-white text-lg"></i>
+            </div>
+            <h3 class="text-sm font-bold text-yellow-300 tracking-wide uppercase mb-1">KAHIM</h3>
+            <p class="text-xs text-gray-400">Ketua Himpunan</p>
+          </div>
+        </div>
+
+        <!-- WAKAHIM -->
+        <div onclick="openDivisiPopup('bph_wakil')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a1200] text-white border border-yellow-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-yellow-500/20 hover:border-yellow-400/40">
+          <div class="p-4 flex flex-col items-center text-center">
+            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center">
+              <i class="fas fa-star-half-alt text-white text-lg"></i>
+            </div>
+            <h3 class="text-sm font-bold text-yellow-300 tracking-wide uppercase mb-1">WAKAHIM</h3>
+            <p class="text-xs text-gray-400">Wakil Ketua Himpunan</p>
+          </div>
+        </div>
+
+        <!-- BPH (Bendahara & Sekretaris) -->
+        <div onclick="openDeptModal('bph_inner')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a1200] text-white border border-yellow-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-yellow-500/20 hover:border-yellow-400/40">
+          <div class="p-4 flex flex-col items-center text-center">
+            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center">
+              <i class="fas fa-briefcase text-white text-lg"></i>
             </div>
             <h3 class="text-sm font-bold text-yellow-300 tracking-wide uppercase mb-1">BPH</h3>
             <p class="text-xs text-gray-400">Badan Pengurus Harian</p>
-            <p class="text-[10px] text-yellow-500/60 mt-2">4 Divisi →</p>
+            <p class="text-[10px] text-yellow-500/60 mt-2">2 Divisi →</p>
           </div>
         </div>
 
@@ -794,13 +816,22 @@ section {
 <script>
   // Data departemen → divisi (untuk modal pilih divisi)
   const deptData = {
+    // Ketua & Wakil Ketua (Langsung memanggil popup, tidak memerlukan modal)
+
     bph: {
       title: 'BPH', sub: 'Badan Pengurus Harian',
-      iconHtml: '<i class="fas fa-crown" style="color:#fff;font-size:1.25rem;"></i>',
+      iconHtml: '<i class="fas fa-briefcase" style="color:#fff;font-size:1.25rem;"></i>',
       iconBgStyle: 'linear-gradient(135deg,#eab308,#a16207)',
       divisi: [
-        { key: 'bph_ketua',     icon: 'fas fa-star',          color: '#facc15', label: 'Ketua Himpunan' },
-        { key: 'bph_wakil',     icon: 'fas fa-star-half-alt', color: '#fde68a', label: 'Wakil Ketua' },
+        { key: 'bph_bendahara', icon: 'fas fa-coins',         color: '#34d399', label: 'Bendahara' },
+        { key: 'bph_sekretaris',icon: 'fas fa-file-alt',      color: '#60a5fa', label: 'Sekretaris' }
+      ]
+    },
+    bph_inner: {
+      title: 'BPH', sub: 'Badan Pengurus Harian',
+      iconHtml: '<i class="fas fa-briefcase" style="color:#fff;font-size:1.25rem;"></i>',
+      iconBgStyle: 'linear-gradient(135deg,#eab308,#a16207)',
+      divisi: [
         { key: 'bph_bendahara', icon: 'fas fa-coins',         color: '#34d399', label: 'Bendahara' },
         { key: 'bph_sekretaris',icon: 'fas fa-file-alt',      color: '#60a5fa', label: 'Sekretaris' }
       ]
@@ -877,22 +908,20 @@ section {
 
   // Data untuk setiap divisi
   const divisiData = {
-    // ── BPH sub-roles ──
+    // ── BPH (Bendahara & Sekretaris) ──
     'bph': {
       title: "Badan Pengurus Harian",
-      description: "Divisi Badan Pengurus Harian merupakan divisi yang memegang peranan penting dalam jalannya roda organisasi. Divisi ini bertugas mengawal fungsi kontrol, koordinasi, evaluasi, pengembangan, serta peningkatan sistem manajemen administrasi, keuangan, dan komunikasi.",
-      icon: '<i class="fas fa-crown text-2xl text-yellow-400"></i>',
+      description: "Badan Pengurus Harian merupakan divisi yang memegang peranan penting dalam jalannya roda organisasi. Divisi ini bertugas mengawal fungsi kontrol, koordinasi, evaluasi, pengembangan, serta peningkatan sistem manajemen administrasi, keuangan, dan komunikasi.",
+      icon: '<i class="fas fa-briefcase text-2xl text-yellow-400"></i>',
       iconBg: 'bg-gradient-to-br from-yellow-600 to-yellow-800',
       images: ["img/Asset Feed/BPH/1.jpg","img/Asset Feed/BPH/2.jpg","img/Asset Feed/BPH/3.jpg","img/Asset Feed/BPH/4.jpg"],
       proker: [
-        { title: "Ketua Himpunan", desc: "Ketua HMTE UNSOED memimpin secara struktural melalui fungsi manajerial: perencanaan, pengarahan, dan pengawasan. Selain memiliki hak delegasi, Ketua juga menjadi penanggung jawab utama seluruh kinerja himpunan." },
-        { title: "Wakil Ketua Himpunan", desc: "Wakil Ketua mendampingi Ketua dalam menjalankan roda organisasi, mengkoordinasikan antar departemen, serta menggantikan peran Ketua saat dibutuhkan." },
         { title: "Bendahara", desc: "Bendahara Umum bertanggung jawab atas pengelolaan dan administrasi keuangan organisasi, serta melakukan transparansi dana setiap bulan selama periode kepengurusan." },
         { title: "Sekretaris", desc: "Sekretaris Umum bertugas mengkoordinasi administrasi surat-menyurat, jadwal program kerja, serta memastikan kesesuaian pelaksanaan dengan TOR." }
       ]
     },
-    'bph_ketua':    { title: "Ketua Himpunan", description: "Ketua HMTE UNSOED memimpin secara struktural melalui fungsi manajerial: perencanaan, pengarahan, dan pengawasan. Selain memiliki hak delegasi, Ketua juga menjadi penanggung jawab utama seluruh kinerja himpunan.", icon: '<i class="fas fa-star text-2xl text-yellow-400"></i>', iconBg: 'bg-gradient-to-br from-yellow-500 to-yellow-700', images: ["img/Asset Feed/BPH/1.jpg","img/Asset Feed/BPH/2.jpg"], proker: [] },
-    'bph_wakil':    { title: "Wakil Ketua Himpunan", description: "Wakil Ketua mendampingi Ketua dalam menjalankan roda organisasi, mengkoordinasikan antar departemen, serta menggantikan peran Ketua saat dibutuhkan.", icon: '<i class="fas fa-star-half-alt text-2xl text-yellow-300"></i>', iconBg: 'bg-gradient-to-br from-yellow-600 to-yellow-800', images: ["img/Asset Feed/BPH/1.jpg","img/Asset Feed/BPH/2.jpg"], proker: [] },
+    'bph_ketua':    { title: "KAHIM", description: "Ketua HMTE UNSOED memimpin secara struktural melalui fungsi manajerial: perencanaan, pengarahan, dan pengawasan. Selain memiliki hak delegasi, Ketua juga menjadi penanggung jawab utama seluruh kinerja himpunan.", icon: '<i class="fas fa-star text-2xl text-yellow-400"></i>', iconBg: 'bg-gradient-to-br from-yellow-500 to-yellow-700', images: ["img/Asset Feed/BPH/1.jpg","img/Asset Feed/BPH/2.jpg"], proker: [] },
+    'bph_wakil':    { title: "WAKAHIM", description: "Wakil Ketua mendampingi Ketua dalam menjalankan roda organisasi, mengkoordinasikan antar departemen, serta menggantikan peran Ketua saat dibutuhkan.", icon: '<i class="fas fa-star-half-alt text-2xl text-yellow-300"></i>', iconBg: 'bg-gradient-to-br from-yellow-600 to-yellow-800', images: ["img/Asset Feed/BPH/1.jpg","img/Asset Feed/BPH/2.jpg"], proker: [] },
     'bph_bendahara':{ title: "Bendahara", description: "Bendahara Umum bertanggung jawab atas pengelolaan dan administrasi keuangan organisasi, serta melakukan transparansi dana setiap bulan.", icon: '<i class="fas fa-coins text-2xl text-emerald-400"></i>', iconBg: 'bg-gradient-to-br from-emerald-600 to-emerald-800', images: ["img/Asset Feed/BPH/3.jpg","img/Asset Feed/BPH/4.jpg"], proker: [] },
     'bph_sekretaris':{ title: "Sekretaris", description: "Sekretaris Umum bertugas mengkoordinasi administrasi surat-menyurat, jadwal program kerja, serta memastikan kesesuaian pelaksanaan dengan TOR.", icon: '<i class="fas fa-file-alt text-2xl text-blue-400"></i>', iconBg: 'bg-gradient-to-br from-blue-600 to-blue-800', images: ["img/Asset Feed/BPH/3.jpg","img/Asset Feed/BPH/4.jpg"], proker: [] },
 
