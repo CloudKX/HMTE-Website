@@ -2,7 +2,7 @@
   "items": [
     {
       "id": 4,
-      "title": "E-Magz Vol.4",
+      "title": "E-Magz Edisi 8 Vol.4",
       "description": "E-MAGZ HMTE UNSOED Edisi 8: Rekomendasi Alat Elektronik dan Tips Hidup Hemat Anak Kost dafafa",
       "coverSrc": "/img/emagz/Vol4.jpg",
       "pdfLink": "/img/emagz/4.pdf",
@@ -10,7 +10,7 @@
     },
     {
       "id": 3,
-      "title": "E-Magz Vol.3",
+      "title": "E-Magz Edisi 8 Vol.3",
       "description": "Panduan E-Magz HMTE UNSOED 2025: Kiat Meningkatkan Skill, Manfaat Olahraga, dan Rekomendasi Musik untuk Mahasiswa",
       "coverSrc": "/img/emagz/Vol3.jpg",
       "pdfLink": "/img/emagz/3.pdf",
@@ -18,7 +18,7 @@
     },
     {
       "id": 2,
-      "title": "E-Magz Vol.2",
+      "title": "E-Magz Edisi 8 Vol.2",
       "description": "E-Magz HMTE UNSOED Vol. 2: Rekomendasi Channel Teknik Elektro, Series 2025, dan Hiburan",
       "coverSrc": "/img/emagz/Vol2.jpg",
       "pdfLink": "/img/emagz/2.pdf",
@@ -26,11 +26,19 @@
     },
     {
       "id": 1,
-      "title": "E-Magz Vol.1",
+      "title": "E-Magz Edisi 8 Vol.1",
       "description": "Kumpulan konten E-MAGZ EDISI 8 HMTE UNSOED 2025",
       "coverSrc": "/img/emagz/Vol1.jpg",
       "pdfLink": "/img/emagz/1.pdf",
       "date": "2025-01-01"
+    },
+    {
+      "title": "E-Magz Edisi 9 Vol.1",
+      "id": 1,
+      "description": "Kumpulan konten E-MAGZ EDISI 9 HMTE UNSOED 2026",
+      "coverSrc": "/img/uploads/screenshot-2026-09-01-131334.png",
+      "pdfLink": "https://drive.google.com/file/d/1IMcdXTiuP_GmjQrzuXoijYMf65dSWdse/view?usp=drive_link",
+      "date": "2026-06-02"
     }
   ]
 }
