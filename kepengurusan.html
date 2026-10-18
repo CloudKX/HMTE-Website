@@ -1,29 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HMTE Unsoed</title>
+  <title>Kepengurusan | HMTE Unsoed</title>
   <meta name="description"
-    content="Website resmi HMTE Unsoed. Temukan informasi tentang Himpunan Mahasiswa Teknik Elektro Universitas Soedirman, kegiatan, dan berita terbaru.">
+    content="Kepengurusan HMTE Unsoed Kabinet Nova Imperium: visi, misi, filosofi logo, dan susunan departemen Himpunan Mahasiswa Teknik Elektro Universitas Jenderal Soedirman.">
+  <link rel="icon" type="image/png" href="img/hmte-icon.png">
 
-  <!-- Styling -->
+  <!-- Styling (tanpa Tailwind CDN & Swiper) -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/satoshi.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Great+Vibes&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zremixicon@4.5.0/fonts/remixicon.css">
-  <link rel="icon" type="image/png" href="img/hmte-icon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-  crossorigin="anonymous" referrerpolicy="no-referrer">
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="css/kepengurusan.css">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="js/loader.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-  <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GWPL5RWLH5"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -32,1221 +25,180 @@
     gtag("config", "G-GWPL5RWLH5");
   </script>
 
-  <style></style>
-
-  <link rel="stylesheet" href="css/satoshi.css">
-  </link>
-
-  <style>
-    .fade-in {
-      opacity: 0;
-      transform: translateY(50px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ===== OVERRIDE khusus kepengurusan.html — tidak menyentuh halaman lain ===== */
-    /* Hanya paksa opacity/visibility, JANGAN override transform karena Swiper butuh transform untuk geser */
-    .centered-slide-carousel {
-      opacity: 1 !important;
-      visibility: visible !important;
-      transform: none !important;
-    }
-
-    /* swiper-wrapper TIDAK boleh di-override transform — Swiper pakai translateX untuk geser */
-    .centered-slide-carousel .swiper-wrapper {
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-
-    /* slide individual juga jangan di-override transform */
-    .centered-slide-carousel .swiper-slide {
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-
-    /* Swiper slide filosofi — layout vertikal, konten tidak hilang */
-    .swiper-slide.filosofi-wrapper {
-      box-sizing: border-box !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: flex-start !important;
-      text-align: center !important;
-      padding: 1rem 1.5rem 2.5rem 1.5rem !important;
-      height: auto !important;
-      min-height: 0 !important;
-      overflow: visible !important;
-      word-break: break-word !important;
-      overflow-wrap: break-word !important;
-      width: 100% !important;
-    }
-
-    .swiper-slide.filosofi-wrapper img {
-      display: block !important;
-      width: 100% !important;
-      max-width: 220px !important;
-      height: auto !important;
-      margin: 0 auto 1rem auto !important;
-      border-radius: 1rem !important;
-    }
-
-    .swiper-slide.filosofi-wrapper p {
-      width: 100% !important;
-      max-width: 600px !important;
-      margin: 0 auto !important;
-      line-height: 1.7 !important;
-      color: #d1d5db !important;
-    }
-
-    .swiper-slide.filosofi-wrapper h1 {
-      width: 100% !important;
-    }
-
-    @media screen and (max-width: 640px) {
-      .swiper-slide.filosofi-wrapper img {
-        max-width: 160px !important;
-      }
-      .swiper-slide.filosofi-wrapper p {
-        font-size: 0.875rem !important;
-      }
-    }
-
-    /* Departemen accordion */
-    .departemen-card {
-      transition: box-shadow 0.2s ease;
-    }
-    .departemen-card:hover {
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
-    }
-    .divisi-btn {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0.875rem 0.5rem;
-      border-radius: 1rem;
-      border: 1px solid rgba(16,185,129,0.2);
-      background: rgba(16,185,129,0.05);
-      color: #d1d5db;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-align: center;
-      transition: all 0.2s ease;
-      line-height: 1.3;
-      gap: 0.25rem;
-    }
-    .divisi-btn:hover {
-      background: rgba(16,185,129,0.15);
-      border-color: rgba(16,185,129,0.4);
-      color: #6ee7b7;
-      transform: translateY(-2px);
-    }
-    .divisi-btn:active {
-      transform: scale(0.97);
-    }
-    .arrow-open {
-      transform: rotate(180deg);
-    }
-    .centered-slide-carousel .swiper-button-prev,
-    .centered-slide-carousel .swiper-button-next {
-      color: #6ee7b7 !important;
-      background: rgba(15,188,109,0.1) !important;
-      border: 1px solid rgba(15,188,109,0.3) !important;
-      border-radius: 50% !important;
-      width: 36px !important;
-      height: 36px !important;
-      top: 35% !important;
-    }
-
-    .centered-slide-carousel .swiper-button-prev::after,
-    .centered-slide-carousel .swiper-button-next::after {
-      font-size: 14px !important;
-      font-weight: 700 !important;
-    }
-
-    .centered-slide-carousel .swiper-button-disabled {
-      opacity: 0.2 !important;
-    }
-
-    /* Custom scrollbar untuk pop-up */
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #1f2937;
-      border-radius: 3px;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #10b981;
-      border-radius: 3px;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #059669;
-    }
-
-    /* Modal Animation Styles */
-    .modal-overlay {
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-overlay.show {
-      opacity: 1;
-    }
-
-    .modal-content {
-      transform: scale(0.7) translateY(-50px);
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .modal-content.show {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-
-    .modal-image-container {
-      opacity: 0;
-      transform: translateX(-30px);
-      transition: all 0.5s ease 0.2s;
-    }
-
-    .modal-image-container.show {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .modal-text-content {
-      opacity: 0;
-      transform: translateX(30px);
-      transition: all 0.5s ease 0.3s;
-    }
-
-    .modal-text-content.show {
-      opacity: 1;
-      transform:
-     translateX(0);
-    } 
-
-    /* Sembunyikan tombol prev/next di mobile */
-@media screen and (max-width: 768px) {
-  .modal-image-container button {
-    display: none !important;
-  }
-  
-  /* Optional: Buat gambar fullwidth di mobile tanpa padding untuk button */
-  .modal-image-container {
-    padding: 0 !important;
-  }
-  
-  .modal-image-container img {
-    padding: 1rem !important;
-  }
-}
-
-/* Tablet - tombol lebih kecil */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-  .modal-image-container button {
-    padding: 0.5rem !important;
-  }
-  
-  .modal-image-container button svg {
-    width: 1rem !important;
-    height: 1rem !important;
-  }
-}
-
-/* Desktop - tombol normal */
-@media screen and (min-width: 1025px) {
-  .modal-image-container button {
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-  }
-  
-  .modal-image-container button:hover {
-    opacity: 1;
-  }
-}
-
-/* Filosofi swiper - cegah teks terpotong di mobile */
-.swiper.centered-slide-carousel {
-  overflow: hidden;
-  width: 100%;
-}
-
-/* Pastikan swiper wrapper mengikuti tinggi slide aktif */
-.swiper.centered-slide-carousel .swiper-wrapper {
-  align-items: flex-start;
-}
-
-/* Slide filosofi - tampil vertikal, konten tidak terpotong */
-.swiper-slide.filosofi-wrapper {
-  box-sizing: border-box;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  text-align: center;
-  padding: 1rem 1.5rem 2.5rem 1.5rem;
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  width: 100%;
-}
-
-.swiper-slide.filosofi-wrapper img {
-  display: block;
-  width: 100%;
-  max-width: 220px;
-  height: auto;
-  margin: 0 auto 1rem auto;
-  border-radius: 1rem;
-}
-
-.swiper-slide.filosofi-wrapper h1,
-.swiper-slide.filosofi-wrapper h3 {
-  width: 100%;
-}
-
-.swiper-slide.filosofi-wrapper p {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.7;
-}
-
-@media screen and (max-width: 640px) {
-  .swiper-slide.filosofi-wrapper img {
-    max-width: 160px;
-  }
-  .swiper-slide.filosofi-wrapper p {
-    font-size: 0.875rem;
-  }
-}
-
-/* Visi misi section responsive */
-@media screen and (max-width: 1024px) {
-  .max-w-6xl.mx-auto.flex.flex-col.lg\\:flex-row {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-  }
-}
-
-/* Team grid — layout departemen, pakai ID agar tidak konflik */
-#departemenContainer {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-@media (min-width: 900px) {
-  #departemenContainer {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-}
-
-/* Kartu departemen */
-.dept-card {
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-/* Team grid responsive - 1 col on very small screens */
-@media screen and (max-width: 400px) {
-  #departemenContainer {
-    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-  }
-}
-
-/* Modal popup title responsive */
-@media screen and (max-width: 640px) {
-  #popupTitle {
-    font-size: 1.25rem;
-  }
-  #popupDescription {
-    font-size: 0.95rem;
-  }
-}
-
-/* ===== FIX: Konten tidak tertutup fixed header (60px) ===== */
-/* Semua section punya jarak aman saat di-scroll ke atas */
-section {
-  scroll-margin-top: 72px;
-}
-
-/* Grid divisi tidak kebesaran / mentok ke tepi */
-#departemenContainer {
-  max-width: 100%;
-  overflow: visible;
-  padding-top: 10px; /* ruang buat kartu saat hover naik (hover:-translate-y-2) */
-}
-  </style>
-
-  <!-- icon -->
-
-  <link href="https://cdn.jsdelivr.net/npm/zremixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
-  </link>
-
-  <link rel="icon" type="image/png" href="img/hmte-icon.png">
-  </link>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
-  </link>
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-GWPL5RWLH5"></script>
-
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-
-    gtag("config", "G-GWPL5RWLH5");
-  </script>
-  <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+  <!-- Header & footer -->
+  <script src="js/loader.js" defer></script>
 </head>
 
 <body>
   <div id="header-placeholder" style="height: 60px;"></div>
 
-  <!-- Page Wrapper with Wider Horizontal Padding -->
+  <main class="kp">
 
-  <div class="container mx-auto px-4 sm:px-6 lg:px-12">
-    <!-- 1. Hero Section -->
-
-    <section class="fade-in flex flex-col lg:flex-row lg:py-4 select-none py-6">
-      <!-- min-h- dapat diganti aspect-video, tapi ada space di bawah gambarnya pas dihover berlaku kebalikannya -->
-      <!-- dikasih lg:py-16 biar ada space antara hero sama visi misi -->
-      <!-- Left: Carousel -->
-
-      <div class="overflow-hidden lg:my-12 mx-4 rounded-2xl">
-        <div class="relative hero-swiper">
-          <div class="swiper progress-slide-carousel swiper-container relative">
-            <div class="swiper-wrapper lg:w-full h-auto">
-              <div class="swiper-slide">
-                <div class="rounded-2xl w-full flex justify-center items-center">
-                  <span class="text-3xl font-semibold text-indigo-600">
-                    <img src="img/g2.JPG" alt="Profil1"
-                      class="items-center object-cover w-full h-full transition-opacity duration-700 rounded-2xl shadow-md">
-                  </span>
-                </div>
-              </div>
-              <!-- <div class="swiper-slide">
-                <div class="rounded-2xl w-full flex justify-center items-center">
-                  <span class="text-3xl font-semibold text-indigo-600">
-                    <img src="img/g3.jpg" alt="Profil2"
-                      class="items-center object-cover w-full h-full transition-opacity duration-700 rounded-2xl shadow-md">
-                  </span>
-                </div> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Prolog Text -->
-
-      <div class="w-full flex flex-col items-center justify-center text-center">
-        <h1
-          class="bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-600 text-[2.5rem] sm:text-[3.5rem] lg:text-[5rem] font-extrabold leading-tight">
-          Kabinet <br>Nova Imperium</h1>
-
-        <p
-          class="bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-500 text-lg lg:text-xl font-medium mt-4">
-          Inovasi &middot; Sinergi &middot; Keberanian
-        </p>
+    <!-- 1. Hero -->
+    <section class="kp-hero">
+      <img class="kp-hero__img" src="img/kepengurusan/hero.webp" width="1100" height="733"
+        alt="Foto bersama pengurus HMTE Unsoed Kabinet Nova Imperium" fetchpriority="high" decoding="async">
+      <div class="kp-hero__text">
+        <h1 class="kp-hero__name">Kabinet <br>Nova Imperium</h1>
+        <p class="kp-hero__tag">Inovasi &middot; Sinergi &middot; Keberanian</p>
       </div>
     </section>
 
+    <!-- 2. Filosofi Logo -->
+    <section class="kp-section">
+      <h2 class="kp-title">Filosofi Logo</h2>
 
-    <!-- Tambahan Filosofi Logo  -->
-    <section class="select-none">
-      <div class="relative w-full flex justify-center items-center fade-in">
-        <h2
-          class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-800 select-none leading-loose py-2">
-          Filosofi Logo
-        </h2>
-      </div>
-
-      <div class="w-full relative h-full">
-        <div class="swiper centered-slide-carousel swiper-container relative w-full">
-          <div class="swiper-wrapper filosofi-wrapper">
-            <!-- Card 1 -->
-            <div class="swiper-slide filosofi-wrapper">
-              <img class="rounded-t-2xl max-w-xs md:max-w-sm h-auto mt-6" src="img/Asset Logo/kepala-elang.jpg" alt="Kepala Elang" loading="lazy" />
-              <div class="">
-                <h1
-                  class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed mt-4 mb-2">
-                  Kepala Elang</h1>
-                <p class="text-gray-300 text-center text-base lg:text-lg leading-relaxed max-w-prose mx-auto">
-                  Kepala elang melambangkan pusat kendali dan arah kabinet. Elemen ini mencerminkan seluruh pengurus yang memiliki visi ke depan serta pemahaman yang kuat terhadap arah gerak HMTE, sehingga setiap rencana 2026 dapat dijalankan secara optimal dan terukur.
-                </p>
-              </div>
-            </div>
-            <!-- Card 2 -->
-            <div class="swiper-slide filosofi-wrapper">
-              <img class="rounded-t-2xl max-w-xs md:max-w-sm h-auto" src="img/Asset Logo/bulu-tengkuk.jpg" alt="Bulu Tengkuk" loading="lazy" class="rounded-t-2xl max-w-xs md:max-w-sm h-auto mt-6" />
-              <div class="">
-                <h1
-                  class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed mt-4 mb-2">
-                  Bulu Tengkuk</h1>
-                <p class="text-gray-300 text-center text-base lg:text-lg leading-relaxed max-w-prose mx-auto">
-                  Bulu tengkuk melambangkan 6 departemen sebagai penopang utama kabinet. Bagian ini menunjukkan bagaimana tiap departemen saling terhubung dan bergerak bersama dalam satu arah, dengan kerja sama yang kompak sehingga kabinet tetap kuat, stabil, dan mampu berjalan lancar menghadapi berbagai kondisi.
-                </p>
-              </div>
-            </div>
-            <!-- Card 3 -->
-            <div class="swiper-slide filosofi-wrapper">
-              <img class="rounded-t-2xl max-w-xs md:max-w-sm h-auto" src="img/Asset Logo/paruh.jpg" alt="Paruh" loading="lazy" class="rounded-t-2xl max-w-xs md:max-w-sm h-auto mt-6" />
-              <div class="">
-                <h1
-                  class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed mt-4 mb-2">
-                  Paruh</h1>
-                <p class="text-gray-300 text-center text-base lg:text-lg leading-relaxed max-w-prose mx-auto">
-                  Paruh melambangkan cara organisasi menyampaikan gagasan dan arah geraknya. Bagian ini menunjukkan komunikasi yang jelas dan terarah, agar ide dan hasil kerja dapat dipahami dengan baik. Paruh juga mencerminkan ketegasan dalam menyampaikan pesan, sehingga langkah organisasi tetap selaras dan berjalan konsisten.
-                </p>
-              </div>
-            </div>
-            <!-- Card 4 -->
-            <div class="swiper-slide filosofi-wrapper">
-              <img class="rounded-t-2xl max-w-xs md:max-w-sm h-auto" src="img/Asset Logo/jambul.jpg" alt="Jambul" loading="lazy" class="rounded-t-2xl max-w-xs md:max-w-sm h-auto mt-6" />
-              <div class="">
-                <h1
-                  class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-200 to-green-800 leading-relaxed mt-4 mb-2">
-                  Jambul</h1>
-                <p class="text-gray-300 text-center text-base lg:text-lg leading-relaxed max-w-prose mx-auto">
-                  Jambul melambangkan divisi yang menghubungkan seluruh bagian organisasi. Bagian kiri menunjukkan penguatan internal, bagian tengah menggambarkan proses pengembangan, dan bagian kanan mencerminkan penyampaian hasil serta keterhubungan secara menyeluruh, sehingga semua peran berjalan seimbang dan selaras.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-pagination filosofi-wrapper"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
+      <div class="kp-carousel">
+        <div class="kp-slides" id="kpSlides">
+          <article class="kp-slide">
+            <img src="img/kepengurusan/filosofi/kepala-elang.webp" width="440" height="550" alt="Kepala Elang" loading="lazy" decoding="async">
+            <h3>Kepala Elang</h3>
+            <p>Kepala elang melambangkan pusat kendali dan arah kabinet. Elemen ini mencerminkan seluruh pengurus yang memiliki visi ke depan serta pemahaman yang kuat terhadap arah gerak HMTE, sehingga setiap rencana 2026 dapat dijalankan secara optimal dan terukur.</p>
+          </article>
+          <article class="kp-slide">
+            <img src="img/kepengurusan/filosofi/bulu-tengkuk.webp" width="440" height="550" alt="Bulu Tengkuk" loading="lazy" decoding="async">
+            <h3>Bulu Tengkuk</h3>
+            <p>Bulu tengkuk melambangkan 6 departemen sebagai penopang utama kabinet. Bagian ini menunjukkan bagaimana tiap departemen saling terhubung dan bergerak bersama dalam satu arah, dengan kerja sama yang kompak sehingga kabinet tetap kuat, stabil, dan mampu berjalan lancar menghadapi berbagai kondisi.</p>
+          </article>
+          <article class="kp-slide">
+            <img src="img/kepengurusan/filosofi/paruh.webp" width="440" height="550" alt="Paruh" loading="lazy" decoding="async">
+            <h3>Paruh</h3>
+            <p>Paruh melambangkan cara organisasi menyampaikan gagasan dan arah geraknya. Bagian ini menunjukkan komunikasi yang jelas dan terarah, agar ide dan hasil kerja dapat dipahami dengan baik. Paruh juga mencerminkan ketegasan dalam menyampaikan pesan, sehingga langkah organisasi tetap selaras dan berjalan konsisten.</p>
+          </article>
+          <article class="kp-slide">
+            <img src="img/kepengurusan/filosofi/jambul.webp" width="440" height="550" alt="Jambul" loading="lazy" decoding="async">
+            <h3>Jambul</h3>
+            <p>Jambul melambangkan divisi yang menghubungkan seluruh bagian organisasi. Bagian kiri menunjukkan penguatan internal, bagian tengah menggambarkan proses pengembangan, dan bagian kanan mencerminkan penyampaian hasil serta keterhubungan secara menyeluruh, sehingga semua peran berjalan seimbang dan selaras.</p>
+          </article>
         </div>
-      </div>
-    </section>
-    <!-- END of Tambahan Filosofi Logo  -->
-
-
-    <!-- 2. Vision & Mission Section -->
-
-    <section class="fade-in select-none">
-      <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8 px-4 py-8 lg:py-16">
-        <!-- dikasih lg:py-12 biar ada space buat ruang animasi -->
-        <!-- Logo -->
-
-        <div class="lg:self-start flex-1 flex justify-center mx-4">
-          <img src="img/nova-imperium.png" alt="Logo Nova Imperium" class="max-h-fit object-contain" loading="lazy">
-        </div>
-
-        <!-- Vision -->
-
-        <div
-          class="self-start flex-1 mx-4 py-4 px-4 bg-gradient-to-br from-green-900 via-black to-green-800 shadow-lg shadow-green-900/50 border border-green-800 rounded-2xl">
-          <!-- <div class="flex-1 mx-4 py-4 px-4 bg-gradient-to-br from-gray-900 via-green-900 to-black shadow-lg shadow-green-900/100 border border-green-800 rounded-2xl"> -->
-
-          <h3 class="text-2xl font-semibold mb-3 text-green-300">Visi</h3>
-
-          <p class="text-base leading-relaxed text-green-100">
-            Membangun Himpunan Mahasiswa Teknik Elektro UNSOED sebagai <em>home base</em> yang solid dan progresif dalam mengembangkan potensi mahasiswa Teknik Elektro, sehingga terwujud generasi yang intelektual, berkompeten di bidangnya, kreatif dalam berkarya, berprestasi secara konsisten, dengan karakter yang kuat, serta menciptakan lingkungan HMTE yang kondusif, aman, dan menyenangkan yang menjunjung tinggi nilai integritas, tanggung jawab, dan saling menghargai dalam setiap proses organisasi.</p>
-        </div>
-
-        <!-- Mission -->
-
-        <div
-          class="flex-1 mx-4 py-4 px-4 bbg-gradient-to-br from-gray-900 via-green-900 to-black shadow-lg shadow-green-900/50 border border-green-800 rounded-2xl">
-          <h3 class="text-2xl font-semibold mb-3 text-green-300">Misi</h3>
-
-          <p class="text-base leading-relaxed text-green-100">
-            1. Membangun lingkungan HMTE yang kondusif, aman, dan menyenangkan dengan menjunjung tinggi nilai integritas, tanggung jawab, dan saling menghargai dalam setiap proses organisasi.
-            <br>
-            2. Mendorong peningkatan prestasi akademik mahasiswa melalui pembinaan yang terarah, pendampingan berkelanjutan, serta budaya belajar yang aktif dan bertanggung jawab.
-            <br>
-            3. Memfasilitasi pengembangan minat, bakat, dan kreativitas mahasiswa di bidang non-akademik melalui ruang aktualisasi yang positif, kompetitif, dan beretika.
-            <br>
-            4. Menumbuhkan karakter kepemimpinan, kedisiplinan, dan rasa tanggung jawab mahasiswa melalui keterlibatan aktif dalam kegiatan dan roda organisasi HMTE.
-            <br>
-            5. Memperkuat kolaborasi antara HMTE, jurusan, fakultas, dan alumni untuk menciptakan ekosistem organisasi yang berdaya saing, berdampak, dan berkelanjutan.</p>
-        </div>
+        <button type="button" class="kp-arrow kp-arrow--prev" id="kpPrev" aria-label="Slide sebelumnya">&#8249;</button>
+        <button type="button" class="kp-arrow kp-arrow--next" id="kpNext" aria-label="Slide berikutnya">&#8250;</button>
+        <div class="kp-dots" id="kpDots"></div>
       </div>
     </section>
 
-    </div>
-  </div>
-  <!-- /container — Team Section sengaja di luar .container agar tidak kena width:60vw dari style.css -->
-  <div style="width:100%; padding: 0 1rem; box-sizing:border-box; overflow:visible;">
+    <!-- 3. Visi & Misi -->
+    <section class="kp-vm">
+      <img class="kp-vm__logo" src="img/kepengurusan/logo-kabinet.webp" width="640" height="905"
+        alt="Logo Kabinet Nova Imperium" loading="lazy" decoding="async">
 
-    <!-- 3. Team Section -->
-    <section class="fade-in pb-12" style="scroll-margin-top: 72px; padding-top: 16px;">
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-green-200 to-green-800 select-none">
-        Meet the Team</h2>
-      <div class="mx-auto w-80 h-1 rounded-full bg-gradient-to-r from-green-700 via-gray-900 to-green-800 mt-3 mb-10"></div>
+      <div class="kp-box">
+        <h3>Visi</h3>
+        <p>Membangun Himpunan Mahasiswa Teknik Elektro UNSOED sebagai <em>home base</em> yang solid dan progresif dalam mengembangkan potensi mahasiswa Teknik Elektro, sehingga terwujud generasi yang intelektual, berkompeten di bidangnya, kreatif dalam berkarya, berprestasi secara konsisten, dengan karakter yang kuat, serta menciptakan lingkungan HMTE yang kondusif, aman, dan menyenangkan yang menjunjung tinggi nilai integritas, tanggung jawab, dan saling menghargai dalam setiap proses organisasi.</p>
+      </div>
 
-      <!-- Grid Departemen -->
-      <div id="departemenContainer">
-
-        <!-- KAHIM -->
-        <div onclick="openDivisiPopup('bph_ketua')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a1200] text-white border border-yellow-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-yellow-500/20 hover:border-yellow-400/40">
-          <div class="p-4 flex flex-col items-center text-center">
-            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center">
-              <i class="fas fa-star text-white text-lg"></i>
-            </div>
-            <h3 class="text-sm font-bold text-yellow-300 tracking-wide uppercase mb-1">KAHIM</h3>
-            <p class="text-xs text-gray-400">Ketua Himpunan</p>
-          </div>
-        </div>
-
-        <!-- WAKAHIM -->
-        <div onclick="openDivisiPopup('bph_wakil')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a1200] text-white border border-yellow-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-yellow-500/20 hover:border-yellow-400/40">
-          <div class="p-4 flex flex-col items-center text-center">
-            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center">
-              <i class="fas fa-star-half-alt text-white text-lg"></i>
-            </div>
-            <h3 class="text-sm font-bold text-yellow-300 tracking-wide uppercase mb-1">WAKAHIM</h3>
-            <p class="text-xs text-gray-400">Wakil Ketua Himpunan</p>
-          </div>
-        </div>
-
-        <!-- BPH (Bendahara & Sekretaris) -->
-        <div onclick="openDeptModal('bph_inner')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a1200] text-white border border-yellow-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-yellow-500/20 hover:border-yellow-400/40">
-          <div class="p-4 flex flex-col items-center text-center">
-            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center">
-              <i class="fas fa-briefcase text-white text-lg"></i>
-            </div>
-            <h3 class="text-sm font-bold text-yellow-300 tracking-wide uppercase mb-1">BPH</h3>
-            <p class="text-xs text-gray-400">2 Divisi →</p>
-          </div>
-        </div>
-
-        <!-- Pengembangan Mahasiswa -->
-        <div onclick="openDeptModal('pengmah')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#0f3d2e] text-white border border-teal-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-teal-500/20 hover:border-teal-400/40">
-          <div class="p-4 flex flex-col items-center text-center">
-            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-teal-500 to-teal-700 rounded-full flex items-center justify-center">
-              <i class="fas fa-users text-white text-lg"></i>
-            </div>
-            <h3 class="text-sm font-bold text-teal-300 tracking-wide uppercase mb-1">Pengembangan<br>Mahasiswa</h3>
-            <p class="text-xs text-gray-400">3 Divisi →</p>
-          </div>
-        </div>
-
-        <!-- Kewirausahaan -->
-        <div onclick="openDivisiPopup('kwu')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a0030] text-white border border-purple-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-purple-500/20 hover:border-purple-400/40">
-          <div class="p-4 flex flex-col items-center text-center">
-            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-purple-500 to-purple-800 rounded-full flex items-center justify-center">
-              <i class="fas fa-briefcase text-white text-lg"></i>
-            </div>
-            <h3 class="text-sm font-bold text-purple-300 tracking-wide uppercase mb-1">Kewirausahaan</h3>
-            <p class="text-xs text-gray-400">Divisi KWU</p>
-          </div>
-        </div>
-
-        <!-- Iptek -->
-        <div onclick="openDeptModal('iptek')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#300000] text-white border border-red-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-red-500/20 hover:border-red-400/40">
-          <div class="p-4 flex flex-col items-center text-center">
-            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-red-500 to-red-800 rounded-full flex items-center justify-center">
-              <i class="fas fa-microchip text-white text-lg"></i>
-            </div>
-            <h3 class="text-sm font-bold text-red-300 tracking-wide uppercase mb-1">Iptek</h3>
-            <p class="text-xs text-gray-400">2 Divisi →</p>
-          </div>
-        </div>
-
-        <!-- Minfo -->
-        <div onclick="openDeptModal('minfo')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#1a0f00] text-white border border-orange-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-orange-500/20 hover:border-orange-400/40">
-          <div class="p-4 flex flex-col items-center text-center">
-            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-orange-500 to-orange-800 rounded-full flex items-center justify-center">
-              <i class="fas fa-photo-video text-white text-lg"></i>
-            </div>
-            <h3 class="text-sm font-bold text-orange-300 tracking-wide uppercase mb-1">Minfo</h3>
-            <p class="text-xs text-gray-400">2 Divisi →</p>
-          </div>
-        </div>
-
-        <!-- Humaniora -->
-        <div onclick="openDeptModal('humaniora')" class="dept-card cursor-pointer bg-gradient-to-br from-[#0f0f0f] to-[#001030] text-white border border-blue-500/20 shadow-xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-blue-500/20 hover:border-blue-400/40">
-          <div class="p-4 flex flex-col items-center text-center">
-            <div class="w-12 h-12 mb-3 bg-gradient-to-br from-blue-500 to-blue-800 rounded-full flex items-center justify-center">
-              <i class="fas fa-handshake text-white text-lg"></i>
-            </div>
-            <h3 class="text-sm font-bold text-blue-300 tracking-wide uppercase mb-1">Humaniora</h3>
-            <p class="text-xs text-gray-400">3 Divisi →</p>
-          </div>
-        </div>
-
+      <div class="kp-box">
+        <h3>Misi</h3>
+        <ol>
+          <li>Membangun lingkungan HMTE yang kondusif, aman, dan menyenangkan dengan menjunjung tinggi nilai integritas, tanggung jawab, dan saling menghargai dalam setiap proses organisasi.</li>
+          <li>Mendorong peningkatan prestasi akademik mahasiswa melalui pembinaan yang terarah, pendampingan berkelanjutan, serta budaya belajar yang aktif dan bertanggung jawab.</li>
+          <li>Memfasilitasi pengembangan minat, bakat, dan kreativitas mahasiswa di bidang non-akademik melalui ruang aktualisasi yang positif, kompetitif, dan beretika.</li>
+          <li>Menumbuhkan karakter kepemimpinan, kedisiplinan, dan rasa tanggung jawab mahasiswa melalui keterlibatan aktif dalam kegiatan dan roda organisasi HMTE.</li>
+          <li>Memperkuat kolaborasi antara HMTE, jurusan, fakultas, dan alumni untuk menciptakan ekosistem organisasi yang berdaya saing, berdampak, dan berkelanjutan.</li>
+        </ol>
       </div>
     </section>
 
-  </div><!-- /team-wrapper -->
+    <!-- 4. Meet the Team -->
+    <section class="kp-team">
+      <h2 class="kp-title">Meet the Team</h2>
+      <div class="kp-bar"></div>
 
-    <!-- POPUP -->
-
-    <div id="divisiPopup" class="fixed inset-0 z-50 hidden">
-      <div class="modal-overlay absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeDivisiPopup()"></div>
-
-      <div
-        class="modal-content relative z-10 w-[95%] max-w-6xl mx-auto mb-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl overflow-hidden border border-emerald-500/30"
-        style="margin-top: 68px; height: calc(100vh - 80px); max-height: calc(100vh - 80px);">
-
-        <button onclick="closeDivisiPopup()"
-          class="absolute top-6 right-6 z-20 text-white hover:text-red-400 transition-colors duration-300">
-          <i class="fas fa-times text-3xl"></i>
+      <div class="kp-grid">
+        <button type="button" class="kp-card kp-card--yellow" data-divisi="bph_ketua">
+          <span class="kp-card__icon"><i class="fas fa-star"></i></span>
+          <span class="kp-card__title">KAHIM</span>
+          <span class="kp-card__sub">Ketua Himpunan</span>
         </button>
 
-        <div class="flex flex-col lg:flex-row h-full overflow-hidden">
+        <button type="button" class="kp-card kp-card--yellow" data-divisi="bph_wakil">
+          <span class="kp-card__icon"><i class="fas fa-star-half-alt"></i></span>
+          <span class="kp-card__title">WAKAHIM</span>
+          <span class="kp-card__sub">Wakil Ketua Himpunan</span>
+        </button>
 
-          <div class="modal-image-container w-full lg:w-1/2 h-[40vh] sm:h-[45vh] lg:h-full flex-shrink-0">
-            <div style="position: relative; width: 100%; height: 100%;">
+        <button type="button" class="kp-card kp-card--yellow" data-dept="bph_inner">
+          <span class="kp-card__icon"><i class="fas fa-briefcase"></i></span>
+          <span class="kp-card__title">BPH</span>
+          <span class="kp-card__sub">2 Divisi &rarr;</span>
+        </button>
 
-              <img id="popupImage" src="" alt="Divisi Image"
-                style="position: absolute; width: 100%; height: 100%; object-fit: contain; margin-top: 4px; border-radius: 10%;">
+        <button type="button" class="kp-card kp-card--teal" data-dept="pengmah">
+          <span class="kp-card__icon"><i class="fas fa-users"></i></span>
+          <span class="kp-card__title">Pengembangan<br>Mahasiswa</span>
+          <span class="kp-card__sub">3 Divisi &rarr;</span>
+        </button>
 
-              <!-- Tombol Prev -->
-              <button onclick="prevPopupImage()"
-                style="position: absolute; top: 50%; left: 1rem; transform: translateY(-50%); z-index: 10;"
-                class="bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-300 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-                    stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
+        <button type="button" class="kp-card kp-card--purple" data-divisi="kwu">
+          <span class="kp-card__icon"><i class="fas fa-briefcase"></i></span>
+          <span class="kp-card__title">Kewirausahaan</span>
+          <span class="kp-card__sub">Divisi KWU</span>
+        </button>
 
-              <!-- Tombol Next -->
-              <button onclick="nextPopupImage()"
-                style="position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); z-index: 10;"
-                class="bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-300 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-                    stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
+        <button type="button" class="kp-card kp-card--red" data-dept="iptek">
+          <span class="kp-card__icon"><i class="fas fa-microchip"></i></span>
+          <span class="kp-card__title">Iptek</span>
+          <span class="kp-card__sub">2 Divisi &rarr;</span>
+        </button>
 
-          <div class="modal-text-content w-full lg:w-1/2 p-4 sm:p-6 lg:p-8 overflow-y-auto custom-scrollbar flex-1">
+        <button type="button" class="kp-card kp-card--orange" data-dept="minfo">
+          <span class="kp-card__icon"><i class="fas fa-photo-video"></i></span>
+          <span class="kp-card__title">Minfo</span>
+          <span class="kp-card__sub">2 Divisi &rarr;</span>
+        </button>
 
-            <div class="flex items-center mb-6">
-              <div id="popupIcon" class="w-16 h-16 rounded-full flex items-center justify-center mr-4">
-              </div>
-              <h2 id="popupTitle"
-                class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-emerald-600">
-              </h2>
-            </div>
+        <button type="button" class="kp-card kp-card--blue" data-dept="humaniora">
+          <span class="kp-card__icon"><i class="fas fa-handshake"></i></span>
+          <span class="kp-card__title">Humaniora</span>
+          <span class="kp-card__sub">3 Divisi &rarr;</span>
+        </button>
+      </div>
+    </section>
+  </main>
 
-            <div class="mb-8">
-              <p id="popupDescription" class="text-gray-300 leading-relaxed text-lg">
-              </p>
-            </div>
+  <!-- Popup divisi (foto + deskripsi) -->
+  <div id="divisiPopup" class="kp-modal" role="dialog" aria-modal="true" aria-labelledby="popupTitle" hidden>
+    <div class="kp-modal__overlay" data-close></div>
+    <div class="kp-modal__box kp-popup">
+      <button type="button" class="kp-modal__close" data-close aria-label="Tutup">&#10005;</button>
 
-            <div>
-              <h3 class="text-2xl font-semibold mb-6 text-emerald-400 flex items-center">
-                <i class="fas fa-tasks mr-3"></i>
-                Program Kerja
-              </h3>
+      <div class="kp-popup__media">
+        <img id="popupImage" src="" alt="" decoding="async">
+        <button type="button" class="kp-nav kp-nav--prev" id="popupPrev" aria-label="Foto sebelumnya">&#8249;</button>
+        <button type="button" class="kp-nav kp-nav--next" id="popupNext" aria-label="Foto berikutnya">&#8250;</button>
+        <span class="kp-count" id="popupCount"></span>
+      </div>
 
-              <div id="popupProker" class="space-y-4">
-              </div>
-            </div>
-          </div>
+      <div class="kp-popup__body">
+        <div class="kp-popup__head">
+          <span class="kp-icon" id="popupIcon"></span>
+          <h2 id="popupTitle"></h2>
         </div>
+        <p id="popupDescription"></p>
       </div>
     </div>
   </div>
 
-  <!-- /Page Wrapper -->
-
-  <!-- Modal Pilih Divisi — di luar container agar fixed berfungsi sempurna -->
-  <div id="deptModal" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center;">
-    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(4px);" onclick="closeDeptModal()"></div>
-    <div style="position:relative; z-index:10; width:92%; max-width:480px; margin:auto; background:linear-gradient(135deg,#1a1f2e,#111827); border-radius:1.25rem; border:1px solid rgba(16,185,129,0.25); box-shadow:0 25px 60px rgba(0,0,0,0.6); padding:1.5rem;">
-      <button onclick="closeDeptModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; color:#9ca3af; font-size:1.25rem; cursor:pointer; line-height:1;">✕</button>
-      <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.25rem;">
-        <div id="deptModalIcon" style="width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;"></div>
+  <!-- Modal pilih divisi -->
+  <div id="deptModal" class="kp-modal" role="dialog" aria-modal="true" aria-labelledby="pickTitle" hidden>
+    <div class="kp-modal__overlay" data-close></div>
+    <div class="kp-modal__box kp-pick">
+      <button type="button" class="kp-modal__close" data-close aria-label="Tutup">&#10005;</button>
+      <div class="kp-pick__head">
+        <span class="kp-icon" id="pickIcon"></span>
         <div>
-          <h3 id="deptModalTitle" style="font-size:1.1rem; font-weight:800; color:#fff; margin:0;"></h3>
-          <p id="deptModalSub" style="font-size:0.75rem; color:#6b7280; margin:0;"></p>
+          <h3 id="pickTitle"></h3>
+          <p id="pickSub"></p>
         </div>
       </div>
-      <p style="font-size:0.65rem; color:#4b5563; text-transform:uppercase; letter-spacing:0.15em; margin-bottom:0.75rem;">Pilih Divisi</p>
-      <div id="deptModalDivisi" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;"></div>
+      <p class="kp-pick__label">Pilih Divisi</p>
+      <div class="kp-pick__grid" id="pickGrid"></div>
     </div>
   </div>
+
   <div id="footer-placeholder"></div>
 
-  <script src="js/script.js"></script>
-  <script src="js/emagz.js"></script>
+  <script src="js/kepengurusan.js" defer></script>
 </body>
+
 </html>
-
-<script>
-  var heroSwiper = new Swiper(".hero-swiper .progress-slide-carousel", {
-    loop: true,
-    autoplay: {
-      delay: 3200,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: ".hero-swiper .swiper-pagination",
-      type: "progressbar",
-    },
-  });
-</script>
-
-<script>
-  // Data departemen → divisi (untuk modal pilih divisi)
-  const deptData = {
-    // Ketua & Wakil Ketua (Langsung memanggil popup, tidak memerlukan modal)
-
-    bph: {
-      title: 'BPH', sub: 'Badan Pengurus Harian',
-      iconHtml: '<i class="fas fa-briefcase" style="color:#fff;font-size:1.25rem;"></i>',
-      iconBgStyle: 'linear-gradient(135deg,#eab308,#a16207)',
-      divisi: [
-        { key: 'bph_bendahara', icon: 'fas fa-coins',         color: '#34d399', label: 'Bendahara' },
-        { key: 'bph_sekretaris',icon: 'fas fa-file-alt',      color: '#60a5fa', label: 'Sekretaris' }
-      ]
-    },
-    bph_inner: {
-      title: 'BPH', sub: 'Badan Pengurus Harian',
-      iconHtml: '<i class="fas fa-briefcase" style="color:#fff;font-size:1.25rem;"></i>',
-      iconBgStyle: 'linear-gradient(135deg,#eab308,#a16207)',
-      divisi: [
-        { key: 'bph_bendahara', icon: 'fas fa-coins',         color: '#34d399', label: 'Bendahara' },
-        { key: 'bph_sekretaris',icon: 'fas fa-file-alt',      color: '#60a5fa', label: 'Sekretaris' }
-      ]
-    },
-    pengmah: {
-      title: 'Pengembangan Mahasiswa', sub: '3 Divisi',
-      iconHtml: '<i class="fas fa-users" style="color:#fff;font-size:1.25rem;"></i>',
-      iconBgStyle: 'linear-gradient(135deg,#14b8a6,#0f766e)',
-      divisi: [
-        { key: 'mikat', icon: 'fas fa-gamepad',        color: '#2dd4bf', label: 'Divisi Mikat' },
-        { key: 'psdm',  icon: 'fas fa-user-graduate',  color: '#f472b6', label: 'Divisi PSDM' },
-        { key: 'event', icon: 'fas fa-calendar-check', color: '#c084fc', label: 'Divisi Event' }
-      ]
-    },
-    iptek: {
-      title: 'Iptek', sub: '2 Divisi',
-      iconHtml: '<i class="fas fa-microchip" style="color:#fff;font-size:1.25rem;"></i>',
-      iconBgStyle: 'linear-gradient(135deg,#ef4444,#991b1b)',
-      divisi: [
-        { key: 'ristek',       icon: 'fas fa-laptop-code',        color: '#f87171', label: 'Divisi Ristek' },
-        { key: 'pendampingan', icon: 'fas fa-chalkboard-teacher', color: '#fb923c', label: 'Divisi Pendampingan' }
-      ]
-    },
-    minfo: {
-      title: 'Minfo', sub: '2 Divisi',
-      iconHtml: '<i class="fas fa-photo-video" style="color:#fff;font-size:1.25rem;"></i>',
-      iconBgStyle: 'linear-gradient(135deg,#f97316,#c2410c)',
-      divisi: [
-        { key: 'medkominfo', icon: 'fas fa-newspaper',   color: '#fb923c', label: 'Media Informasi' },
-        { key: 'medkrtatif', icon: 'fas fa-paint-brush', color: '#f472b6', label: 'Media Kreatif' }
-      ]
-    },
-    humaniora: {
-      title: 'Humaniora', sub: '3 Divisi',
-      iconHtml: '<i class="fas fa-handshake" style="color:#fff;font-size:1.25rem;"></i>',
-      iconBgStyle: 'linear-gradient(135deg,#3b82f6,#1d4ed8)',
-      divisi: [
-        { key: 'personalia', icon: 'fas fa-id-badge', color: '#60a5fa', label: 'Divisi Personalia' },
-        { key: 'humas',      icon: 'fas fa-globe',    color: '#22d3ee', label: 'Divisi Humas' },
-        { key: 'internal',   icon: 'fas fa-home',     color: '#f472b6', label: 'Divisi Internal' }
-      ]
-    }
-  };
-
-  function openDeptModal(deptId) {
-    const dept = deptData[deptId];
-    if (!dept) return;
-    document.getElementById('deptModalTitle').textContent = dept.title;
-    document.getElementById('deptModalSub').textContent = dept.sub;
-    const iconEl = document.getElementById('deptModalIcon');
-    iconEl.style.background = dept.iconBgStyle;
-    iconEl.innerHTML = dept.iconHtml;
-    const grid = document.getElementById('deptModalDivisi');
-    grid.innerHTML = '';
-    dept.divisi.forEach(function(d) {
-      const btn = document.createElement('div');
-      btn.className = 'divisi-btn';
-      btn.onclick = function() { closeDeptModal(); openDivisiPopup(d.key); };
-      btn.innerHTML = '<i class="' + d.icon + '" style="color:' + d.color + '; font-size:1.5rem; margin-bottom:0.5rem; display:block;"></i><span>' + d.label + '</span>';
-      grid.appendChild(btn);
-    });
-    const modal = document.getElementById('deptModal');
-    modal.style.display = 'flex';
-  }
-
-  function closeDeptModal() {
-    document.getElementById('deptModal').style.display = 'none';
-  }
-
-  // Tutup modal dept dengan ESC
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { closeDeptModal(); closeDivisiPopup(); }
-  });
-
-  // Data untuk setiap divisi
-  const divisiData = {
-    // ── BPH (Bendahara & Sekretaris) ──
-    // ── BPH Umum (Hanya untuk deskripsi fallback jika diperlukan) ──
-    'bph': {
-      title: "Badan Pengurus Harian",
-      description: "Inti administrasi dan keuangan organisasi HMTE UNSOED.",
-      icon: '<i class="fas fa-briefcase text-2xl text-yellow-400"></i>',
-      iconBg: 'bg-gradient-to-br from-yellow-600 to-yellow-800',
-      // Gunakan foto grup administrasi BPH di sini jika ada
-      images: ["img/Asset Feed/BPH/1.jpg"], 
-      proker: [
-        { title: "Koordinasi Administrasi & Keuangan", desc: "Menjalankan fungsi manajemen internal himpunan." }
-      ]
-    },
-
-    // --- Pemisahan Foto Spesifik ---
-
-    // DATA SPESIFIK BENDAHARA (BENUM)
-    'bph_bendahara': { 
-      title: "Bendahara Umum (BENUM)", 
-      description: "Pengelola tunggal keuangan himpunan, bertanggung jawab atas transparansi dan efisiensi dana.", 
-      icon: '<i class="fas fa-coins text-2xl text-emerald-400"></i>', 
-      iconBg: 'bg-gradient-to-br from-emerald-600 to-emerald-800', 
-      // GANTI DENGAN FILE FOTO SPESIFIK BENDAHARA (Bisa di-slide)
-      images: [
-        "img/Asset Feed/BPH/1.jpg",
-        "img/Asset Feed/BPH/4.jpg",
-        "img/Asset Feed/BPH/5.jpg"
-      ], 
-      proker: [
-        { title: "Transparansi Dana", desc: "Melaporkan arus kas himpunan secara berkala kepada anggota." }
-      ] 
-    },
-
-    // DATA SPESIFIK SEKRETARIS (SEKUM)
-    'bph_sekretaris': { 
-      title: "Sekretaris Umum (SEKUM)", 
-      description: "Pusat administrasi dan dokumentasi himpunan, mengelola arsip dan jadwal organisasi.", 
-      icon: '<i class="fas fa-file-alt text-2xl text-blue-400"></i>', 
-      iconBg: 'bg-gradient-to-br from-blue-600 to-blue-800', 
-      // GANTI DENGAN FILE FOTO SPESIFIK SEKRETARIS (Bisa di-slide)
-      images: [
-        "img/Asset Feed/BPH/1.jpg",
-        "img/Asset Feed/BPH/2.jpg",
-        "img/Asset Feed/BPH/3.jpg"
-      ], 
-      proker: [
-        { title: "Manajemen Arsip Digital", desc: "Mendigitalisasi dan merapikan seluruh dokumen penting himpunan." }
-      ] 
-    },
-
-    'bph_ketua':    { 
-        title: "KAHIM", 
-        description: "Ketua HMTE UNSOED memimpin secara struktural melalui fungsi manajerial: perencanaan, pengarahan, dan pengawasan. Selain memiliki hak delegasi, Ketua juga menjadi penanggung jawab utama seluruh kinerja himpunan.", 
-        icon: '<i class="fas fa-star text-2xl text-yellow-400"></i>', 
-        iconBg: 'bg-gradient-to-br from-yellow-500 to-yellow-700', 
-        // Ganti nama file di bawah ini dengan nama file foto KAHIM Anda
-        images: ["img/Asset Feed/KAHIM/1.jpg"],
-        proker: []
-    },
-    'bph_wakil':    { 
-        title: "WAKAHIM", 
-        description: "Wakil Ketua mendampingi Ketua dalam menjalankan roda organisasi, mengkoordinasikan antar departemen, serta menggantikan peran Ketua saat dibutuhkan.", 
-        icon: '<i class="fas fa-star-half-alt text-2xl text-yellow-300"></i>', 
-        iconBg: 'bg-gradient-to-br from-yellow-600 to-yellow-800', 
-        // Ganti nama file di bawah ini dengan nama file foto WAKAHIM Anda
-        images: ["img/Asset Feed/WAKAHIM/1.jpg"],
-        proker: []
-    },
-
-    // ── BPH (Data Spesifik untuk Modal 'bph_inner') ── (Pertahankan ini)
-    'bph_bendahara':{ title: "Bendahara", description: "Bendahara Umum bertanggung jawab atas pengelolaan dan administrasi keuangan organisasi, serta melakukan transparansi dana setiap bulan.", icon: '<i class="fas fa-coins text-2xl text-emerald-400"></i>', iconBg: 'bg-gradient-to-br from-emerald-600 to-emerald-800', images: ["img/Asset Feed/BPH/1.jpg","img/Asset Feed/BPH/4.jpg","img/Asset Feed/BPH/5.jpg"], proker: [] },
-    'bph_sekretaris':{ title: "Sekretaris", description: "Sekretaris Umum bertugas mengkoordinasi administrasi surat-menyurat, jadwal program kerja, serta memastikan kesesuaian pelaksanaan dengan TOR.", icon: '<i class="fas fa-file-alt text-2xl text-blue-400"></i>', iconBg: 'bg-gradient-to-br from-blue-600 to-blue-800', images: ["img/Asset Feed/BPH/1.jpg","img/Asset Feed/BPH/2.jpg","img/Asset Feed/BPH/3.jpg"], proker: [] },
-
-    // ── Pengembangan Mahasiswa ──
-    mikat: {
-      title: "Minat dan Bakat",
-      description: "Divisi Mikat HMTE Unsoed hadir sebagai ruang kreatif bagi mahasiswa untuk menyalurkan minat sekaligus mengasah bakat. Lewat berbagai kegiatan, Mikat mendorong mahasiswa lebih percaya diri, produktif, dan berprestasi.",
-      icon: '<i class="fas fa-gamepad text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-teal-600 to-teal-800',
-      images: ["img/Asset Feed/MIKAT/1.jpg","img/Asset Feed/MIKAT/2.jpg","img/Asset Feed/MIKAT/3.jpg","img/Asset Feed/MIKAT/4.jpg"],
-      proker: [
-        { title: "E-Sport", desc: "Program kerja ini bertujuan mempererat tali persaudaraan dan kekeluargaan di kalangan mahasiswa Teknik Elektro, tersalurkannya bakat, tumbuhnya semangat kompetitif, serta terwujudnya sikap sportivitas yang tinggi." },
-        { title: "Coming Soon", desc: "In progress. . . ." }
-      ]
-    },
-    psdm: {
-      title: "Pengembangan Sumber Daya Manusia",
-      description: "Divisi PSDM HMTE Unsoed hadir sebagai wadah pengembangan diri bagi mahasiswa. Melalui program pembinaan dan pelatihan, PSDM mendorong mahasiswa untuk aktif, tangguh, dan siap menghadapi tantangan.",
-      icon: '<i class="fas fa-user-graduate text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-indigo-600 to-indigo-800',
-      images: ["img/Asset Feed/PSDM/1.jpg","img/Asset Feed/PSDM/2.jpg","img/Asset Feed/PSDM/3.jpg","img/Asset Feed/PSDM/4.jpg","img/Asset Feed/PSDM/5.jpg"],
-      proker: [
-        { title: "Electrical Days", desc: "Wadah dari HMTE Unsoed bagi mahasiswa baru untuk mensosialisasikan lingkungan perkuliahan yang baik dan mengenalkan civitas akademika." },
-        { title: "Pelatihan dan Bootcamp", desc: "Program kerja pelatihan dan bootcamp yang terintegrasi mencakup hard skill dan soft skill sebagai sarana vital untuk menguasai dinamika teknologi." },
-        { title: "Sosialisasi", desc: "Terdapat 4 sosialisasi: Sosialisasi Konsentrasi, Sosialisasi KP, Sosialisasi TA, dan Sosialisasi MBKM." },
-        { title: "DEFORCOM", desc: "Fasilitasi mahasiswa Teknik Elektro yang ingin mengikuti kompetisi atau pelatihan baik akademik maupun non akademik." }
-      ]
-    },
-    event: {
-      title: "Divisi Event",
-      description: "Divisi Event HMTE Unsoed berperan dalam melaksanakan berbagai kegiatan berskala besar himpunan, seperti Dies Natalis dan Seminar Nasional. Divisi ini bertanggung jawab menghadirkan acara yang kreatif, terstruktur, dan mampu membangun hubungan baik antara himpunan dengan masyarakat luas.",
-      icon: '<i class="fas fa-calendar-check text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-purple-600 to-purple-800',
-      images: ["img/Asset Feed/EVENT/1.jpg","img/Asset Feed/EVENT/2.jpg","img/Asset Feed/EVENT/3.jpg","img/Asset Feed/EVENT/4.jpg"],
-      proker: [
-        { title: "Seminar Nasional", desc: "Program kerja Divisi Event yang menjadi bagian dari rangkaian Dies Natalis Teknik Elektro Unsoed. Kegiatan ini bertujuan memberikan wawasan kepada mahasiswa, fresh graduate, dan masyarakat umum mengenai kesiapan menghadapi dunia kerja di era transformasi digital, khususnya penguatan soft skill dan kemampuan adaptasi terhadap perkembangan teknologi." },
-        { title: "Dies Natalis Teknik Elektro", desc: "Rangkaian acara peringatan tahunan yang diselenggarakan oleh HMTE Unsoed. Kegiatan ini menjadi momentum perayaan hari jadi yang bertujuan mempererat rasa kebersamaan, kekeluargaan, dan solidaritas antar mahasiswa, alumni, serta seluruh civitas akademika Teknik Elektro." }
-      ]
-    },
-
-    // ── Kewirausahaan ──
-    kwu: {
-      title: "Kewirausahaan",
-      description: "KWU HMTE Unsoed adalah wadah bagi mahasiswa untuk menyalurkan ide, melatih keterampilan, dan merasakan pengalaman nyata di bidang bisnis. Lewat divisi ini, mahasiswa belajar membangun mindset entrepreneur yang visioner.",
-      icon: '<i class="fas fa-briefcase text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-purple-600 to-purple-800',
-      images: ["img/Asset Feed/KWU/1.jpg","img/Asset Feed/KWU/2.jpg","img/Asset Feed/KWU/3.jpg","img/Asset Feed/KWU/4.jpg","img/Asset Feed/KWU/5.jpg","img/Asset Feed/KWU/6.jpg"],
-      proker: [{ title: "Coming Soon", desc: "In Progress . . . ." }]
-    },
-
-    // ── Iptek ──
-    ristek: {
-      title: "Riset dan Teknologi",
-      description: "Divisi Ristek HMTE Unsoed jadi ruang bagi mahasiswa Teknik Elektro untuk menuangkan ide, bereksperimen, dan menciptakan inovasi. Melalui karya kreatif dan pengembangan teknologi, Ristek hadir untuk membangun generasi yang inovatif.",
-      icon: '<i class="fas fa-laptop-code text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-red-600 to-red-800',
-      images: ["img/Asset Feed/RISTEK/1.jpg","img/Asset Feed/RISTEK/2.jpg","img/Asset Feed/RISTEK/3.jpg","img/Asset Feed/RISTEK/4.jpg","img/Asset Feed/RISTEK/5.jpg","img/Asset Feed/RISTEK/6.jpg","img/Asset Feed/RISTEK/7.jpg","img/Asset Feed/RISTEK/8.jpg"],
-      proker: [
-        { title: "Studymate", desc: "Kegiatan mentoring atau diskusi bersama yang berfungsi untuk meningkatkan pemahaman mahasiswa terhadap mata kuliah yang dianggap sulit." },
-        { title: "Kuliah Umum", desc: "Kegiatan akademik sebagai wadah penyampaian topik atau pengetahuan kepada mahasiswa yang disampaikan oleh akademisi kompeten di bidangnya." },
-        { title: "Komunitas KRONIKA", desc: "Komunitas Mikrokontroler, Elektronika, dan Robotika yang mewadahi minat teknis mahasiswa Teknik Elektro Unsoed." },
-        { title: "Komunitas OSC", desc: "Open Source Community untuk pengembangan keterampilan dan kolaborasi di dunia teknologi open source." },
-        { title: "Komunitas PLC", desc: "Komunitas Programmable Logic Controller untuk pengembangan hard skill di bidang otomasi industri." },
-        { title: "PKM Center", desc: "Fasilitasi mahasiswa dalam menghadapi ajang PKM DIKTI melalui sosialisasi terarah dan lomba proposal." },
-        { title: "PILMAPRES", desc: "Menjaring talenta unggul yang siap mensinergikan kecerdasan intelektual dengan kontribusi nyata bagi masyarakat." },
-        { title: "Database", desc: "Wadah bagi Keluarga Besar Teknik Elektro untuk menyimpan data penting: alumni, materi kuliah, judul TA, dan data KP." }
-      ]
-    },
-    pendampingan: {
-      title: "Divisi Pendampingan",
-      description: "Divisi Pendampingan HMTE Unsoed hadir untuk memfasilitasi pengembangan akademik dan prestasi mahasiswa Teknik Elektro, mulai dari kompetisi mahasiswa berprestasi hingga program kreativitas, mendorong setiap anggota mencapai potensi terbaiknya.",
-      icon: '<i class="fas fa-chalkboard-teacher text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-orange-600 to-orange-800',
-      images: ["img/Asset Feed/PENDAMPINGAN/1.jpg","img/Asset Feed/PENDAMPINGAN/2.jpg","img/Asset Feed/PENDAMPINGAN/3.jpg","img/Asset Feed/PENDAMPINGAN/4.jpg","img/Asset Feed/PENDAMPINGAN/5.jpg","img/Asset Feed/PENDAMPINGAN/6.jpg"],
-      proker: [
-        { title: "Pilmapres", desc: "Kompetisi bergengsi baik tingkat jurusan, fakultas, dan universitas untuk menjaring mahasiswa terbaik yang memiliki keseimbangan antara prestasi akademik (IPK), karya tulis ilmiah, capaian unggulan, serta kemampuan bahasa Inggris." },
-        { title: "PMW (Program Mahasiswa Wirausaha)", desc: "Program yang bertujuan meningkatkan semangat, pengetahuan, keterampilan, dan jiwa kewirausahaan mahasiswa serta mendorong terbentuknya mahasiswa yang terdidik, berkarakter, dan dapat menjalankan bisnis dengan baik sehingga menciptakan pembangunan ekonomi Indonesia yang lebih baik." },
-        { title: "PKM (Program Kreativitas Mahasiswa)", desc: "Wadah penyaluran dan sumber informasi terkait PKM bagi mahasiswa Teknik Elektro. Bertujuan agar mahasiswa mengetahui jenis-jenis PKM dan dapat menuangkan idenya, serta menyusun proposal PKM sesuai prosedur sehingga tercipta kualitas proposal yang baik untuk seleksi tingkat fakultas maupun universitas." },
-        { title: "Sosialisasi", desc: "Proses pembelajaran untuk membantu mahasiswa memahami lingkungannya. Periode ini mencakup empat kegiatan: Sosialisasi Konsentrasi, Sosialisasi Kerja Praktik (KP), Sosialisasi Tugas Akhir (TA), dan Sosialisasi MBKM." }
-      ]
-    },
-
-    // ── Minfo ──
-    medkominfo: {
-      title: "Media Informasi",
-      description: "Divisi Media Informasi HMTE Unsoed adalah garda informasi sekaligus wajah digital organisasi. Lewat media sosial, menyampaikan pengetahuan, publikasi acara, hingga ucapan hari besar agar seluruh civitas HMTE selalu terhubung.",
-      icon: '<i class="fas fa-newspaper text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-orange-600 to-orange-800',
-      images: ["img/Asset Feed/MINFO/1.jpg","img/Asset Feed/MINFO/2.jpg","img/Asset Feed/MINFO/3.jpg","img/Asset Feed/MINFO/4.jpg","img/Asset Feed/MINFO/5.jpg","img/Asset Feed/MINFO/6.jpg"],
-      proker: [
-        { title: "Electro's Present", desc: "Pengelolaan media sosial HMTE mencakup distribusi informasi, publikasi kegiatan, serta konten hiburan di Instagram, Twitter, TikTok, dan LinkedIn." },
-        { title: "Electropedia", desc: "Berbagi informasi seputar teknologi dan teknik elektro melalui media sosial HMTE Unsoed, termasuk kuis berhadiah untuk KBTE." },
-        { title: "E-Magz", desc: "Media publikasi resmi yang menjembatani kebutuhan mahasiswa akan informasi kegiatan himpunan dan wawasan teknologi terbaru." },
-        { title: "POTEK", desc: "Podcast Teknik Elektro — konten obrolan santai dengan narasumber terkait sebagai media informasi, aspirasi, inspirasi, dan hiburan." },
-        { title: "Web Content", desc: "Website untuk mendigitalisasi informasi di lingkungan Teknik Elektro Unsoed, memuat etalase program kerja dan wawasan jurusan." }
-      ]
-    },
-    medkrtatif: {
-      title: "Media Kreatif",
-      description: "Divisi Media Kreatif HMTE Unsoed bertanggung jawab dalam produksi konten visual dan kreatif himpunan, meliputi desain grafis, fotografi, videografi, serta berbagai karya kreatif yang memperkuat identitas visual HMTE.",
-      icon: '<i class="fas fa-paint-brush text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-pink-600 to-pink-800',
-      images: ["img/Asset Feed/MEDKRE/1.jpg","img/Asset Feed/MEDKRE/2.jpg","img/Asset Feed/MEDKRE/3.jpg","img/Asset Feed/MEDKRE/4.jpg","img/Asset Feed/MEDKRE/5.jpg"],
-      proker: [{ title: "Coming Soon", desc: "In Progress . . . ." }]
-    },
-
-    // ── Humaniora ──
-    personalia: {
-      title: "Divisi Personalia",
-      description: "Divisi Personalia adalah divisi yang bertanggung jawab dalam membangun, menjaga, dan mempererat hubungan kebersamaan serta keterikatan emosional Keluarga Besar Teknik Elektro, yang meliputi mahasiswa aktif, alumni, dan unsur pendukung lainnya.",
-      icon: '<i class="fas fa-id-badge text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-blue-600 to-blue-800',
-      images: ["img/Asset Feed/PERSONALIA/1.jpg","img/Asset Feed/HUMAS/2.jpg","img/Asset Feed/HUMAS/3.jpg","img/Asset Feed/HUMAS/4.jpg","img/Asset Feed/HUMAS/5.jpg","img/Asset Feed/HUMAS/6.jpg"],
-      proker: [
-        { title: "Electrical Euphoria", desc: "Kegiatan yang bertujuan memberikan apresiasi kepada mahasiswa Teknik Elektro Unsoed yang berprestasi dalam berbagai kompetisi atau perlombaan. Acara ini juga menjadi momen perayaan ulang tahun serta penghargaan bagi kepengurusan HMTE, mempererat kepedulian dan kebersamaan seluruh keluarga besar Teknik Elektro Unsoed." },
-        { title: "HMTE Adviscal", desc: "Program kerja sebagai wadah bagi KBTE untuk memberikan kritik dan saran tentang fasilitas di jurusan Teknik Elektro. Angket disebarkan ke mahasiswa aktif dan alumni untuk membantu bidang akademik, non akademik, serta organisasi, berisi keluh kesah terkait HMTE maupun perkuliahan yang akan disampaikan ke pihak terkait." },
-        { title: "HMTE Peduli", desc: "Program kerja yang berfokus pada penguatan solidaritas dan kepedulian sosial antar anggota aktif HMTE. Dirancang untuk menjaga keberlanjutan dana solidaritas serta menciptakan budaya saling peduli dan tanggap terhadap kondisi darurat yang dialami oleh anggota himpunan." },
-        { title: "Ikatan Alumni & Bincang Alumni", desc: "Wadah untuk mempererat hubungan antara alumni dengan mahasiswa serta menjaga silaturahmi antar alumni Teknik Elektro. Bertujuan membangun jaringan komunikasi aktif sebagai sarana berbagi informasi, pengalaman, dan peluang di dunia kerja maupun wirausaha." }
-      ]
-    },
-    humas: {
-      title: "Hubungan Masyarakat",
-      description: "Divisi Humas HMTE Unsoed berperan sebagai garda depan dalam menjalin komunikasi dengan pihak internal maupun eksternal, sekaligus menjaga citra organisasi agar tetap dikenal, dipercaya, dan berkembang.",
-      icon: '<i class="fas fa-globe text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-blue-600 to-blue-800',
-      images: ["img/Asset Feed/HUMAS/1.jpg","img/Asset Feed/HUMAS/2.jpg","img/Asset Feed/HUMAS/3.jpg","img/Asset Feed/HUMAS/4.jpg","img/Asset Feed/HUMAS/5.jpg","img/Asset Feed/HUMAS/6.jpg"],
-      proker: [
-        { title: "Electrical For Society", desc: "Program mewujudkan implementasi poin ketiga Tri Dharma Perguruan Tinggi dengan memberikan kontribusi nyata dan solusi yang berdampak langsung untuk kesejahteraan masyarakat." },
-        { title: "Kunjungan Himpunan", desc: "Kegiatan mempererat tali silaturahmi, berbagi pengalaman, serta bertukar wawasan dengan himpunan mahasiswa lainnya, baik di dalam maupun di luar Unsoed." },
-        { title: "Kunjungan Industri", desc: "Mengunjungi perusahaan untuk mempelajari proses produksi, teknologi, manajemen, dan praktik industri secara langsung." },
-        { title: "FKHMEI", desc: "Membangun sinergi antara HMTE dengan jejaring mahasiswa Teknik Elektro se-Indonesia, khususnya di wilayah Jawa Tengah." },
-        { title: "Sponsorship", desc: "Memperluas relasi dan menjalin kerja sama yang saling menguntungkan dengan pihak eksternal dalam penyediaan dana dan dukungan." }
-      ]
-    },
-    internal: {
-      title: "Internal",
-      description: "Divisi Internal HMTE Unsoed hadir untuk mempererat kebersamaan dan membangun solidaritas antar mahasiswa Teknik Elektro. Lewat berbagai program kerja, Internal menjadi ruang tumbuh yang mendukung mahasiswa berkembang.",
-      icon: '<i class="fas fa-home text-2xl text-white"></i>',
-      iconBg: 'bg-gradient-to-br from-pink-600 to-pink-800',
-      images: ["img/Asset Feed/INTERNAL/1.jpg","img/Asset Feed/INTERNAL/2.jpg","img/Asset Feed/INTERNAL/3.jpg","img/Asset Feed/INTERNAL/4.jpg","img/Asset Feed/INTERNAL/5.jpg","img/Asset Feed/INTERNAL/6.jpg"],
-      proker: [{ title: "Coming Soon", desc: "In Progress . . . ." }]
-    }
-  };
-
-  let currentDivisi = '';
-  let currentImageIndex = 0;
-
-  function openDivisiPopup(divisi, sub) {
-    // Kalau ada sub-key (misal bph + ketua), gabungkan jadi bph_ketua
-    const key = sub ? divisi + '_' + sub : divisi;
-    currentDivisi = key;
-    currentImageIndex = 0;
-
-    const data = divisiData[key];
-    if (!data) return;
-
-    document.getElementById('popupTitle').textContent = data.title;
-    document.getElementById('popupDescription').textContent = data.description;
-
-    const iconContainer = document.getElementById('popupIcon');
-    iconContainer.className = `w-16 h-16 rounded-full flex items-center justify-center mr-4 ${data.iconBg}`;
-    iconContainer.innerHTML = data.icon;
-
-    document.getElementById('popupImage').src = data.images[0];
-
-    const prokerContainer = document.getElementById('popupProker');
-    prokerContainer.innerHTML = '';
-
-    data.proker.forEach((program, index) => {
-      const prokerElement = document.createElement('div');
-      prokerElement.className = 'bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-xl p-6 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300';
-      prokerElement.innerHTML = `
-        <h4 class="text-xl font-semibold text-emerald-300 mb-3 flex items-center">
-          <span class="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-sm font-bold mr-3">${index + 1}</span>
-          ${program.title}
-        </h4>
-        <p class="text-gray-300 leading-relaxed">${program.desc}</p>
-      `;
-      prokerContainer.appendChild(prokerElement);
-    });
-
-    const popup = document.getElementById('divisiPopup');
-    const overlay = popup.querySelector('.modal-overlay');
-    const content = popup.querySelector('.modal-content');
-    const imageContainer = popup.querySelector('.modal-image-container');
-    const textContent = popup.querySelector('.modal-text-content');
-
-    overlay.classList.remove('show');
-    content.classList.remove('show');
-    imageContainer.classList.remove('show');
-    textContent.classList.remove('show');
-
-    popup.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-
-    requestAnimationFrame(() => {
-      overlay.classList.add('show');
-      content.classList.add('show');
-      setTimeout(() => { imageContainer.classList.add('show'); }, 100);
-      setTimeout(() => { textContent.classList.add('show'); }, 200);
-    });
-  }
-
-  function closeDivisiPopup() {
-    const popup = document.getElementById('divisiPopup');
-    const overlay = popup.querySelector('.modal-overlay');
-    const content = popup.querySelector('.modal-content');
-    const imageContainer = popup.querySelector('.modal-image-container');
-    const textContent = popup.querySelector('.modal-text-content');
-
-    overlay.classList.remove('show');
-    content.classList.remove('show');
-    imageContainer.classList.remove('show');
-    textContent.classList.remove('show');
-
-    setTimeout(() => {
-      popup.classList.add('hidden');
-      document.body.style.overflow = 'auto';
-    }, 400);
-  }
-
-  function nextPopupImage() {
-    const data = divisiData[currentDivisi];
-    currentImageIndex = (currentImageIndex + 1) % data.images.length;
-    document.getElementById('popupImage').src = data.images[currentImageIndex];
-  }
-
-  function prevPopupImage() {
-    const data = divisiData[currentDivisi];
-    currentImageIndex = (currentImageIndex - 1 + data.images.length) % data.images.length;
-    document.getElementById('popupImage').src = data.images[currentImageIndex];
-  }
-
-  function observeElements() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { entry.target.classList.add('visible'); }
-      });
-    });
-    document.querySelectorAll('.fade-in').forEach(el => { observer.observe(el); });
-  }
-
-  document.addEventListener('DOMContentLoaded', observeElements);
-</script>
-
-<script>
-  var swiper = new Swiper(".centered-slide-carousel", {
-    centeredSlides: false,
-    loop: false,
-    speed: 400,
-    effect: "slide",
-    slidesPerView: 1,
-    spaceBetween: 0,
-    autoHeight: true,
-    watchSlidesProgress: true,
-    pagination: {
-      el: ".centered-slide-carousel .swiper-pagination",
-      clickable: true,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    on: {
-      init: function () {
-        this.updateAutoHeight(0);
-      },
-      slideChangeTransitionEnd: function () {
-        this.updateAutoHeight(300);
-      }
-    }
-  });
-</script>
