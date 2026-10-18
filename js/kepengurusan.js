@@ -267,6 +267,8 @@
     function sync() {
       ticking = false;
       current = Math.round(track.scrollLeft / (track.clientWidth || 1));
+      current = Math.max(0, Math.min(n - 1, current));
+      track.style.height = slides[current].offsetHeight + 'px'; // tinggi mengikuti slide aktif
       prev.disabled = current <= 0;
       next.disabled = current >= n - 1;
       for (var i = 0; i < dots.children.length; i++) {
@@ -278,7 +280,10 @@
     }, { passive: true });
     prev.addEventListener('click', function () { go(current - 1); });
     next.addEventListener('click', function () { go(current + 1); });
-    window.addEventListener('resize', function () { track.scrollLeft = current * track.clientWidth; });
+    window.addEventListener('resize', function () {
+      track.scrollLeft = current * track.clientWidth;
+      sync();
+    });
     sync();
   }
 
