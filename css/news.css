@@ -1,0 +1,107 @@
+/* =====================================================================
+   news.css — gaya halaman Berita (page/news/news.html)
+   Menggantikan Tailwind CDN + <style> inline lama. Berdampingan dengan
+   css/style.css (font Satoshi, latar kotak-kotak).
+   ===================================================================== */
+
+html { overflow-x: hidden; }
+body { color: #fff; min-height: 100vh; }
+
+/* ---------- Pembungkus ---------- */
+/* width:100% wajib: body di style.css berupa flex */
+.news-wrap { width: 100%; padding: 120px 0 80px; position: relative; animation: newsFade .4s ease both; }
+@keyframes newsFade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .news-wrap { animation: none; } }
+
+.news-inner { max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 5vw, 48px); }
+
+/* ---------- Judul ---------- */
+.news-title-block { text-align: center; margin-bottom: clamp(32px, 5vh, 56px); scroll-margin-top: 90px; }
+.news-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+  font-size: .7rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
+  color: #0fbc6d;
+}
+.news-eyebrow::before, .news-eyebrow::after { content: ''; width: 24px; height: 1px; background: #0fbc6d; opacity: .6; }
+.news-title {
+  display: block; margin-bottom: 12px;
+  font-size: clamp(1.9rem, 6vw, 3.5rem); font-weight: 900; line-height: 1.2; letter-spacing: -.04em;
+  color: #fff;
+}
+.news-title em { font-style: normal; color: #0fbc6d; }
+.news-subtitle { max-width: 500px; margin: 0 auto; font-size: clamp(.85rem, 2vw, 1rem); line-height: 1.65; color: rgba(156, 163, 175, .7); }
+
+/* ---------- Grid kartu ---------- */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  margin-bottom: 40px;
+}
+@media (max-width: 1024px) { .news-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 768px)  { .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
+@media (max-width: 480px)  { .news-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.news-status { grid-column: 1 / -1; padding: 2rem 0; text-align: center; color: rgba(156, 163, 175, .8); }
+
+/* ---------- Kartu ---------- */
+.nc {
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  color: inherit; text-decoration: none;
+  border: 1px solid rgba(15, 188, 109, .12);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(15, 188, 109, .07) 0%, #0d1117 35%, #0d1117 65%, rgba(15, 188, 109, .04) 100%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+  transition: transform .25s ease, border-color .25s ease;
+}
+.nc:focus-visible, .pg-btn:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; }
+@media (hover: hover) {
+  .nc:hover { transform: translateY(-4px); border-color: rgba(15, 188, 109, .35); }
+  .nc:hover .nc__img img { transform: scale(1.04); }
+  .nc:hover .nc__title { color: #fff; }
+}
+.nc:active { transform: scale(.98); }
+
+.nc__img { aspect-ratio: 16 / 9; overflow: hidden; background: #0d1117; }
+.nc__img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.nc__img img.is-fallback { object-fit: contain; padding: 18%; opacity: .6; }
+
+.nc__body { display: flex; flex-direction: column; flex: 1; gap: 6px; padding: 14px 16px 16px; }
+.nc__tag {
+  align-self: flex-start;
+  padding: 3px 9px;
+  font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: #0fbc6d;
+  background: rgba(15, 188, 109, .1);
+  border: 1px solid rgba(15, 188, 109, .2);
+  border-radius: 20px;
+}
+.nc__title, .nc__desc { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.nc__title { -webkit-line-clamp: 3; font-size: clamp(.9rem, 1.2vw, 1rem); font-weight: 800; line-height: 1.35; letter-spacing: -.01em; color: rgba(255, 255, 255, .92); transition: color .2s ease; }
+.nc__desc  { -webkit-line-clamp: 3; font-size: .8rem; line-height: 1.6; color: rgba(156, 163, 175, .75); }
+.nc__date  { margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .07); font-size: .72rem; color: rgba(156, 163, 175, .6); }
+@media (max-width: 480px) {
+  .nc__title { font-size: 1.05rem; }
+  .nc__desc  { font-size: .85rem; }
+}
+
+/* ---------- Paginasi ---------- */
+.news-pager { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
+.pg-btn {
+  min-width: 40px; height: 40px; padding: 0 12px;
+  font: inherit; font-size: .875rem; font-weight: 700; color: rgba(255, 255, 255, .7);
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+@media (hover: hover) { .pg-btn:hover:not(:disabled):not([aria-current]) { background: rgba(15, 188, 109, .12); border-color: rgba(15, 188, 109, .3); color: #0fbc6d; } }
+.pg-btn[aria-current="page"] { background: #0fbc6d; border-color: #0fbc6d; color: #fff; cursor: default; }
+.pg-btn:disabled { opacity: .3; cursor: not-allowed; }
+@media (max-width: 768px) {
+  .news-wrap { padding-top: 100px; padding-bottom: 60px; }
+  .news-inner { padding: 0 16px; }
+}
