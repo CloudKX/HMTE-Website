@@ -1,14 +1,24 @@
 {
   "videos": [
     {
-      "episode": 6,
-      "title": "POTEK SEASON 4 - EPS.6 NGOBROL KARIER TEKNIK ELEKTRO, DARI BANGKU KE DUNIA INDUSTRI",
-      "youtubeId": "Pna4bKoWnVM"
-    },
-    {
       "episode": 1,
       "title": "Potek Season 5 Eps 1: Cerita di Balik Layar Menembus Panggung LKTI",
       "youtubeId": "4ppf_GaljuA"
+    },
+    {
+      "episode": 2,
+      "title": " Potek Season 5 Eps 2 : Cerita di Balik Jalur Pendakian",
+      "youtubeId": "v=dRqjLCGCA0E"
+    },
+    {
+      "episode": 3,
+      "youtubeId": "v=3Y9p5gIoG9Y",
+      "title": " Potek Season 5 Eps 3 : KKN di Malaysia vs KKN di Bangka Belitung. Beda Negara, Beda Cerita!"
+    },
+    {
+      "episode": 4,
+      "youtubeId": "v=-3wZUj_i2KI",
+      "title": " Potek Season 5 Eps 4 : Malam Halloween, Antara Seru dan Bikin Merinding"
     }
   ]
 }
